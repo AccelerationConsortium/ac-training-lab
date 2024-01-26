@@ -1,7 +1,11 @@
 [![Project generated with PyScaffold](https://img.shields.io/badge/-PyScaffold-005CA0?logo=pyscaffold)](https://pyscaffold.org/)
+[![ReadTheDocs](https://readthedocs.org/projects/ac-training-lab/badge/?version=latest)](https://ac-training-lab.readthedocs.io/en/stable/)
+[![tests](https://github.com/AccelerationConsortium/ac-training-lab/actions/workflows/ci.yml/badge.svg)](https://github.com/AccelerationConsortium/ac-training-lab/actions/workflows/ci.yml)
+[![GitHub issues](https://img.shields.io/github/issues/AccelerationConsortium/ac-training-lab)](https://github.com/AccelerationConsortium/ac-training-lab/issues)
+[![GitHub Discussions](https://img.shields.io/github/discussions/AccelerationConsortium/ac-training-lab)](https://github.com/AccelerationConsortium/ac-training-lab/discussions)
+[![Last Committed](https://img.shields.io/github/last-commit/AccelerationConsortium/ac-training-lab)](https://github.com/AccelerationConsortium/ac-training-lab/commits/main/)
 <!-- These are examples of badges you might also want to add to your README. Update the URLs accordingly.
 [![Built Status](https://api.cirrus-ci.com/github/<USER>/ac-training-lab.svg?branch=main)](https://cirrus-ci.com/github/<USER>/ac-training-lab)
-[![ReadTheDocs](https://readthedocs.org/projects/ac-training-lab/badge/?version=latest)](https://ac-training-lab.readthedocs.io/en/stable/)
 [![Coveralls](https://img.shields.io/coveralls/github/<USER>/ac-training-lab/main.svg)](https://coveralls.io/r/<USER>/ac-training-lab)
 [![PyPI-Server](https://img.shields.io/pypi/v/ac-training-lab.svg)](https://pypi.org/project/ac-training-lab/)
 [![Conda-Forge](https://img.shields.io/conda/vn/conda-forge/ac-training-lab.svg)](https://anaconda.org/conda-forge/ac-training-lab)
