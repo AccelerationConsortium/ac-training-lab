@@ -14,9 +14,6 @@
    and update things accordingly.
 ```
 
-```{todo} Provide the correct links/replacements at the bottom of the document.
-```
-
 ```{todo} You might want to have a look on [PyScaffold's contributor's guide],
 
    especially if your project is open source. The text should be very similar to
@@ -73,23 +70,20 @@ that any documentation update is done in the same way was a code contribution.
     e.g.,  [reStructuredText] or [CommonMark] with [MyST] extensions.
 ```
 
-```{todo} If your project is hosted on GitHub, you can also mention the following tip:
+:::{tip}
+   Please notice that the [GitHub web interface] provides a quick way of
+   propose changes in `ac-training-lab`'s files. While this mechanism can
+   be tricky for normal code contributions, it works perfectly fine for
+   contributing to the docs, and can be quite handy.
 
-   :::{tip}
-      Please notice that the [GitHub web interface] provides a quick way of
-      propose changes in `ac-training-lab`'s files. While this mechanism can
-      be tricky for normal code contributions, it works perfectly fine for
-      contributing to the docs, and can be quite handy.
-
-      If you are interested in trying this method out, please navigate to
-      the `docs` folder in the source [repository], find which file you
-      would like to propose changes and click in the little pencil icon at the
-      top, to open [GitHub's code editor]. Once you finish editing the file,
-      please write a message in the form at the bottom of the page describing
-      which changes have you made and what are the motivations behind them and
-      submit your proposal.
-   :::
-```
+   If you are interested in trying this method out, please navigate to
+   the `docs` folder in the source [repository], find which file you
+   would like to propose changes and click in the little pencil icon at the
+   top, to open [GitHub's code editor]. Once you finish editing the file,
+   please write a message in the form at the bottom of the page describing
+   which changes have you made and what are the motivations behind them and
+   submit your proposal.
+:::
 
 When working on documentation changes in your local machine, you can
 compile them using [tox] :
@@ -114,6 +108,47 @@ python3 -m http.server --directory 'docs/_build/html'
    quickly.
 ```
 
+
+### Project Organization
+
+```
+├── AUTHORS.md              <- List of developers and maintainers.
+├── CHANGELOG.md            <- Changelog to keep track of new features and fixes.
+├── CONTRIBUTING.md         <- Guidelines for contributing to this project.
+├── Dockerfile              <- Build a docker container with `docker build .`.
+├── LICENSE.txt             <- License as chosen on the command-line.
+├── README.md               <- The top-level README for developers.
+├── configs                 <- Directory for configurations of model & application.
+├── data
+│   ├── external            <- Data from third party sources.
+│   ├── interim             <- Intermediate data that has been transformed.
+│   ├── processed           <- The final, canonical data sets for modeling.
+│   └── raw                 <- The original, immutable data dump.
+├── docs                    <- Directory for Sphinx documentation in rst or md.
+├── environment.yml         <- The conda environment file for reproducibility.
+├── models                  <- Trained and serialized models, model predictions,
+│                              or model summaries.
+├── notebooks               <- Jupyter notebooks. Naming convention is a number (for
+│                              ordering), the creator's initials and a description,
+│                              e.g. `1.0-fw-initial-data-exploration`.
+├── pyproject.toml          <- Build configuration. Don't change! Use `pip install -e .`
+│                              to install for development or to build `tox -e build`.
+├── references              <- Data dictionaries, manuals, and all other materials.
+├── reports                 <- Generated analysis as HTML, PDF, LaTeX, etc.
+│   └── figures             <- Generated plots and figures for reports.
+├── scripts                 <- Analysis and production scripts which import the
+│                              actual PYTHON_PKG, e.g. train_model.
+├── setup.cfg               <- Declarative configuration of your project.
+├── setup.py                <- [DEPRECATED] Use `python setup.py develop` to install for
+│                              development or `python setup.py bdist_wheel` to build.
+├── src
+│   └── ac_training_lab     <- Actual Python package where the main functionality goes.
+├── tests                   <- Unit tests which can be run with `pytest`.
+├── .coveragerc             <- Configuration for coverage reports of unit tests.
+├── .isort.cfg              <- Configuration for git hook that sorts imports.
+└── .pre-commit-config.yaml <- Configuration of pre-commit git hooks.
+```
+
 ### Submit an issue
 
 Before you work on any non-trivial code contribution it's best to first create
@@ -124,19 +159,26 @@ This often provides additional considerations and avoids unnecessary work.
 
 Before you start coding, we recommend creating an isolated [virtual environment]
 to avoid any problems with your installed Python packages.
-This can easily be done via either [virtualenv]:
+This can easily be done via [Miniconda]:
 
-```
-virtualenv <PATH TO VENV>
-source <PATH TO VENV>/bin/activate
-```
-
-or [Miniconda]:
-
-```
-conda create -n ac-training-lab python=3 six virtualenv pytest pytest-cov
+```bash
+conda env create -f environment.yml
 conda activate ac-training-lab
 ```
+
+> **_NOTE:_**  The conda environment will have ac-training-lab installed in editable mode.
+> Some changes, e.g. in `setup.cfg`, might require you to run `pip install -e .` again.
+
+
+Optional and needed only once after `git clone`:
+
+1. install several [pre-commit] git hooks with:
+   ```bash
+   pre-commit install
+   # You might also want to run `pre-commit autoupdate`
+   ```
+   and checkout the configuration under `.pre-commit-config.yaml`.
+   The `-n, --no-verify` flag of `git commit` can be used to deactivate pre-commit hooks temporarily.
 
 ### Clone the repository
 
@@ -186,7 +228,7 @@ conda activate ac-training-lab
 2. Start your work on this branch. Don't forget to add [docstrings] to new
    functions, modules and classes, especially if they are part of public APIs.
 
-3. Add yourself to the list of contributors in `AUTHORS.rst`.
+3. Add yourself to the list of contributors in `AUTHORS.md`.
 
 4. When you’re done editing, do:
 
@@ -367,5 +409,5 @@ on [PyPI], the following steps can be used to release a new version for
 ```{todo} Please review and change the following definitions:
 ```
 
-[repository]: https://github.com/<USERNAME>/ac-training-lab
-[issue tracker]: https://github.com/<USERNAME>/ac-training-lab/issues
+[repository]: https://github.com/AccelerationConsortium/ac-training-lab
+[issue tracker]: https://github.com/AccelerationConsortium/ac-training-lab/issues
