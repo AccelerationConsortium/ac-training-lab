@@ -16,7 +16,7 @@ setting up an autonomous laboratory.
 
 <a class="github-button" href="https://github.com/AccelerationConsortium/ac-training-lab"
 data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="Star
-AccelerationConsortium/ac-microcourses on GitHub">Star</a>
+AccelerationConsortium/ac-training-lab on GitHub">Star</a>
 <a class="github-button"
 href="https://github.com/AccelerationConsortium" data-size="large" data-show-count="true"
 aria-label="Follow @AccelerationConsortium on GitHub">Follow</a>
@@ -35,6 +35,7 @@ intended for the AC Training Lab.
 
 ![training lab categories](training-lab-categories.png)
 
+For additional training opportunities offered by the Acceleration Consortium, please navigate to [AC Microcourses](https://ac-microcourses.readthedocs.io/en/latest/).
 
 ## Contents
 
