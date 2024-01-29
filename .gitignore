@@ -52,3 +52,5 @@ MANIFEST
 .venv*/
 .conda*/
 .python-version
+
+**/my_secrets.py
