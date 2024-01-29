@@ -46,6 +46,7 @@ Contributions & Help <contributing>
 License <license>
 Authors <authors>
 Module Reference <api/modules>
+GitHub Source <https://github.com/AccelerationConsortium/ac-training-lab>
 ```
 
 ## Indices and tables
