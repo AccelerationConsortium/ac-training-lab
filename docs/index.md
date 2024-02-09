@@ -55,6 +55,10 @@ Here are some of the modules we have procured and are in the process of setting 
 - [Chi.Bio](https://chi.bio/) (x1)
 - [Pioreactor](https://pioreactor.com/en-ca/products/pioreactor-20ml?variant=46559156469816) (x1)
 - [Rodeostat](https://iorodeo.com/products/rodeostat) (x5)
+- [Microfluidics](https://www.labmaker.org/collections/biotechnology/products/pressure-regulator-senyo-lab) (x1)
+- [UC2 Minibox](https://www.labmaker.org/collections/uc2-miniscope/products/uc2-minibox) (x1)
+- Chamber interfaces (glovebox, fumehood)
+- Tensile tester
 - [uMobileLab](https://unitedrobotics.group/en/robots/umobilelab) (x1)
 - [Phenom Pure G6 SEM](https://www.thermofisher.com/ca/en/home/electron-microscopy/products/desktop-scanning-electron-microscopes/phenom-pure.html) (x1)
 
