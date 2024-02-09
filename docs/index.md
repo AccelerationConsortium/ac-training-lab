@@ -35,6 +35,31 @@ intended for the AC Training Lab.
 
 ![training lab categories](training-lab-categories.png)
 
+Here are some of the modules we have procured and are in the process of setting up (help wanted if you're in Toronto!):
+- Jubilee Tool Changer (x1)
+- OpenFlexure Delta Stage Microscope with Reflection Illumination (x2)
+- Opentrons OT-2 (x1)
+- Opentrons Flex (x1)
+- Hiwonder ArmPi Pro (x1)
+- Hiwonder JetAuto Pro (x1)
+- Elephant Robotics MyCobot 280 (x1)
+- Elephant Robotics MyAGV (x1)
+- AutoTrickler v4 (x1)
+- RCBS ChargeMaster Supreme (x1)
+- Ingenuity Powder System (x1)
+- Cocoa Press (x1)
+- FormAuto + Form 3+ 24/7 autonomous 3D printer (x1)
+- Form 3L (x1)
+- Fluxgarage Automated Turntable (x1)
+- Digital Pipette (x1)
+- Chi.Bio (x1)
+- Pioreactor (x1)
+- Rodeostat (x5)
+- uMobileLab (x1)
+- Phenom Pure G6 SEM (x1)
+
+We would love to get suggestions on the types of workflows you'd like to see in the AC Training Lab! Please see the "Discussions" link above.
+
 For additional training opportunities offered by the Acceleration Consortium, please navigate to [AC Microcourses](https://ac-microcourses.readthedocs.io/en/latest/).
 
 ## Contents
