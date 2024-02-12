@@ -62,9 +62,7 @@ Here are some of the modules we have procured and are in the process of setting 
 - [uMobileLab](https://unitedrobotics.group/en/robots/umobilelab) (x1)
 - [Phenom Pure G6 SEM](https://www.thermofisher.com/ca/en/home/electron-microscopy/products/desktop-scanning-electron-microscopes/phenom-pure.html) (x1)
 
-We would love to get suggestions on the [types of workflows](https://github.com/AccelerationConsortium/ac-training-lab/discussions/3) you'd like to see in the AC Training Lab!
-
-For additional training opportunities offered by the Acceleration Consortium, please navigate to [AC Microcourses](https://ac-microcourses.readthedocs.io/en/latest/).
+We would love to get suggestions on the [types of workflows](https://github.com/AccelerationConsortium/ac-training-lab/discussions/3) you'd like to see in the AC Training Lab! For additional training opportunities offered by the Acceleration Consortium, please navigate to [AC Microcourses](https://ac-microcourses.readthedocs.io/en/latest/).
 
 ## Contents
 
