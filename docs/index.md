@@ -37,7 +37,7 @@ intended for the AC Training Lab.
 
 Here are some of the modules we have procured and are in the process of setting up (help wanted if you're in Toronto!):
 
-| Name | Quantity | Description |
+| Name | Qty | Description |
 | --- | --- | --- |
 | [Jubilee](https://jubilee3d.com/index.php?title=Main_Page) | 1 | A versatile, open-source toolchanger with a large community of users and developers which is used for both general 3D printing and [scientific applications](https://dx.doi.org/10.1039/D3DD00033H). |
 | [Delta Stage Microscope](https://openflexure.org/projects/deltastage/) | 2 | A DIY open-source microscope with a fine-positioning, motorized stage. Reflection illumination version of Delta Stage |
