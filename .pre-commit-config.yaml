@@ -58,7 +58,7 @@ repos:
   rev: 7.0.0
   hooks:
   - id: flake8
-    exclude: ^src/picow/
+    exclude: ^src/ac_training_lab/picow/
   ## You can add flake8 plugins via `additional_dependencies`:
   #  additional_dependencies: [flake8-bugbear]
 
