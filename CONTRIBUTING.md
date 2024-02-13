@@ -1,27 +1,3 @@
-```{todo} THIS IS SUPPOSED TO BE AN EXAMPLE. MODIFY IT ACCORDING TO YOUR NEEDS!
-
-   The document assumes you are using a source repository service that promotes a
-   contribution model similar to [GitHub's fork and pull request workflow].
-   While this is true for the majority of services (like GitHub, GitLab,
-   BitBucket), it might not be the case for private repositories (e.g., when
-   using Gerrit).
-
-   Also notice that the code examples might refer to GitHub URLs or the text
-   might use GitHub specific terminology (e.g., *Pull Request* instead of *Merge
-   Request*).
-
-   Please make sure to check the document having these assumptions in mind
-   and update things accordingly.
-```
-
-```{todo} You might want to have a look on [PyScaffold's contributor's guide],
-
-   especially if your project is open source. The text should be very similar to
-   this template, but there are a few extra contents that you might decide to
-   also include, like mentioning labels of your issue tracker or automated
-   releases.
-```
-
 # Contributing
 
 Welcome to `ac-training-lab` contributor's guide.
@@ -63,12 +39,7 @@ by adding missing information and correcting mistakes.
 
 `ac-training-lab` documentation uses [Sphinx] as its main documentation compiler.
 This means that the docs are kept in the same repository as the project code, and
-that any documentation update is done in the same way was a code contribution.
-
-```{todo} Don't forget to mention which markup language you are using.
-
-    e.g.,  [reStructuredText] or [CommonMark] with [MyST] extensions.
-```
+that any documentation update is done in the same way was a code contribution. The documentation uses [CommonMark] with [MyST] extensions.
 
 :::{tip}
    Please notice that the [GitHub web interface] provides a quick way of
@@ -107,6 +78,8 @@ python3 -m http.server --directory 'docs/_build/html'
    main concepts will make it easy for potential contributors to get started
    quickly.
 ```
+
+A list of projects is available on the documentation [homepage].
 
 
 ### Project Organization
@@ -151,8 +124,7 @@ python3 -m http.server --directory 'docs/_build/html'
 
 ### Submit an issue
 
-Before you work on any non-trivial code contribution it's best to first create
-a report in the [issue tracker] to start a discussion on the subject.
+Before you work on any non-trivial code contribution it's best to first create either a feature request in the [issue tracker] or a new discussion in the [discussions] page on the subject.
 This often provides additional considerations and avoids unnecessary work.
 
 ### Create an environment
@@ -181,6 +153,8 @@ Optional and needed only once after `git clone`:
    The `-n, --no-verify` flag of `git commit` can be used to deactivate pre-commit hooks temporarily.
 
 ### Clone the repository
+
+The instructions below assume that you are using git's command line interface. Alternatively, you may use [GitHub Desktop](https://desktop.github.com/) or the built-in git functionality of your favorite IDE, such as [VS Code's Source Control extension](https://code.visualstudio.com/docs/sourcecontrol/overview).
 
 1. Create an user account on GitHub if you do not already have one.
 
@@ -239,9 +213,6 @@ Optional and needed only once after `git clone`:
 
    to record your changes in [git].
 
-   ```{todo} if you are not using pre-commit, please remove the following item:
-   ```
-
    Please make sure to see the validation messages from [pre-commit] and fix
    any eventual issues.
    This should automatically use [flake8]/[black] to check/fix the code style
@@ -283,13 +254,9 @@ Optional and needed only once after `git clone`:
 2. Go to the web page of your fork and click "Create pull request"
    to send your changes for review.
 
-   ```{todo} if you are using GitHub, you can uncomment the following paragraph
-
-      Find more detailed information in [creating a PR]. You might also want to open
-      the PR as a draft first and mark it as ready for review after the feedbacks
-      from the continuous integration (CI) system or any required fixes.
-
-   ```
+Find more detailed information in [creating a PR]. You might also want to open
+the PR as a draft first and mark it as ready for review after the feedbacks
+from the continuous integration (CI) system or any required fixes.
 
 ### Troubleshooting
 
@@ -348,12 +315,6 @@ package:
 
 ### Releases
 
-```{todo} This section assumes you are using PyPI to publicly release your package.
-
-   If instead you are using a different/private package index, please update
-   the instructions accordingly.
-```
-
 If you are part of the group of maintainers and have correct user permissions
 on [PyPI], the following steps can be used to release a new version for
 `ac-training-lab`:
@@ -406,8 +367,7 @@ on [PyPI], the following steps can be used to release a new version for
 [virtualenv]: https://virtualenv.pypa.io/en/stable/
 
 
-```{todo} Please review and change the following definitions:
-```
-
 [repository]: https://github.com/AccelerationConsortium/ac-training-lab
 [issue tracker]: https://github.com/AccelerationConsortium/ac-training-lab/issues
+[homepage]: https://ac-training-lab.readthedocs.io/en/latest/
+[discussions]: https://github.com/AccelerationConsortium/ac-training-lab/discussions
