@@ -37,6 +37,8 @@ intended for the AC Training Lab.
 
 Here are some of the modules we have procured and are in the process of setting up (help wanted if you're in Toronto!):
 
+<!-- TODO: Convert this to YAML and autopopulate table, preferably linked to current status somehow (planning, in progress, complete, etc.) -->
+
 | Name | Qty | Description |
 | --- | --- | --- |
 | [Jubilee](https://jubilee3d.com/index.php?title=Main_Page) | 1 | A versatile, open-source toolchanger with a large community of users and developers which is used for both general 3D printing and [scientific applications](https://dx.doi.org/10.1039/D3DD00033H). |
@@ -45,7 +47,7 @@ Here are some of the modules we have procured and are in the process of setting 
 | [Opentrons Flex](https://opentrons.com/products/flex/) | 1 | An open-source commercial liquid handler tailored towards high-throughput and advanced liquid handling operations |
 | [Hiwonder ArmPi FPV](https://www.hiwonder.com/products/armpi?_pos=4&_sid=a9741a308&_ss=r) | 1 | An educational six-axis robotic arm |
 | [Hiwonder JetAuto Pro](https://www.hiwonder.com/products/jetauto-pro?variant=40040875229271) | 1 | An educational six-axis mobile cobot with a 3D depth camera and lidar |
-| [MyCobot 280](https://shop.elephantrobotics.com/en-ca/collections/mycobot/products/mycobot-pi-worlds-smallest-and-lightest-six-axis-collaborative-robot) with [MyAGV](https://shop.elephantrobotics.com/en-ca/collections/myagv/products/myagv-2023-pi?variant=47262714069304) and accessories | 1 | An educational six-axis mobile cobot |
+| [MyCobot 280](https://shop.elephantrobotics.com/en-ca/collections/mycobot/products/mycobot-pi-worlds-smallest-and-lightest-six-axis-collaborative-robot) and [MyAGV](https://shop.elephantrobotics.com/en-ca/collections/myagv/products/myagv-2023-pi?variant=47262714069304) | 1 | An educational six-axis mobile cobot |
 | [AutoTrickler v4](https://autotrickler.com/pages/autotrickler-v4) | 1 | An automated solid dispensing station designed for ammunition loading |
 | [ChargeMaster Supreme](https://www.rcbs.com/priming-and-powder-charging/powder-dispensers-and-scales/chargemaster-supreme-electronic-powder-dispenser/16-98943.html) | 1 | An automated solid dispensing station designed for ammunition loading |
 | [Ingenuity Powder System](https://ingenuityprecision.com/product/ingenuity-powder-system/) | 1 | An automated solid dispensing station designed for ammunition loading |
