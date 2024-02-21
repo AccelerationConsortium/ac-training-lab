@@ -79,6 +79,27 @@ We would love to get suggestions on the [types of workflows](https://github.com/
 
 See the [AC Training Lab Bill of Materials](https://docs.google.com/spreadsheets/d/1wZc2Ii4kCsEWfSIQK7FoxSDgO_DuaGSqY09E8hmxD3I/edit?usp=sharing), which is an ongoing document.
 
+## Workflows
+
+The AC Training Lab is intended as a hands-on sandbox and prototyping environment for researchers. While the equipment is not restricted to particular workflows, we are actively developing a subset of readily accessible workflows for the AC Training Lab. Note that single workflow could be carried out using different sets of equipment within the training lab. These workflows will use dedicated hardware in a permanent setup to allow for 24/7 access. The core workflows that are planned, in development, or available are listed below:
+
+| Name | Diagram | Description | Status |
+| --- | --- | --- | --- |
+Light-based color matching | | Adjust red, green, and blue LED power levels to match a target color | Ready |
+Liquid-based color matching | | Adjust diluted red, yellow, and blue food coloring pumping power to match a target color | Ready |
+Solid-based color matching | | Adjust the composition of red, yellow, and blue powder (e.g., wax) and processing conditions to match a target color | In development |
+Chocolate tensile testing | | Adjust the composition and processing conditions of 3D printed chocolate tensile specimens to tune the microstructure for maximization of tensile strength | In development |
+[Yeast growth](https://docs.pioreactor.com/experiments/yeast-growth-by-temperature) | | Adjust reactor temperature to maximize yeast growth and explore nonlinear effects | In development |
+Titration | | Add a base of known concentration to an acid to find the equivalence point as determined by successive pH measurements | In development |
+Conductivity | | Adjust the ratio of battery electrolyte reagants to maximize conductivity and redox potential for a target pH | Planning |
+
+
+Supported workflows (i.e., non-permanent setups) that are planned, in development, or available are listed below:
+
+| Name | Diagram | Description | Status |
+| --- | --- | --- | --- |
+| Alkaline Catalysis Lifecycle Testing | | Adjust the stress-cycling conditions of a nickel electrode in a KOH solution to investigate the cause of catalyst degredation | In development |
+
 ## Contents
 
 ```{toctree}
