@@ -73,21 +73,15 @@ Here are some modules we are also considering:
 | Chamber interfaces (TBD) |  | - | e.g., miniature glovebox, miniature ductless fumehood, small nitrogen generator |
 | Low-force tensile tester |  | 1 | Low-cost, open-source tensile tester. Examples [[1](https://www.instructables.com/Universal-Tensile-Testing-Machine-VERSION-TWO/)], [[2](https://www.creativemachineslab.com/freeloader.html)], [[3](https://tspace.library.utoronto.ca/bitstream/1807/109212/4/Liu_Xinyue_202111_MAS_thesis.pdf)], [[4](https://www.printables.com/model/81214-open-pull-diy-universal-test-machine)] |
 
-We would love to get suggestions on the [types of workflows](https://github.com/AccelerationConsortium/ac-training-lab/discussions/3) you'd like to see in the AC Training Lab! For additional training opportunities offered by the Acceleration Consortium, please navigate to [AC Microcourses](https://ac-microcourses.readthedocs.io/en/latest/).
-
-## Bill of Materials
-
-See the [AC Training Lab Bill of Materials](https://docs.google.com/spreadsheets/d/1wZc2Ii4kCsEWfSIQK7FoxSDgO_DuaGSqY09E8hmxD3I/edit?usp=sharing), which is an ongoing document.
-
 ## Workflows
 
 The AC Training Lab is intended as a hands-on sandbox and prototyping environment for researchers. While the equipment is not restricted to particular workflows, we are actively developing a subset of readily accessible workflows for the AC Training Lab. Note that single workflow could be carried out using different sets of equipment within the training lab. These workflows will use dedicated hardware in a permanent setup to allow for 24/7 access. The core workflows that are planned, in development, or available are listed below:
 
 | Name | Diagram | Description | Status |
 | --- | --- | --- | --- |
-Light-based color matching | | Adjust red, green, and blue LED power levels to match a target color | Ready |
-Liquid-based color matching | | Adjust diluted red, yellow, and blue food coloring pumping power to match a target color | Ready |
-Solid-based color matching | | Adjust the composition of red, yellow, and blue powder (e.g., wax) and processing conditions to match a target color | In development |
+Light-based color matching | <img src="./_static/images/clslab-light.png" height=50> | Adjust red, green, and blue LED power levels to match a target color | Ready |
+Liquid-based color matching | <img src="./_static/images/clslab-liquid.png" height=50> | Adjust diluted red, yellow, and blue food coloring pumping power to match a target color | Ready |
+Solid-based color matching | <img src="./_static/images/clslab-solid.png" height=50> | Adjust the composition of red, yellow, and blue powder (e.g., wax) and processing conditions to match a target color | In development |
 Chocolate tensile testing | | Adjust the composition and processing conditions of 3D printed chocolate tensile specimens to tune the microstructure for maximization of tensile strength | In development |
 [Yeast growth](https://docs.pioreactor.com/experiments/yeast-growth-by-temperature) | | Adjust reactor temperature to maximize yeast growth and explore nonlinear effects | In development |
 Titration | | Add a base of known concentration to an acid to find the equivalence point as determined by successive pH measurements | In development |
@@ -112,6 +106,14 @@ This refers to the infrastructure-focused capabilities showcased in the AC Train
 | Vial transfer (mobile) | | Move a sample to a different location | In development |
 | Vial capping/decapping | | Cap or decap a vial | In development |
 | Tool changing | | Swap a tool on a robotic arm | In development |
+
+## Feedback
+
+We would love to get suggestions on the [types of workflows and functions](https://github.com/AccelerationConsortium/ac-training-lab/discussions/3) you'd like to see in the AC Training Lab! For additional training opportunities offered by the Acceleration Consortium, please navigate to [AC Microcourses](https://ac-microcourses.readthedocs.io/en/latest/).
+
+## Bill of Materials
+
+See the [AC Training Lab Bill of Materials](https://docs.google.com/spreadsheets/d/1wZc2Ii4kCsEWfSIQK7FoxSDgO_DuaGSqY09E8hmxD3I/edit?usp=sharing), which is an ongoing document.
 
 ## Contents
 
