@@ -5,13 +5,13 @@ This is an ongoing project. If you would like to participate or are interested i
 ```
 
 The [Acceleration Consortium](https://github.com/AccelerationConsortium) (AC)
-Training Lab is meant to be a remotely accessible facility that will house a
+Training Lab is a remotely accessible facility that houses a
 diverse set of physical hardware for self-driving laboratories (SDLs) including
 liquid handlers, solid dispensers, Cartesian-axis systems, mobile robotic arms,
 and synthesis and characterization modules. Where possible, both educational and
-research-grade hardware will be included. The AC Training Lab will be used to
-develop and test SDLs, and to provide a platform for training students and
-researchers in the use of SDLs. This repository also acts as an example of
+research-grade hardware are included. The AC Training Lab is used to
+develop and test SDLs and to provide a platform for training students and
+researchers in the use of SDLs. The [AC Training Lab GitHub repository](https://github.com/AccelerationConsortium/ac-training-lab) also acts as an example of
 setting up an autonomous laboratory.
 
 <a class="github-button" href="https://github.com/AccelerationConsortium/ac-training-lab"
@@ -92,6 +92,7 @@ Chocolate tensile testing | | Adjust the composition and processing conditions o
 [Yeast growth](https://docs.pioreactor.com/experiments/yeast-growth-by-temperature) | | Adjust reactor temperature to maximize yeast growth and explore nonlinear effects | In development |
 Titration | | Add a base of known concentration to an acid to find the equivalence point as determined by successive pH measurements | In development |
 Conductivity | | Adjust the ratio of battery electrolyte reagants to maximize conductivity and redox potential for a target pH | Planning |
+Polymer cross-linkage | | | Planning |
 
 
 Supported workflows (i.e., non-permanent setups) that are planned, in development, or available are listed below:
@@ -99,6 +100,18 @@ Supported workflows (i.e., non-permanent setups) that are planned, in developmen
 | Name | Diagram | Description | Status |
 | --- | --- | --- | --- |
 | Alkaline Catalysis Lifecycle Testing | | Adjust the stress-cycling conditions of a nickel electrode in a KOH solution to investigate the cause of catalyst degredation | In development |
+
+
+## Functionality
+
+This refers to the infrastructure-focused capabilities showcased in the AC Training Lab. The core functionalities (intended as permanent demos) that are planned, in development, or available are listed below. These functionalities may either be standalone or part of the workflows listed above.
+
+| Name | Diagram | Description | Status |
+| --- | --- | --- | --- |
+| Vial transfer (stationary) | | Move a vial between adjacent modules | Ready |
+| Vial transfer (mobile) | | Move a sample to a different location | In development |
+| Vial capping/decapping | | Cap or decap a vial | In development |
+| Tool changing | | Swap a tool on a robotic arm | In development |
 
 ## Contents
 
