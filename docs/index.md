@@ -81,10 +81,10 @@ The AC Training Lab is intended as a hands-on sandbox and prototyping environmen
 | --- | --- | --- | --- |
 Light-based color matching | <img src="./_static/images/clslab-light.png" height=50> | Adjust red, green, and blue LED power levels to match a target color | Ready |
 Liquid-based color matching | <img src="./_static/images/clslab-liquid.png" height=50> | Adjust diluted red, yellow, and blue food coloring pumping power to match a target color | Ready |
-Solid-based color matching | <img src="./_static/images/clslab-solid.png" height=50> | Adjust the composition of red, yellow, and blue powder (e.g., wax) and processing conditions to match a target color | In development |
-Chocolate tensile testing | | Adjust the composition and processing conditions of 3D printed chocolate tensile specimens to tune the microstructure for maximization of tensile strength | In development |
-[Yeast growth](https://docs.pioreactor.com/experiments/yeast-growth-by-temperature) | | Adjust reactor temperature to maximize yeast growth and explore nonlinear effects | In development |
-Titration | | Add a base of known concentration to an acid to find the equivalence point as determined by successive pH measurements | In development |
+Solid-based color matching | <img src="./_static/images/clslab-solid.png" height=50> | Adjust the composition of red, yellow, and blue powder (e.g., wax) and processing conditions to match a target color | Development |
+Chocolate tensile testing | | Adjust the composition and processing conditions of 3D printed chocolate tensile specimens to tune the microstructure for maximization of tensile strength | Development |
+[Yeast growth](https://docs.pioreactor.com/experiments/yeast-growth-by-temperature) | | Adjust reactor temperature to maximize yeast growth and explore nonlinear effects | Development |
+Titration | | Add a base of known concentration to an acid to find the equivalence point as determined by successive pH measurements | Development |
 Conductivity | | Adjust the ratio of battery electrolyte reagants to maximize conductivity and redox potential for a target pH | Planning |
 Polymer cross-linkage | | | Planning |
 
@@ -93,19 +93,19 @@ Supported workflows (i.e., non-permanent setups) that are planned, in developmen
 
 | Name | Diagram | Description | Status |
 | --- | --- | --- | --- |
-| Alkaline Catalysis Lifecycle Testing | | Adjust the stress-cycling conditions of a nickel electrode in a KOH solution to investigate the cause of catalyst degredation | In development |
+| Alkaline Catalysis Lifecycle Testing | | Adjust the stress-cycling conditions of a nickel electrode in a KOH solution to investigate the cause of catalyst degredation | Development |
 
 
 ## Functionality
 
-This refers to the infrastructure-focused capabilities showcased in the AC Training Lab. The core functionalities (intended as permanent demos) that are planned, in development, or available are listed below. These functionalities may either be standalone or part of the workflows listed above.
+This refers to the infrastructure-focused capabilities showcased in the AC Training Lab. The core functionalities (intended as permanent demos) that are planned, development, or available are listed below. These functionalities may either be standalone or part of the workflows listed above.
 
 | Name | Diagram | Description | Status |
 | --- | --- | --- | --- |
 | Vial transfer (stationary) | | Move a vial between adjacent modules | Ready |
-| Vial transfer (mobile) | | Move a sample to a different location | In development |
-| Vial capping/decapping | | Cap or decap a vial | In development |
-| Tool changing | | Swap a tool on a robotic arm | In development |
+| Vial transfer (mobile) | | Move a sample to a different location | Development |
+| Vial capping/decapping | | Cap or decap a vial | Development |
+| Tool changing | | Swap a tool on a robotic arm | Development |
 
 ## Feedback
 
