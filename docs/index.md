@@ -64,13 +64,13 @@ Here are some of the modules we have procured and are in the process of setting 
 | [Microfluidics](https://www.labmaker.org/collections/biotechnology/products/pressure-regulator-senyo-lab) | <img src="./_static/images/senyo-regulator.webp" height=50> | 1 | A commercially sold, open-source pressure regulator for controlling pneumatically-driven microfluidic chips |
 | [UC2 Minibox](https://www.labmaker.org/collections/uc2-miniscope/products/uc2-minibox) | <img src="./_static/images/uc2-minibox.webp" height=50> | 1 | A commercially sold, open source set of introductory modular optics cubes for microscopy |
 | [Vial Capper](https://ca.robotshop.com/products/dh-robotics-automated-screw-cap-decapper-intelligent-capping-machine) | <img src="./_static/images/capper-decapper.webp" height=50> | 1 | An automated vial capping and decapping machine by DH-Robotics |
-| [uMobileLab](https://unitedrobotics.group/en/robots/umobilelab) | <img src="./_static/images/umobilelab.jpg" height=50> | 1 | A research-grade six-axis mobile cobot with vision capabilities optimized for laboratory environments |
-| [Phenom Pure G6 SEM](https://www.thermofisher.com/ca/en/home/electron-microscopy/products/desktop-scanning-electron-microscopes/phenom-pure.html) | <img src="./_static/images/phenom-g6.jpeg" height=50> | 1 | A desktop scanning electron microscope (SEM) with Python integrations |
 
-Here are some modules we are also considering:
+Here are some modules we are considering, planning for, or are in the process of procuring:
 
 | Name | Image | Qty | Description |
 | --- | --- | --- | --- |
+| [uMobileLab](https://unitedrobotics.group/en/robots/umobilelab) | <img src="./_static/images/umobilelab.jpg" height=50> | 1 | A research-grade six-axis mobile cobot with vision capabilities optimized for laboratory environments |
+| [Phenom Pure G6 SEM](https://www.thermofisher.com/ca/en/home/electron-microscopy/products/desktop-scanning-electron-microscopes/phenom-pure.html) | <img src="./_static/images/phenom-g6.jpeg" height=50> | 1 | A desktop scanning electron microscope (SEM) with Python integrations |
 | Chamber interfaces (TBD) |  | - | e.g., miniature glovebox, miniature ductless fumehood, small nitrogen generator |
 | Low-force tensile tester |  | 1 | Low-cost, open-source tensile tester. Examples [[1](https://www.instructables.com/Universal-Tensile-Testing-Machine-VERSION-TWO/)], [[2](https://www.creativemachineslab.com/freeloader.html)], [[3](https://tspace.library.utoronto.ca/bitstream/1807/109212/4/Liu_Xinyue_202111_MAS_thesis.pdf)], [[4](https://www.printables.com/model/81214-open-pull-diy-universal-test-machine)] |
 
@@ -111,10 +111,6 @@ This refers to the infrastructure-focused capabilities showcased in the AC Train
 ## Feedback
 
 We would love to get suggestions on the [types of workflows and functions](https://github.com/AccelerationConsortium/ac-training-lab/discussions/3) you'd like to see in the AC Training Lab! For additional training opportunities offered by the Acceleration Consortium, please navigate to [AC Microcourses](https://ac-microcourses.readthedocs.io/en/latest/).
-
-## Bill of Materials
-
-See the [AC Training Lab Bill of Materials](https://docs.google.com/spreadsheets/d/1wZc2Ii4kCsEWfSIQK7FoxSDgO_DuaGSqY09E8hmxD3I/edit?usp=sharing), which is an ongoing document.
 
 ## Contents
 
