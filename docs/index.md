@@ -70,7 +70,7 @@ Here are some modules we are considering, planning for, or are in the process of
 | Name | Image | Qty | Description |
 | --- | --- | --- | --- |
 | [uMobileLab](https://unitedrobotics.group/en/robots/umobilelab) | <img src="./_static/images/umobilelab.jpg" height=50> | 1 | A research-grade six-axis mobile cobot with vision capabilities optimized for laboratory environments |
-| [Phenom Pure G6 SEM](https://www.thermofisher.com/ca/en/home/electron-microscopy/products/desktop-scanning-electron-microscopes/phenom-pure.html) | <img src="./_static/images/phenom-g6.jpeg" height=50> | 1 | A desktop scanning electron microscope (SEM) with Python integrations |
+| Desktop SEM (e.g., Phenom) | <img src="./_static/images/phenom-g6.jpeg" height=50> | 1 | A desktop scanning electron microscope (SEM) with Python integrations |
 | Chamber interfaces (TBD) |  | - | e.g., miniature glovebox, miniature ductless fumehood, small nitrogen generator |
 | Low-force tensile tester |  | 1 | Low-cost, open-source tensile tester. Examples [[1](https://www.instructables.com/Universal-Tensile-Testing-Machine-VERSION-TWO/)], [[2](https://www.creativemachineslab.com/freeloader.html)], [[3](https://tspace.library.utoronto.ca/bitstream/1807/109212/4/Liu_Xinyue_202111_MAS_thesis.pdf)], [[4](https://www.printables.com/model/81214-open-pull-diy-universal-test-machine)] |
 
