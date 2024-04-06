@@ -6,13 +6,17 @@ dependencies:
   - python>=3.6,<3.12
   - pip
   - ipython
+  - matplotlib
+  - pyserial
+  - streamlit
+  - paho-mqtt
   # VISUALIZATION
   - pip:
      - -e .  # install git checkout of ac-training-lab in editable mode
+     - prefect
   # DEVELOPMENT ONLY PACKAGES (could also be kept in a separate environment file)
   - pytest
   - pytest-cov
   - tox
   - pre_commit
   - sphinx
-  - recommonmark
