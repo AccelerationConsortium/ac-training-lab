@@ -104,7 +104,9 @@ async def main(client):
     # must have the while True loop to keep the program running
     while True:
         await asyncio.sleep(5)
-        onboard_led.toggle()  # sign of life
+        onboard_led.value(1)  # Turn the LED on
+        await asyncio.sleep(0.5)  # Keep the LED on for 0.5 seconds
+        onboard_led.value(0)  # Turn the LED off
         elapsed_time = round(time() - start_time)
         print(f"Elapsed: {elapsed_time}s")
 
