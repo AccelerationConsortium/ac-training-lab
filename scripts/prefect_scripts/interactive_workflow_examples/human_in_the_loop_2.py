@@ -69,7 +69,7 @@ async def load_image(url: str) -> bytes:
 MESSAGE = "Help us, humans! Please view <{image_url}|this image> and classify it."
 
 
-@flow
+@flow(name="classify-image-2")
 async def classify_image(image_url: str = PUGLY):
     logger = get_run_logger()
     image = await load_image(image_url)
