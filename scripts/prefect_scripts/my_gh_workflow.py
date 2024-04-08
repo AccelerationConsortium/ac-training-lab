@@ -22,7 +22,7 @@ def get_contributors(repo_info: dict):
     return contributors
 
 
-@flow(log_prints=True)
+@flow(log_prints=True, persist_result=True)
 def repo_info(repo_owner: str = "PrefectHQ", repo_name: str = "prefect"):
     """
     Given a GitHub repository, logs the number of stargazers
