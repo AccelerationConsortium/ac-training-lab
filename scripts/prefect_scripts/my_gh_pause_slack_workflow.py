@@ -27,6 +27,7 @@ async def greet_user():
     await slack_block.notify(message)
     user = await pause_flow_run(wait_for_input=str, timeout=60)
 
-    logger.info(f"Hello, {user}!")
+    msg_out = f"Hello, {user}!"
+    logger.info(msg_out)
 
-    return user
+    return msg_out
