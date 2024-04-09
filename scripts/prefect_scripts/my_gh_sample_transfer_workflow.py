@@ -2,8 +2,6 @@
 # https://prefecthq.github.io/prefect-slack/
 # https://github.com/PrefectHQ/interactive_workflow_examples
 
-from typing import Optional
-
 from prefect import flow, get_run_logger, pause_flow_run, settings
 from prefect.blocks.notifications import SlackWebhook
 from prefect.context import get_run_context
@@ -16,7 +14,7 @@ MESSAGE = "Please move sample <{sample_link}|{sample_name}> from <{source_link}|
 
 class UserInput(RunInput):
     github_username: str
-    comments: Optional[str] = None
+    comments: str
     flag_for_review: bool
 
 
@@ -52,13 +50,14 @@ async def move_sample(
         wait_for_input=UserInput.with_initial_data(
             description="Please provide your GitHub username, any comments, and whether this sample transfer should be flagged for review.",  # noqa: E501
             github_username="sgbaird",
+            comments="",
             flag_for_review=False,
         ),
         timeout=300,
     )
 
-    msg_out = f"🚀 Sample transfer initiated by {user_input.github_username}.\n\n💬 Comments:\n{user_input.comments}.\n\n🚩 Flagged for review: {user_input.flag_for_review}."  # noqa: E501
-
-    logger.info(msg_out)
+    logger.info(f"🚀 Sample transfer initiated by {user_input.github_username}")
+    logger.info(f"💬 Comments: {user_input.comments}")
+    logger.info(f"🚩 Flagged for review: {user_input.flag_for_review}")
 
     return user_input
