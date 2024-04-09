@@ -2,6 +2,8 @@
 # https://prefecthq.github.io/prefect-slack/
 # https://github.com/PrefectHQ/interactive_workflow_examples
 
+from typing import Optional
+
 from prefect import flow, get_run_logger, pause_flow_run, settings
 from prefect.blocks.notifications import SlackWebhook
 from prefect.context import get_run_context
@@ -14,7 +16,7 @@ MESSAGE = "Please move sample <{sample_link}|{sample_name}> from <{source_link}|
 
 class UserInput(RunInput):
     github_username: str
-    comments: str
+    comments: Optional[str] = None
     flag_for_review: bool
 
 
