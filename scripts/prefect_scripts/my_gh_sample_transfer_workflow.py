@@ -9,7 +9,7 @@ from prefect.input import RunInput
 
 slack_block = SlackWebhook.load("prefect-test")
 
-MESSAGE = "Please move sample <{sample_link}|{sample_name}> from <{source_link}|{source_name} to <{destination_link}|{destination_name}>."  # noqa: E501
+MESSAGE = "Please move sample <{sample_link}|{sample_name}> from <{source_link}|{source_name}> to <{destination_link}|{destination_name}>."  # noqa: E501
 
 
 class UserInput(RunInput):
