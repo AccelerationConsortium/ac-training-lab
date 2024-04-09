@@ -25,7 +25,7 @@ async def greet_user():
         message += f"\n\nOpen the <{flow_run_url}|paused flow run>, click 'Resume', and then submit your name."  # noqa: E501
 
     await slack_block.notify(message)
-    user = await suspend_flow_run(wait_for_input=str, timeout=60)
+    user = await suspend_flow_run(wait_for_input=str, timeout=120)
 
     msg_out = f"Hello, {user}!"
     logger.info(msg_out)
