@@ -14,7 +14,7 @@ MESSAGE = "Please move sample <{sample_link}|{sample_name}> from <{source_link}|
 
 class UserInput(RunInput):
     github_username: str
-    comments: str
+    comments: str = ""
     flag_for_review: bool
 
 
@@ -49,8 +49,8 @@ async def move_sample(
     user_input = await pause_flow_run(
         wait_for_input=UserInput.with_initial_data(
             description="Please provide your GitHub username, any comments, and whether this sample transfer should be flagged for review.",  # noqa: E501
-            github_username="sgbaird",
-            comments="",
+            # github_username="sgbaird",
+            # comments="",
             flag_for_review=False,
         ),
         timeout=300,
