@@ -9,8 +9,6 @@ from prefect.input import RunInput
 
 slack_block = SlackWebhook.load("prefect-test")
 
-MESSAGE = "Please move sample <{sample_link}|{sample_name}> from <{source_link}|{source_name}> to <{destination_link}|{destination_name}>."  # noqa: E501
-
 
 class UserInput(RunInput):
     github_username: str
@@ -29,21 +27,15 @@ async def move_sample(
 ):
     logger = get_run_logger()
 
-    message = MESSAGE.format(
-        sample_link=sample_link,
-        sample_name=sample_name,
-        source_link=source_link,
-        source_name=source_name,
-        destination_link=destination_link,
-        destination_name=destination_name,
-    )
+    message = f"Please move sample <{sample_link}|{sample_name}> from <{source_link}|{source_name}> to <{destination_link}|{destination_name}>."  # noqa: E501
+
     flow_run = get_run_context().flow_run
 
     if flow_run and settings.PREFECT_UI_URL:
         flow_run_url = (
             f"{settings.PREFECT_UI_URL.value()}/flow-runs/flow-run/{flow_run.id}"
         )
-        message += f"\n\nOpen the <{flow_run_url}|paused flow run>, click 'Resume', and follow the instructions."  # noqa: E501
+        message += f"\n\nOpen the <{flow_run_url}|paused flow run>, click 'Resume ▶️', and follow the instructions."  # noqa: E501
 
     await slack_block.notify(message)
     user_input = await pause_flow_run(
