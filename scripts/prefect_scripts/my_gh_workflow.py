@@ -28,11 +28,11 @@ def repo_info(repo_owner: str = "PrefectHQ", repo_name: str = "prefect"):
     Given a GitHub repository, logs the number of stargazers
     and contributors for that repo and return the two numbers.
     """
-    repo_info = get_repo_info(repo_owner, repo_name)
-    stars = repo_info["stargazers_count"]
+    info = get_repo_info(repo_owner, repo_name)
+    stars = info["stargazers_count"]
     print(f"Stars 🌠 : {stars}")
 
-    contributors = get_contributors(repo_info)
+    contributors = get_contributors(info)
     num_contributors = len(contributors)
     print(f"Number of contributors 👷: {num_contributors}")
 
