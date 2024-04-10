@@ -5,7 +5,7 @@ if __name__ == "__main__":
         source="https://github.com/AccelerationConsortium/ac-training-lab.git",
         entrypoint="scripts/prefect_scripts/my_gh_pause_slack_workflow.py:greet_user",
     ).deploy(
-        name="pause-workflow-deployment",
-        work_pool_name="my-managed-pool",
+        name="pause-slack-workflow-deployment",
+        work_pool_name="managed-pool",
         cron="0 1 * * *",
     )
