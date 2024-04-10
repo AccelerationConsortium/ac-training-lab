@@ -6,6 +6,6 @@ if __name__ == "__main__":
         entrypoint="scripts/prefect_scripts/my_gh_pause_slack_workflow.py:greet_user",
     ).deploy(
         name="pause-slack-workflow-deployment",
-        work_pool_name="managed-pool",
+        work_pool_name="my-managed-pool",
         cron="0 1 * * *",
     )

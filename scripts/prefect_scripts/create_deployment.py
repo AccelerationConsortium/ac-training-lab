@@ -6,6 +6,6 @@ if __name__ == "__main__":
         entrypoint="scripts/prefect_scripts/my_gh_workflow.py:repo_info",
     ).deploy(
         name="my-first-deployment",
-        work_pool_name="managed-pool",
+        work_pool_name="my-managed-pool",
         cron="0 1 * * *",
     )
