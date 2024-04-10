@@ -6,6 +6,6 @@ if __name__ == "__main__":
         entrypoint="scripts/prefect_scripts/my_gh_sample_transfer_workflow.py:move_sample",  # noqa: E501
     ).deploy(
         name="sample-transfer-deployment",
-        work_pool_name="managed-pool",
+        work_pool_name="my-managed-pool",
         # cron="0 1 * * *",
     )
