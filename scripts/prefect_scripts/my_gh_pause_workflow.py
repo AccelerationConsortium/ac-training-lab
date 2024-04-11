@@ -8,3 +8,7 @@ def greet_user():
     user = pause_flow_run(wait_for_input=str, timeout=60)
 
     logger.info(f"Hello, {user}!")
+
+
+if __name__ == "__main__":
+    greet_user()
