@@ -2,6 +2,8 @@
 # https://prefecthq.github.io/prefect-slack/
 # https://github.com/PrefectHQ/interactive_workflow_examples
 
+import asyncio
+
 from prefect import flow, get_run_logger, pause_flow_run, settings
 from prefect.blocks.notifications import SlackWebhook
 from prefect.context import get_run_context
@@ -31,3 +33,9 @@ async def greet_user():
     logger.info(msg_out)
 
     return msg_out
+
+
+if __name__ == "__main__":
+    msg_out = asyncio.run(greet_user())
+
+    1 + 1
