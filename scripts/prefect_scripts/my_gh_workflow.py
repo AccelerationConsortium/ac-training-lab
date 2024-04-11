@@ -40,4 +40,4 @@ def repo_info(repo_owner: str = "PrefectHQ", repo_name: str = "prefect"):
 
 
 if __name__ == "__main__":
-    repo_info()
+    repo_info(repo_owner="AccelerationConsortium", repo_name="ac-training-lab")
