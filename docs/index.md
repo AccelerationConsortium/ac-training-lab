@@ -41,7 +41,7 @@ Here are some of the modules we have procured and are in the process of setting 
 
 | Name | Image | Qty | Description |
 | --- | --- | --- | --- |
-| [Jubilee](https://jubilee3d.com/index.php?title=Main_Page) | <img src="./_static/images/jubilee.png" height=50> | 5 | A versatile, open-source toolchanger with a large community of users and developers which is used for both general 3D printing and [scientific applications](https://dx.doi.org/10.1039/D3DD00033H). One nearing completion. Four more planned. |
+| [Jubilee](https://jubilee3d.com/index.php?title=Main_Page) | <img src="./_static/images/jubilee.png" height=50> | 1(+4) | A versatile, open-source toolchanger with a large community of users and developers which is used for both general 3D printing and [scientific applications](https://dx.doi.org/10.1039/D3DD00033H). One nearing completion. Four more planned. |
 | [Delta Stage Microscope](https://openflexure.org/projects/deltastage/) | <img src="./_static/images/delta-stage.jpg" height=50> | 2 | A DIY open-source microscope with a fine-positioning, motorized stage. Reflection illumination version of Delta Stage |
 | [Opentrons OT-2](https://opentrons.com/products/robots/ot-2/) | <img src="./_static/images/ot2.png" height=50> | 1 | An open-source and cost-friendly commercial liquid handler |
 | [Opentrons Flex](https://opentrons.com/products/flex/) | <img src="./_static/images/opentrons-flex.png" height=50> | 1 | An open-source commercial liquid handler tailored towards high-throughput and advanced liquid handling operations |
