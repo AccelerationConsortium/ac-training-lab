@@ -67,10 +67,16 @@ Here are some of the modules we have procured and are in the process of setting 
 
 Here are some modules we are considering, planning for, or are in the process of procuring:
 
+<!--- | Mobile manipulator (e.g., uMobileLab) | <img src="./_static/images/umobilelab.jpg" height=50> | 1 | A research-grade six-axis mobile cobot with vision capabilities optimized for laboratory environments | 
+
+| Desktop SEM (e.g., Phenom) | <img src="./_static/images/phenom-g6.jpeg" height=50> | 1 | A desktop scanning electron microscope (SEM) with Python integrations |
+
+--->
+
 | Name | Image | Qty | Description |
 | --- | --- | --- | --- |
-| [uMobileLab](https://unitedrobotics.group/en/robots/umobilelab) | <img src="./_static/images/umobilelab.jpg" height=50> | 1 | A research-grade six-axis mobile cobot with vision capabilities optimized for laboratory environments |
-| Desktop SEM (e.g., Phenom) | <img src="./_static/images/phenom-g6.jpeg" height=50> | 1 | A desktop scanning electron microscope (SEM) with Python integrations |
+| Mobile manipulator | | 1 | A research-grade six-axis mobile cobot with vision capabilities optimized for laboratory environments |
+| Desktop SEM |  | 1 | A desktop scanning electron microscope (SEM) with Python integrations |
 | Chamber interfaces (TBD) |  | - | e.g., miniature glovebox, miniature ductless fumehood, small nitrogen generator |
 | Low-force tensile tester |  | 1 | Low-cost, open-source tensile tester. Examples [[1](https://www.instructables.com/Universal-Tensile-Testing-Machine-VERSION-TWO/)], [[2](https://www.creativemachineslab.com/freeloader.html)], [[3](https://tspace.library.utoronto.ca/bitstream/1807/109212/4/Liu_Xinyue_202111_MAS_thesis.pdf)], [[4](https://www.printables.com/model/81214-open-pull-diy-universal-test-machine)] |
 
