@@ -67,7 +67,7 @@ Here are some of the modules we have procured and are in the process of setting 
 
 Here are some modules we are considering, planning for, or are in the process of procuring:
 
-<!--- | Mobile manipulator (e.g., uMobileLab) | <img src="./_static/images/umobilelab.jpg" height=50> | 1 | A research-grade six-axis mobile cobot with vision capabilities optimized for laboratory environments | 
+<!--- | Mobile manipulator (e.g., uMobileLab) | <img src="./_static/images/umobilelab.jpg" height=50> | 1 | A research-grade six-axis mobile cobot with vision capabilities optimized for laboratory environments |
 
 | Desktop SEM (e.g., Phenom) | <img src="./_static/images/phenom-g6.jpeg" height=50> | 1 | A desktop scanning electron microscope (SEM) with Python integrations |
 
