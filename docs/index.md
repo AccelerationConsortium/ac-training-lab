@@ -59,8 +59,9 @@ Here are some of the modules we have procured and are in the process of setting 
 | [Digital Pipette](https://github.com/ac-rad/digital-pipette) | <img src="./_static/images/digital-pipette.png" height=50> | 1 | A DIY linear actuator-based syringe pump designed for easy handling by robotic arms |
 | [Chi.Bio](https://chi.bio/) | <img src="./_static/images/chi-bio.jpeg" height=50> | 1 | A commercially sold, open-source automated system with heating, stirring, liquid handling, spectrometry, and optogenetics characterization geared towards biological research |
 | [Pioreactor](https://pioreactor.com/en-ca/products/pioreactor-20ml?variant=46559156469816) | <img src="./_static/images/pioreactor.webp" height=50> | 1 | A commercially sold, open-source automated bioreactor with heating, stirring, and optical density measurements |
-| [Rodeostat](https://iorodeo.com/products/rodeostat) | <img src="./_static/images/rodeostat.png" height=50> | 5 | A commercially sold, open-source potentiostat for electrochemical experiments with current measurement ranges of +/- 1, 10, 100, 1000uA. |
-| [Rodeostat HC](https://iorodeo.com/products/rodeostat-hc) | <img src="./_static/images/rodeostat.png" height=50> | 1 | A commercially sold, open-source potentiostat for electrochemical experiments with current measurement ranges of +/- 10, 100, 1000, 10000uA. |
+| [Rodeostat](https://iorodeo.com/products/rodeostat) | <img src="./_static/images/rodeostat.png" height=50> | 5 | A commercially sold, open-source potentiostat for electrochemical experiments with current measurement ranges of +/- 0.001, 0.01, 0.1, 1mA. |
+| [Rodeostat HC](https://iorodeo.com/products/rodeostat-hc) | <img src="./_static/images/rodeostat.png" height=50> | 1 | A commercially sold, open-source potentiostat for electrochemical experiments with current measurement ranges of +/- 0.01, 0.1, 1, 10mA. |
+| [Squidstat Solo](https://www.admiralinstruments.com/product-page/squidstat-solo) | <img src="./_static/images/squidstat.png" height=50> | 1 | An entry-level research-grade potentiostat with eight ranges between +/- 10 nA and +/- 100 mA and a Python API |
 | [Microfluidics](https://www.labmaker.org/collections/biotechnology/products/pressure-regulator-senyo-lab) | <img src="./_static/images/senyo-regulator.webp" height=50> | 1 | A commercially sold, open-source pressure regulator for controlling pneumatically-driven microfluidic chips |
 | [UC2 Minibox](https://www.labmaker.org/collections/uc2-miniscope/products/uc2-minibox) | <img src="./_static/images/uc2-minibox.webp" height=50> | 1 | A commercially sold, open source set of introductory modular optics cubes for microscopy |
 | [Vial Capper](https://ca.robotshop.com/products/dh-robotics-automated-screw-cap-decapper-intelligent-capping-machine) | <img src="./_static/images/capper-decapper.webp" height=50> | 1 | An automated vial capping and decapping machine by DH-Robotics |
@@ -82,7 +83,11 @@ Here are some modules we are considering, planning for, or are in the process of
 
 ## Workflows
 
-The AC Training Lab is intended as a hands-on sandbox and prototyping environment for researchers. While the equipment is not restricted to particular workflows, we are actively developing a subset of readily accessible workflows for the AC Training Lab. Note that single workflow could be carried out using different sets of equipment within the training lab. These workflows will use dedicated hardware in a permanent setup to allow for 24/7 access. The core workflows that are planned, in development, or available are listed below:
+The AC Training Lab is intended as a hands-on sandbox and prototyping environment for researchers. Each workflow will either be dedicated (permanent) or supported (non-permanent).
+
+### Dedicated Workflows
+
+While the equipment is not restricted to particular workflows, we are actively developing a subset of readily accessible workflows for the AC Training Lab. Note that single workflow could be carried out using different sets of equipment within the training lab. These workflows will use dedicated hardware in a permanent setup to allow for 24/7 access. The core workflows that are planned, in development, or available are listed below:
 
 | Name | Diagram | Description | Status |
 | --- | --- | --- | --- |
@@ -95,6 +100,8 @@ Titration | | Add a base of known concentration to an acid to find the equivalen
 Conductivity | | Adjust the ratio of battery electrolyte reagants to maximize conductivity and redox potential for a target pH | Planning |
 Polymer cross-linkage | | | Planning |
 
+
+### Supported Workflows
 
 Supported workflows (i.e., non-permanent setups) that are planned, in development, or available are listed below:
 
