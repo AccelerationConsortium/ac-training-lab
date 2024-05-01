@@ -19,10 +19,10 @@ data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="St
 AccelerationConsortium/ac-training-lab on GitHub">Star</a>
 <a class="github-button"
 href="https://github.com/AccelerationConsortium" data-size="large" data-show-count="true"
-aria-label="Follow @AccelerationConsortium on GitHub">Follow</a>
+aria-label="Follow @AccelerationConsortium on GitHub">Follow @AccelerationConsortium</a>
 <a class="github-button"
 href="https://github.com/sgbaird" data-size="large" data-show-count="true"
-aria-label="Follow @sgbaird on GitHub">Follow</a>
+aria-label="Follow @sgbaird on GitHub">Follow @sgbaird</a>
 <a class="github-button" href="https://github.com/AccelerationConsortium/ac-training-lab/issues"
 data-icon="octicon-issue-opened" data-size="large" data-show-count="true"
 aria-label="Issue AccelerationConsortium/ac-training-lab on GitHub">Issue</a>
