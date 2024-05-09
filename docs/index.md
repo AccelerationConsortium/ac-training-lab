@@ -41,7 +41,7 @@ Here are some of the modules we have procured and are in the process of setting 
 
 | Name | Image | Qty | Description | Video |
 | --- | --- | --- | --- | --- |
-| [Jubilee](https://jubilee3d.com/index.php?title=Main_Page) | <img src="./_static/images/jubilee.png" height=50> | 1(+4) | A versatile, open-source toolchanger with a large community of users and developers which is used for both general 3D printing and [scientific applications](https://dx.doi.org/10.1039/D3DD00033H). One nearing completion. Four more planned. | |
+| [Science Jubilee](https://machineagency.github.io/science_jubilee/) | <img src="./_static/images/jubilee.png" height=50> | 1(+4) | A versatile, open-source toolchanger with a large community of users and developers which is used for both general 3D printing and [scientific applications](https://dx.doi.org/10.1039/D3DD00033H). One nearing completion. Four more planned. | <a href="http://www.youtube.com/watch?v=I_TUBX-A1sQ" title="TITLE"><img src="http://img.youtube.com/vi/I_TUBX-A1sQ/0.jpg" height=50 alt="video thumbnail"></a> |
 | [Delta Stage Microscope](https://openflexure.org/projects/deltastage/) | <img src="./_static/images/delta-stage.jpg" height=50> | 2 | A DIY open-source microscope with a fine-positioning, motorized stage. Reflection illumination version of Delta Stage | |
 | [Opentrons OT-2](https://opentrons.com/products/robots/ot-2/) | <img src="./_static/images/ot2.png" height=50> | 1 | An open-source and cost-friendly commercial liquid handler | |
 | [Opentrons Flex](https://opentrons.com/products/flex/) | <img src="./_static/images/opentrons-flex.png" height=50> | 1 | An open-source commercial liquid handler tailored towards high-throughput and advanced liquid handling operations | |
@@ -66,8 +66,7 @@ Here are some of the modules we have procured and are in the process of setting 
 | [UC2 Minibox](https://www.labmaker.org/collections/uc2-miniscope/products/uc2-minibox) | <img src="./_static/images/uc2-minibox.webp" height=50> | 1 | A commercially sold, open source set of introductory modular optics cubes for microscopy | |
 | [Vial Capper](https://ca.robotshop.com/products/dh-robotics-automated-screw-cap-decapper-intelligent-capping-machine) | <img src="./_static/images/capper-decapper.webp" height=50> | 1 | An automated vial capping and decapping machine by DH-Robotics | <a href="http://www.youtube.com/watch?v=S3lx9qviH9Y" title="Introduction to Robotics"><img src="http://img.youtube.com/vi/S3lx9qviH9Y/0.jpg" height=50 alt="Vial capper video"></a> |
 
-
-Here are some modules we are considering, planning for, or are in the process of procuring:
+<!-- <a href="http://www.youtube.com/watch?v=VIDEO_ID" title="TITLE"><img src="http://img.youtube.com/vi/VIDEO_ID/0.jpg" height=50 alt="video thumbnail"></a> -->
 
 <!--- | Mobile manipulator (e.g., uMobileLab) | <img src="./_static/images/umobilelab.jpg" height=50> | 1 | A research-grade six-axis mobile cobot with vision capabilities optimized for laboratory environments |
 
