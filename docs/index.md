@@ -41,7 +41,7 @@ Here are some of the modules we have procured and are in the process of setting 
 
 | Name | Image | Qty | Description | Video |
 | --- | --- | --- | --- | --- |
-| [Science Jubilee](https://machineagency.github.io/science_jubilee/) | <img src="./_static/images/jubilee.png" height=50> | 1(+4) | A versatile, open-source toolchanger with a large community of users and developers which is used for both general 3D printing and [scientific applications](https://dx.doi.org/10.1039/D3DD00033H). One nearing completion. Four more planned. | <a href="http://www.youtube.com/watch?v=I_TUBX-A1sQ" title="TITLE"><img src="http://img.youtube.com/vi/I_TUBX-A1sQ/0.jpg" height=50 alt="video thumbnail"></a> |
+| [Science Jubilee](https://machineagency.github.io/science_jubilee/) | <img src="./_static/images/jubilee.png" height=50> | 1(+4) | A versatile, open-source toolchanger with a large community of users and developers which is used for both general 3D printing and [scientific applications](https://dx.doi.org/10.1039/D3DD00033H). One nearing completion. Four more planned. | ![Vial capper](http://img.youtube.com/vi/I_TUBX-A1sQ/0.jpg){h=50px align=center target="http://www.youtube.com/watch?v=I_TUBX-A1sQ"} |
 | [Delta Stage Microscope](https://openflexure.org/projects/deltastage/) | <img src="./_static/images/delta-stage.jpg" height=50> | 2 | A DIY open-source microscope with a fine-positioning, motorized stage. Reflection illumination version of Delta Stage | |
 | [Opentrons OT-2](https://opentrons.com/products/robots/ot-2/) | <img src="./_static/images/ot2.png" height=50> | 1 | An open-source and cost-friendly commercial liquid handler | |
 | [Opentrons Flex](https://opentrons.com/products/flex/) | <img src="./_static/images/opentrons-flex.png" height=50> | 1 | An open-source commercial liquid handler tailored towards high-throughput and advanced liquid handling operations | |
@@ -64,7 +64,11 @@ Here are some of the modules we have procured and are in the process of setting 
 | [Squidstat Solo](https://www.admiralinstruments.com/product-page/squidstat-solo) | <img src="./_static/images/squidstat.png" height=50> | 1 | An entry-level research-grade potentiostat with eight ranges between +/- 10 nA and +/- 100 mA and a Python API | |
 | [Microfluidics](https://www.labmaker.org/collections/biotechnology/products/pressure-regulator-senyo-lab) | <img src="./_static/images/senyo-regulator.webp" height=50> | 1 | A commercially sold, open-source pressure regulator for controlling pneumatically-driven microfluidic chips | |
 | [UC2 Minibox](https://www.labmaker.org/collections/uc2-miniscope/products/uc2-minibox) | <img src="./_static/images/uc2-minibox.webp" height=50> | 1 | A commercially sold, open source set of introductory modular optics cubes for microscopy | |
-| [Vial Capper](https://ca.robotshop.com/products/dh-robotics-automated-screw-cap-decapper-intelligent-capping-machine) | <img src="./_static/images/capper-decapper.webp" height=50> | 1 | An automated vial capping and decapping machine by DH-Robotics | <a href="http://www.youtube.com/watch?v=S3lx9qviH9Y" title="Introduction to Robotics"><img src="http://img.youtube.com/vi/S3lx9qviH9Y/0.jpg" height=50 alt="Vial capper video"></a> |
+| [Vial Capper](https://ca.robotshop.com/products/dh-robotics-automated-screw-cap-decapper-intelligent-capping-machine) | <img src="./_static/images/capper-decapper.webp" height=50> | 1 | An automated vial capping and decapping machine by DH-Robotics | ![Vial capper](http://img.youtube.com/vi/S3lx9qviH9Y/0.jpg){h=50px align=center target="http://www.youtube.com/watch?v=S3lx9qviH9Y"} |
+
+<!-- <a href="http://www.youtube.com/watch?v=S3lx9qviH9Y" title="Introduction to Robotics"><img src="http://img.youtube.com/vi/S3lx9qviH9Y/0.jpg" height=50 alt="Vial capper video"></a> -->
+
+<!-- NOTE: Video thumbnails use myst syntax https://myst-parser.readthedocs.io/en/latest/syntax/images_and_figures.html -->
 
 <!-- <a href="http://www.youtube.com/watch?v=VIDEO_ID" title="TITLE"><img src="http://img.youtube.com/vi/VIDEO_ID/0.jpg" height=50 alt="video thumbnail"></a> -->
 
