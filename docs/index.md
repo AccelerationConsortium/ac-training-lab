@@ -53,9 +53,7 @@ Here are some of the modules we have procured and are in the process of setting 
 | [Ingenuity Powder System](https://ingenuityprecision.com/product/ingenuity-powder-system/) | <img src="./_static/images/ingenuity-powder-system.jpg" height=50> | 1 | An automated solid dispensing station, usually marketed for ammunition reloading, but to be used as a general-purpose powder doser | |
 | [MT Powder Powder Doser](https://www.mt.com/in/en/home/products/Laboratory_Weighing_Solutions/analytical-balances/XPR105-30355389.html) | <img src="./_static/images/xpr105.jpg" height=50> | 1 | XPR105DU is a commercial, automated powder doser by Mettler-Toledo | |
 | [Cocoa Press](https://cocoapress.com/en-ca) | <img src="./_static/images/cocoapress.webp" height=50> | 1 | A commercially sold and mostly open-source chocolate 3D printer kit | |
-| [FormAuto](https://formlabs.com/3d-printers/form-auto/) and [Form 3+](https://formlabs.com/3d-printers/form-3/) | <img src="./_static/images/formauto-form3.webp" height=50> |
-
- 1 | 24/7 autonomous SLA 3D printer with camera inspection | |
+| [FormAuto](https://formlabs.com/3d-printers/form-auto/) and [Form 3+](https://formlabs.com/3d-printers/form-3/) | <img src="./_static/images/formauto-form3.webp" height=50> | 1 | 24/7 autonomous SLA 3D printer with camera inspection | |
 | [Form 3L](https://formlabs.com/3d-printers/form-3l/) package | <img src="./_static/images/form-3l.webp" height=50> | 1 | A large-format SLA printer with wash and cure stations | |
 | [Automated Turntable](https://www.tindie.com/products/fluxgarage/turntable-for-stepper-motor-kit/) | <img src="./_static/images/fluxgarage-turntable.png" height=50> | 1 | An open-source automated turntable controlled by a stepper motor and designed for photography applications | |
 | [Digital Pipette](https://github.com/ac-rad/digital-pipette) | <img src="./_static/images/digital-pipette.png" height=50> | 1 | A DIY linear actuator-based syringe pump designed for easy handling by robotic arms | |
@@ -66,8 +64,8 @@ Here are some of the modules we have procured and are in the process of setting 
 | [Squidstat Solo](https://www.admiralinstruments.com/product-page/squidstat-solo) | <img src="./_static/images/squidstat.png" height=50> | 1 | An entry-level research-grade potentiostat with eight ranges between +/- 10 nA and +/- 100 mA and a Python API | |
 | [Microfluidics](https://www.labmaker.org/collections/biotechnology/products/pressure-regulator-senyo-lab) | <img src="./_static/images/senyo-regulator.webp" height=50> | 1 | A commercially sold, open-source pressure regulator for controlling pneumatically-driven microfluidic chips | |
 | [UC2 Minibox](https://www.labmaker.org/collections/uc2-miniscope/products/uc2-minibox) | <img src="./_static/images/uc2-minibox.webp" height=50> | 1 | A commercially sold, open source set of introductory modular optics cubes for microscopy | |
-| [Vial Capper](https://ca.robotshop.com/products/dh-robotics-automated-screw-cap-decapper-intelligent-capping-machine) | <img src="./_static/images/capper-decapper.webp" height=50> | 1 | An automated vial capping and decapping machine by DH-Robotics | [![Vial Capper](http://img.youtube.com/vi/S3lx9qviH9Y/0.jpg)](http://www.youtube.com/watch?v=S3lx9qviH9Y "Introduction to Robotics")
- |
+| [Vial Capper](https://ca.robotshop.com/products/dh-robotics-automated-screw-cap-decapper-intelligent-capping-machine) | <img src="./_static/images/capper-decapper.webp" height=50> | 1 | An automated vial capping and decapping machine by DH-Robotics | <a href="http://www.youtube.com/watch?v=S3lx9qviH9Y" title="Introduction to Robotics"><img src="http://img.youtube.com/vi/S3lx9qviH9Y/0.jpg" height=50 alt="Vial capper video"></a> |
+
 
 Here are some modules we are considering, planning for, or are in the process of procuring:
 
