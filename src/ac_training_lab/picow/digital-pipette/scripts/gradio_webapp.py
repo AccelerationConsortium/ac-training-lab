@@ -1,3 +1,5 @@
+"""Streamlit implementation is preferred over this gradio implementation"""
+
 import json
 
 import gradio as gr
