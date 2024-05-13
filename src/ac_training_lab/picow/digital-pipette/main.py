@@ -60,8 +60,11 @@ def set_position(pulse_ms):
 command_topic = f"digital-pipette/picow/{pico_id}/L16-R"  # Prefix for all topics
 print(command_topic)
 
+status_ok = True
+
 
 async def messages(client):  # Respond to incoming messages
+    global status_ok
     async for topic, msg, retained in client.queue:
         try:
             topic = topic.decode()
@@ -81,8 +84,10 @@ async def messages(client):  # Respond to incoming messages
 
                 # There's no feedback from the actuator, so better to just use a QoS on the orchestrator side
                 # In the future, this could be a visual, audio, vibrational, or other kind of check
+                status_ok = True
 
         except Exception as e:
+            status_ok = False
             with StringIO() as f:
                 sys.print_exception(e, f)
                 print(f.getvalue())
@@ -103,10 +108,16 @@ async def main(client):
     start_time = time()
     # must have the while True loop to keep the program running
     while True:
-        await asyncio.sleep(5)
-        onboard_led.value(1)  # Turn the LED on
-        await asyncio.sleep(0.5)  # Keep the LED on for 0.5 seconds
-        onboard_led.value(0)  # Turn the LED off
+        if client.isconnected() and status_ok:
+            await asyncio.sleep(5)
+            onboard_led.value(1)  # Turn the LED on
+            await asyncio.sleep(0.5)  # Keep the LED on for 0.5 seconds
+            onboard_led.value(0)  # Turn the LED off
+        else:
+            onboard_led.value(1)  # Turn the LED on
+            await asyncio.sleep(0.5)  # Keep the LED on for 0.5 seconds
+            onboard_led.value(0)  # Turn the LED off
+            await asyncio.sleep(0.5)  # Wait for 0.5 seconds before the next blink
         elapsed_time = round(time() - start_time)
         print(f"Elapsed: {elapsed_time}s")
 
