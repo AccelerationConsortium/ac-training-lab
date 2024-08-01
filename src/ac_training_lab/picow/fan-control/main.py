@@ -1,3 +1,4 @@
+import json
 import ssl
 import time
 
@@ -16,11 +17,10 @@ print(f"\nPICO_ID: {my_id}\n")
 PICO_ID = "test-fan"  # UPDATE THIS TO YOUR ID
 print(f"Overriding PICO_ID to: {PICO_ID}")
 
-
 # Constants
 PIN_I2C0_SDA = Pin(4)
 PIN_I2C0_SCL = Pin(5)
-I2C0_FREQ = 400000
+I2C0_FREQ = 100000  # 400000 was from test file
 
 # Initialize I2C bus
 i2c = I2C(0, scl=PIN_I2C0_SCL, sda=PIN_I2C0_SDA, freq=I2C0_FREQ)
@@ -77,18 +77,21 @@ async def messages(client):  # Respond to incoming messages
 
             if topic == command_topic:
                 try:
-                    speed = int(msg)
-                    if 0 <= speed <= 100:
+                    data = json.loads(msg)
+                    speed = data.get("speed")
+                    if isinstance(speed, int) and 0 <= speed <= 100:
                         fan_controller.set_duty_cycle(speed)
                         print(f"Fan speed set to {speed}%")
                     else:
-                        print("Speed out of range")
-                except ValueError:
+                        print("Speed out of range or invalid")
+                except (ValueError, json.JSONDecodeError):
                     print("Invalid speed value")
 
                 rpm = fan_controller.get_fan_rpm()
-                print(f"Publish {rpm} RPM to {sensor_data_topic}")
-                await client.publish(sensor_data_topic, f"{rpm}", qos=1)
+                utc_timestamp = round(time.time())
+                payload = json.dumps({"rpm": rpm, "utc_timestamp": utc_timestamp})
+                print(f"Publish {payload} to {sensor_data_topic}")
+                await client.publish(sensor_data_topic, payload, qos=1)
         except Exception as e:
             print(e)
 
@@ -108,14 +111,15 @@ async def main(client):
     start_time = time.time()
     # must have the while True loop to keep the program running
     while True:
-        await asyncio.sleep(5)
+        await asyncio.sleep(0.1)
         rpm = fan_controller.get_fan_rpm()
-        elapsed_time = round(time.time() - start_time)
-        print(f"Elapsed: {elapsed_time}s, RPM: {rpm}")
-        await client.publish(sensor_data_topic, f"{rpm}", qos=1)
+        utc_timestamp = round(time.time())
+        payload = json.dumps({"rpm": rpm, "utc_timestamp": utc_timestamp})
+        print(f"Elapsed: {round(time.time() - start_time)}s, {payload}")
+        await client.publish(sensor_data_topic, payload, qos=1)
 
 
-config["queue_len"] = 2  # Use event interface with specified queue length
+config["queue_len"] = 100  # Use event interface with specified queue length
 MQTTClient.DEBUG = True  # Optional: print diagnostic messages
 client = MQTTClient(config)
 del cacert  # to free memory
