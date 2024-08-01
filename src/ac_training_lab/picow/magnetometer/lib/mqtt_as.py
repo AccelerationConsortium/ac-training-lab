@@ -26,7 +26,7 @@ from micropython import const
 gc.collect()
 from sys import platform
 
-VERSION = (0, 7, 1)
+VERSION = (0, 7, 2)
 
 # Default short delay for good SynCom throughput (avoid sleep(0) with SynCom).
 _DEFAULT_MS = const(20)
@@ -284,9 +284,12 @@ class MQTT_base:
         await asyncio.sleep_ms(_DEFAULT_MS)
         self.dprint("Connecting to broker.")
         if self._ssl:
-            import ussl
+            try:
+                import ssl
+            except ImportError:
+                import ussl as ssl
 
-            self._sock = ussl.wrap_socket(self._sock, **self._ssl_params)
+            self._sock = ssl.wrap_socket(self._sock, **self._ssl_params)
         premsg = bytearray(b"\x10\0\0\0\0\0")
         msg = bytearray(b"\x04MQTT\x04\0\0\0")  # Protocol 3.1.1
 
@@ -322,9 +325,8 @@ class MQTT_base:
         # read causes ECONNABORTED if broker is out; triggers a reconnect.
         resp = await self._as_read(4)
         self.dprint("Connected to broker.")  # Got CONNACK
-        if (
-            resp[3] != 0 or resp[0] != 0x20 or resp[1] != 0x02
-        ):  # Bad CONNACK e.g. authentication fail.
+        if resp[3] != 0 or resp[0] != 0x20 or resp[1] != 0x02:
+            # Bad CONNACK e.g. authentication fail.
             raise OSError(
                 -1,
                 f"Connect fail: 0x{(resp[0] << 8) + resp[1]:04x} {resp[3]} (README 7)",
@@ -624,8 +626,10 @@ class MQTTClient(MQTT_base):
                 if s.isconnected():
                     break
                 if ESP32:
-                    if s.status() != network.STAT_CONNECTING:  # 1001
-                        break
+                    # Status values >= STAT_IDLE can occur during connect:
+                    # STAT_IDLE 1000, STAT_CONNECTING 1001, STAT_GOT_IP 1010
+                    if s.status() < network.STAT_IDLE:  # Error statuses
+                        break  # are in range 200..204
                 elif PYBOARD:  # No symbolic constants in network
                     if not 1 <= s.status() <= 2:
                         break
