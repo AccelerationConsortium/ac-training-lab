@@ -13,6 +13,9 @@ from ubinascii import hexlify
 my_id = hexlify(unique_id()).decode()
 print(f"\nPICO_ID: {my_id}\n")
 
+PICO_ID = "test-fan"  # UPDATE THIS TO YOUR ID
+print(f"Overriding PICO_ID to: {PICO_ID}")
+
 
 # Constants
 PIN_I2C0_SDA = Pin(4)
@@ -59,8 +62,6 @@ config.update(
         "keepalive": 3600,
     }
 )
-
-PICO_ID = "test-fan"  # UPDATE THIS TO YOUR ID
 
 command_topic = f"fan-control/picow/{PICO_ID}/speed"
 sensor_data_topic = f"fan-control/picow/{PICO_ID}/rpm"
