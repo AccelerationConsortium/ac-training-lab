@@ -1,70 +1,124 @@
-from time import sleep
+import ssl
+import time
 
-from lib.EMC2101 import EMC2101
-from machine import Pin, SoftI2C, Timer
+import ntptime
+import uasyncio as asyncio
+from EMC2101 import EMC2101
+from machine import I2C, Pin, unique_id
+from mqtt_as import MQTTClient, config
+from my_secrets import HIVEMQ_HOST, HIVEMQ_PASSWORD, HIVEMQ_USERNAME, PASSWORD, SSID
+from netman import connectWiFi
+from ubinascii import hexlify
 
-timer = Timer()
-
-led = Pin("LED", Pin.OUT)
-
-
-def blink(timer):
-    led.toggle()
-
-
-timer.init(freq=3, mode=Timer.PERIODIC, callback=blink)
-sleep(5)
-
-i2c = SoftI2C(scl=Pin((0)), sda=Pin(1))
-controller = EMC2101(i2c)
-
-controller.set_duty_cycle(int(percent[i]))
+my_id = hexlify(unique_id()).decode()
+print(f"\nPICO_ID: {my_id}\n")
 
 
-def set_stirring_percent(devices, percent):
-    try:
-        for i, dev in enumerate(devices):
-            dev.set_duty_cycle(int(percent[i]))
-    except IndexError:
-        print("An incorrect number of stirring place speeds were specified")
-        return
+# Constants
+PIN_I2C0_SDA = Pin(4)
+PIN_I2C0_SCL = Pin(5)
+I2C0_FREQ = 400000
 
-    return print(f"stirring speeds set to {percent}")
+# Initialize I2C bus
+i2c = I2C(0, scl=PIN_I2C0_SCL, sda=PIN_I2C0_SDA, freq=I2C0_FREQ)
+print(f"I2C Bus Initialized! Devices found: {i2c.scan()}")
+
+# Initialize fan controller
+fan_controller = EMC2101(i2c)
+print("Fan controller object created")
+
+# WiFi and MQTT configuration
+connectWiFi(SSID, PASSWORD, country="US")
+
+# To validate certificates, a valid time is required
+ntptime.timeout = 30  # type: ignore
+ntptime.host = "pool.ntp.org"
+ntptime.settime()
+
+print("Obtaining CA Certificate")
+with open("hivemq-com-chain.der", "rb") as f:
+    cacert = f.read()
+    f.close()
+
+config.update(
+    {
+        "ssid": SSID,
+        "wifi_pw": PASSWORD,
+        "server": HIVEMQ_HOST,
+        "user": HIVEMQ_USERNAME,
+        "password": HIVEMQ_PASSWORD,
+        "ssl": True,
+        "ssl_params": {
+            "server_side": False,
+            "key": None,
+            "cert": None,
+            "cert_reqs": ssl.CERT_REQUIRED,
+            "cadata": cacert,
+            "server_hostname": HIVEMQ_HOST,
+        },
+        "keepalive": 3600,
+    }
+)
+
+PICO_ID = "test-fan"  # UPDATE THIS TO YOUR ID
+
+command_topic = f"fan-control/picow/{PICO_ID}/speed"
+sensor_data_topic = f"fan-control/picow/{PICO_ID}/rpm"
 
 
-def set_stirring_rpm(rpm):
-    controller.set_duty_cycle(30)
-    sleep(5)
-    a = controller.get_fan_rpm()
-    b = controller.get_duty_cycle()
+async def messages(client):  # Respond to incoming messages
+    async for topic, msg, retained in client.queue:
+        try:
+            topic = topic.decode()
+            msg = msg.decode()
+            retained = str(retained)
+            print((topic, msg, retained))
 
-    duty_estimator = (b / a) * rpm
+            if topic == command_topic:
+                try:
+                    speed = int(msg)
+                    if 0 <= speed <= 100:
+                        fan_controller.set_duty_cycle(speed)
+                        print(f"Fan speed set to {speed}%")
+                    else:
+                        print("Speed out of range")
+                except ValueError:
+                    print("Invalid speed value")
 
-    if duty_estimator > 100:
-        controller.set_duty_cycle(95)
-        sleep(2)
-        a = controller.get_fan_rpm()
-        b = controller.get_duty_cycle()
-    else:
-        controller.set_duty_cycle(int(duty_estimator))
-        sleep(2)
-        a = controller.get_fan_rpm()
-        b = controller.get_duty_cycle()
+                rpm = fan_controller.get_fan_rpm()
+                print(f"Publish {rpm} RPM to {sensor_data_topic}")
+                await client.publish(sensor_data_topic, f"{rpm}", qos=1)
+        except Exception as e:
+            print(e)
 
+
+async def up(client):  # Respond to connectivity being (re)established
     while True:
-        if a < rpm * 0.95:
-            b += 2
-            controller.set_duty_cycle(b)
-            sleep(2)
-            a = controller.get_fan_rpm()
-            b = controller.get_duty_cycle()
-        elif a > rpm * 1.05:
-            b -= 2
-            controller.set_duty_cycle(b)
-            sleep(2)
-            a = controller.get_fan_rpm()
-            b = controller.get_duty_cycle()
-        else:
-            break
+        await client.up.wait()  # Wait on an Event
+        client.up.clear()
+        await client.subscribe(command_topic, 1)  # renew subscriptions
 
-    return print(f"stirring speeds set to {rpm}")
+
+async def main(client):
+    await client.connect()
+    for coroutine in (up, messages):
+        asyncio.create_task(coroutine(client))
+
+    start_time = time.time()
+    # must have the while True loop to keep the program running
+    while True:
+        await asyncio.sleep(5)
+        rpm = fan_controller.get_fan_rpm()
+        elapsed_time = round(time.time() - start_time)
+        print(f"Elapsed: {elapsed_time}s, RPM: {rpm}")
+        await client.publish(sensor_data_topic, f"{rpm}", qos=1)
+
+
+config["queue_len"] = 2  # Use event interface with specified queue length
+MQTTClient.DEBUG = True  # Optional: print diagnostic messages
+client = MQTTClient(config)
+del cacert  # to free memory
+try:
+    asyncio.run(main(client))
+finally:
+    client.close()  # Prevent LmacRxBlk:1 errors
