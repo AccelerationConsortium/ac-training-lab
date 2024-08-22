@@ -141,6 +141,7 @@ License <license>
 Authors <authors>
 Module Reference <api/modules>
 GitHub Source <https://github.com/AccelerationConsortium/ac-training-lab>
+Setting Up IoLT Devices <devices/setup_iolt_devices>
 ```
 
 ## Indices and tables
