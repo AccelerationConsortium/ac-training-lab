@@ -11,4 +11,4 @@ MAC address from there.
 
 Up to 128 connections. Set QoS to 1 MB (wish it could go lower).
 
-Quick Setup with APN set to `hologram`.
+Quick Setup with APN set to `hologram`. Note that hologram US$100/GB.
