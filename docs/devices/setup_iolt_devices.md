@@ -10,6 +10,7 @@
 4. GitHub pull requests
 5. Video demo
 6. Video setup tutorial
-7. Embedding into Gather Town
+7. Docs page and tutorial (BoM, setup, etc.)
+8. Embedding into Gather Town
 
 Periodic updates to Accelerated Discovery. 
