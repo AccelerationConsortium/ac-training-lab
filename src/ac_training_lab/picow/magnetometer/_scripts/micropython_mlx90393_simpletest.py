@@ -11,8 +11,9 @@ onboard_led = Pin("LED", Pin.OUT)
 i2c = I2C(0, sda=Pin(4), scl=Pin(5))  # Correct I2C pins for Pico W
 mlx = mlx90393.MLX90393(i2c, address=0x18)  # address comes from check_for_i2c.py script
 
-flash_interval = 3  # Flash the LED every 5 seconds
-last_flash_time = time.time()
+flash_interval = 3  # Flash the LED every 3 seconds
+start_time = time.time()
+last_flash_time = start_time
 
 while True:
     magx, magy, magz = mlx.magnetic
@@ -26,3 +27,7 @@ while True:
         last_flash_time = current_time
 
     time.sleep(0.01)  # Short delay to prevent the loop from running too fast
+
+    # Stop the loop after 5 seconds
+    if current_time - start_time >= 5:
+        break
