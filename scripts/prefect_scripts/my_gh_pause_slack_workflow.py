@@ -2,6 +2,8 @@
 # https://prefecthq.github.io/prefect-slack/
 # https://github.com/PrefectHQ/interactive_workflow_examples
 
+# async might not be necessary
+
 import asyncio
 
 from prefect import flow, get_run_logger, pause_flow_run, settings
@@ -14,7 +16,7 @@ MESSAGE = "This is an example of a human-in-the-loop flow using Prefect's intera
 
 
 @flow(name="greet-slack-user")  # persist result or not?
-async def greet_user():
+def greet_user():
     logger = get_run_logger()
 
     message = str(MESSAGE)  # modify as needed
@@ -26,8 +28,8 @@ async def greet_user():
         )
         message += f"\n\nOpen the <{flow_run_url}|paused flow run>, click 'Resume', and then submit your name."  # noqa: E501
 
-    await slack_block.notify(message)
-    user = await pause_flow_run(wait_for_input=str, timeout=60)
+    slack_block.notify(message)
+    user = pause_flow_run(wait_for_input=str, timeout=60)
 
     msg_out = f"Hello, {user}!"
     logger.info(msg_out)

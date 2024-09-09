@@ -20,6 +20,19 @@ __location__ = os.path.dirname(__file__)
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 sys.path.insert(0, os.path.join(__location__, "../src"))
 
+autodoc_mock_imports = ["machine"]
+
+# # This is the expected signature of the handler for this event, cf doc
+# def autodoc_skip_member_handler(app, what, name, obj, skip, options):
+#     # Basic approach; you might want a regex instead
+#     return name.startswith("test_")
+
+# # Automatically called by sphinx at startup
+# def setup(app):
+#     # Connect the autodoc-skip-member event from apidoc to the callback
+#     app.connect('autodoc-skip-member', autodoc_skip_member_handler)
+
+
 # -- Run sphinx-apidoc -------------------------------------------------------
 # This hack is necessary since RTD does not issue `sphinx-apidoc` before running
 # `sphinx-build -b html . _build/html`. See Issue:
@@ -59,7 +72,7 @@ except Exception as e:
 # If your documentation needs a minimal Sphinx version, state it here.
 # needs_sphinx = '1.0'
 
-import sphinx_rtd_theme  # noqa
+# import sphinx_rtd_theme  # noqa
 
 # Add any Sphinx extension module names here, as strings. They can be extensions
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
@@ -74,8 +87,10 @@ extensions = [
     "sphinx.ext.ifconfig",
     "sphinx.ext.mathjax",
     "sphinx.ext.napoleon",
-    "sphinx_rtd_theme",
+    # "sphinx_rtd_theme",
     "sphinx_book_theme",
+    "sphinx_copybutton",
+    "sphinx_design",
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -110,7 +125,8 @@ master_doc = "index"
 
 # General information about the project.
 project = "ac-training-lab"
-copyright = "2024, Sterling G. Baird"
+author = "Sterling G. Baird"
+copyright = ["2024, Acceleration Consortium", "2024, Sterling G. Baird"]
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -142,7 +158,7 @@ release = version
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
-exclude_patterns = ["_build", "Thumbs.db", ".DS_Store", ".venv"]
+exclude_patterns = ["_build", "Thumbs.db", ".DS_Store", ".venv", "**/scripts/**/*"]
 
 # The reST default role (used for this markup: `text`) to use for all documents.
 # default_role = None
@@ -183,6 +199,22 @@ html_theme = "sphinx_book_theme"
 # documentation.
 # html_theme_options = {"sidebar_width": "300px", "page_width": "1200px"}
 
+html_theme_options = {
+    "repository_provider": "github",
+    "repository_url": "https://github.com/AccelerationConsortium/ac-training-lab",
+    "path_to_docs": "docs",
+    "use_repository_button": True,
+    "use_edit_page_button": True,
+    "use_source_button": True,
+    "use_issues_button": True,
+    "use_download_button": True,
+    "launch_buttons": {"colab_url": "https://colab.research.google.com"},
+    "home_page_in_toc": True,
+    "show_navbar_depth": 1,  # Adjust based on your structure
+    "navigation_with_keys": True,
+    # "navbar_center": ["navbar-nav"], # adds Course 1 / Course 2 buttons at top
+}
+
 # Add any paths that contain custom themes here, relative to this directory.
 # html_theme_path = []
 
@@ -200,7 +232,7 @@ html_logo = "logo.png"
 # The name of an image file (within the static path) to use as favicon of the
 # docs.  This file should be a Windows icon file (.ico) being 16x16 or 32x32
 # pixels large.
-# html_favicon = None
+html_favicon = "_static/images/favicon-32x32.png"
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
@@ -244,7 +276,7 @@ html_last_updated_fmt = "%b %d, %Y"
 # html_show_sphinx = True
 
 # If true, "(C) Copyright ..." is shown in the HTML footer. Default is True.
-# html_show_copyright = True
+html_show_copyright = False
 
 # If true, an OpenSearch description file will be output, and all pages will
 # contain a <link> tag referring to it.  The value of this option must be the
