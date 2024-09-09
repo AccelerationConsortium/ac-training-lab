@@ -2,13 +2,34 @@
 
 <!-- This document provides comprehensive instructions for setting up new IoLT devices, including documentation and demo for each device. Follow the steps below to ensure proper setup and configuration. -->
 
+IoLT = Internet of Laboratory Things
+
 1. MWE for functionality
+
+Typically, these go into a `src/ac_training_lab/*/_scripts` folder. This also makes it easier to iteratively develop.
+
 2. Accelerated discovery post
+
+This is used as a sort of "travel log" of work on the project. This one is more public facing, and easier for others to look at and contribute discussion to (easier than GitHub for those who are unfamiliar with GitHub).
+
 1. MQTT orchestrator and device code
+
+This enables hardware/software communication over WiFi. Typically, this will follow closely to https://ac-microcourses.readthedocs.io/en/latest/courses/hello-world/1.4-hardware-software-communication.html.
+
 2. MongoDB logging setup
+
+Typically, anything with data and timestamp-based actions will be logged to a database. These implementations will usually follow closely to https://ac-microcourses.readthedocs.io/en/latest/courses/hello-world/1.5-data-logging.html.
+
 3. Hugging Face Spaces
-4. GitHub pull requests
+
+Each demo will typically have a streamlit app hosted on Hugging Face Spaces within [the Acceleration Consortium organization under a hardware control list](https://huggingface.co/collections/AccelerationConsortium/hardware-control-66a4506f9876e9781c8a0808).
+
+some additional context is available at https://ac-bo-hackathon.github.io/resources/ (scroll to bottom).
+
 5. Video demo
+
+
+
 6. Video setup tutorial
 7. Docs page and tutorial (BoM, setup, etc.)
 8. Embedding into Gather Town
