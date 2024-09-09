@@ -176,9 +176,6 @@ The instructions below assume that you are using git's command line interface. A
 
    to be able to import the package under development in the Python REPL.
 
-   ```{todo} if you are not using pre-commit, please remove the following item:
-   ```
-
 5. Install [pre-commit]:
 
    ```

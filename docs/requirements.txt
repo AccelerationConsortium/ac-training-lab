@@ -5,3 +5,5 @@ sphinx>=3.2.1
 # under `install_requires` in `setup.cfg` is also listed here!
 # sphinx_rtd_theme
 sphinx_book_theme
+sphinx_copybutton
+sphinx_design
