@@ -313,6 +313,51 @@ package:
 
 ## Maintainer tasks
 
+### Setting Up IoLT Devices
+
+<!-- This document provides comprehensive instructions for setting up new IoLT devices, including documentation and demo for each device. Follow the steps below to ensure proper setup and configuration. -->
+
+#### MWE for functionality
+
+#### Accelerated discovery post
+
+A sort of "travel log" can be kept for each device that is set up via the Accelerated Discovery Discourse Forum. Here are some examples of these "travel log" style Accelerated Discovery posts.
+
+- https://accelerated-discovery.org/t/building-the-high-resolution-motorized-openflexure-microscope-v7-using-the-rodeostat-kit/231/16
+- https://accelerated-discovery.org/t/improvements-to-the-digital-pipette/236/8
+- https://accelerated-discovery.org/t/science-jubilee-adapter-for-the-digital-pipette/255/3
+- https://accelerated-discovery.org/t/automated-microfluidics-programming-an-electronic-pressure-regulator/252/5
+- https://accelerated-discovery.org/t/building-the-open-flexure-delta-stage-reflection-and-transmission-microscopes/254
+
+#### MQTT orchestrator and device code
+
+
+#### MongoDB logging setup
+
+#### Hugging Face Spaces
+
+https://huggingface.co/collections/AccelerationConsortium/hardware-control-66a4506f9876e9781c8a0808
+
+#### GitHub Source Code
+
+Via pull requests
+
+#### Video demo
+
+
+
+#### Video setup tutorial
+
+#### Docs page and tutorial (BoM, setup, etc.)
+
+Device pages are hosted at https://github.com/AccelerationConsortium/ac-training-lab/tree/main/docs/devices.
+
+It should have some kind of brief intro to what the device is, links to the original websites and documentation (e.g., like the links above), a short description of why this is relevant to scientific lab automation, a link to the corresponding accelerated discovery post, and links to related code within the AC Training Lab repo. The intent is to not replicate existing documentation, but link out to it where possible, and clarify any differences or specifics to usage within a self-driving lab context.
+
+#### Embedding into Gather Town
+
+https://app.gather.town/invite?token=lXaaIWn0Qk2TG0Z9fkyk
+
 ### Releases
 
 If you are part of the group of maintainers and have correct user permissions
