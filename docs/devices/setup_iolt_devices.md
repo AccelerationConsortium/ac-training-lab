@@ -4,7 +4,7 @@
 
 IoLT = Internet of Laboratory Things
 
-The AC Training Lab emphasizes not just repeatability, but especially replicability. Solutions within the training lab should be chosen, designed, implemented, and documented with this in mind, within reason. in other words, if someone can take a look at something within the AC training lab and replicate it easily within their own lab with minimal frustration, the AC Training Lab is serving one of its most fundamental purposes. To achieve that, we have the following items that are typically present when taking a demo from start to finish.
+The AC Training Lab emphasizes not just repeatability, but especially replicability. Solutions within the training lab should be chosen, designed, implemented, and documented with this in mind, within reason. In other words, if someone can take a look at something within the AC training lab and replicate it easily within their own lab with minimal frustration, the AC Training Lab is serving one of its most fundamental purposes. To achieve that, we have the following items that are typically present when taking a demo from start to finish.
 
 1. MWE for functionality
 
