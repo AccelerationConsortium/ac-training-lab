@@ -2,13 +2,13 @@ import json
 import ssl
 import time
 
-import ntptime
 import uasyncio as asyncio
 from EMC2101 import EMC2101
 from machine import I2C, Pin, unique_id
 from mqtt_as import MQTTClient, config
 from my_secrets import HIVEMQ_HOST, HIVEMQ_PASSWORD, HIVEMQ_USERNAME, PASSWORD, SSID
 from netman import connectWiFi
+from robust_ntptime import set_ntptime
 from ubinascii import hexlify
 
 my_id = hexlify(unique_id()).decode()
@@ -34,9 +34,7 @@ print("Fan controller object created")
 connectWiFi(SSID, PASSWORD, country="US")
 
 # To validate certificates, a valid time is required
-ntptime.timeout = 30  # type: ignore
-ntptime.host = "pool.ntp.org"
-ntptime.settime()
+set_ntptime()
 
 print("Obtaining CA Certificate")
 with open("hivemq-com-chain.der", "rb") as f:
