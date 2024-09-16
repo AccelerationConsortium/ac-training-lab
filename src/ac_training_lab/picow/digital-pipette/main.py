@@ -18,7 +18,8 @@ onboard_led = get_onboard_led()
 
 connectWiFi(SSID, PASSWORD, country="US")
 set_ntptime(host="time.google.com", retry_host="pool.ntp.org")
-pico_id = get_unique_id(write_to_file=True)
+# pico_id = get_unique_id(write_to_file=True)
+pico_id = "test-pipette"
 
 print("Obtaining CA Certificate from file")
 with open("hivemq-com-chain.der", "rb") as f:
