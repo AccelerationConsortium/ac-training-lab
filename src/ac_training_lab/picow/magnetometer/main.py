@@ -9,6 +9,7 @@ from micropython_mlx90393 import mlx90393
 from mqtt_as import MQTTClient, config
 from my_secrets import HIVEMQ_HOST, HIVEMQ_PASSWORD, HIVEMQ_USERNAME, PASSWORD, SSID
 from netman import connectWiFi
+from robust_ntptime import set_ntptime
 from sdl_utils import get_onboard_led, get_unique_id
 
 connectWiFi(SSID, PASSWORD, country="US")
@@ -30,9 +31,7 @@ sensor_data_buffer = deque(queue, 100)  # Adjust maxlen as needed
 data_topic = "magnetometer/picow/test-magnetometer/sensor_data"
 
 # To validate certificates, a valid time is required
-ntptime.timeout = 30  # type: ignore
-ntptime.host = "pool.ntp.org"
-ntptime.settime()
+set_ntptime()
 
 print("Obtaining CA Certificate")
 # generated via https://colab.research.google.com/github/sparks-baird/self-driving-lab-demo/blob/main/notebooks/7.2.1-hivemq-openssl-certificate.ipynb # noqa: E501
