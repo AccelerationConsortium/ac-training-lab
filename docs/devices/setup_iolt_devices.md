@@ -62,7 +62,7 @@ Examples:
 
 ## Embedding into Gather Town
 
-Invite link: app.gather.town/invite?token=DGRf3bPeSZ-AKx5FHChK
+Invite link: https://app.gather.town/invite?token=DGRf3bPeSZ-AKx5FHChK
 
 Password: `backlog-snowball-protrude` (subject to change in case access needs to be refreshed for some reason)
 
