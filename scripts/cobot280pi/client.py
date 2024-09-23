@@ -6,6 +6,8 @@ import matplotlib.pyplot as plt
 from queue import Queue
 import numpy as np
 from PIL import Image
+import io
+import base64
 
 response_queues = {}
 
@@ -28,11 +30,11 @@ class CobotMQTTClient:
 		hive_mq_username: str,
 		hive_mq_password: str,
 		hive_mq_cloud: str,
+        cobot_id: str,
 		port: int = 8883
 	):
         self.client = paho.Client(client_id="", userdata=None, protocol=paho.MQTTv5)
         self.client.on_connect = on_connect
-        # client.on_subscribe = on_subscribe
         self.client.on_message = on_message
         self.client.on_publish = on_publish
 
@@ -40,12 +42,13 @@ class CobotMQTTClient:
         self.client.username_pw_set(hive_mq_username, hive_mq_password)
         self.client.connect(hive_mq_cloud, port)
 
-        self.client.subscribe("response/query/angles", qos=2)
-        self.client.subscribe("response/query/coords", qos=2)
-        self.client.subscribe("response/query/camera", qos=2)
-        self.client.subscribe("response/control/angles", qos=2)
-        self.client.subscribe("response/control/coords", qos=2)
-        self.client.subscribe("response/control/gripper", qos=2)
+        self.base_endpoint = f"cobot280pi/{cobot_id}/"
+        self.client.subscribe(self.base_endpoint + "response/query/angles", qos=2)
+        self.client.subscribe(self.base_endpoint + "response/query/coords", qos=2)
+        self.client.subscribe(self.base_endpoint + "response/query/camera", qos=2)
+        self.client.subscribe(self.base_endpoint + "response/control/angles", qos=2)
+        self.client.subscribe(self.base_endpoint + "response/control/coords", qos=2)
+        self.client.subscribe(self.base_endpoint + "response/control/gripper", qos=2)
         
         self.client_loop_thread = threading.Thread(target=self.client.loop_forever)
         self.client_loop_thread.start()
@@ -69,13 +72,9 @@ class CobotMQTTClient:
         assert(type(speed) == int)
 
         payload = json.dumps({"args": {"angles": angle_list, "speed": speed}})
-        self.client.publish("control/angles", payload=payload, qos=2)
-        response = self.wait_until_response_recieved("response/control/angles")
-        if not response["success"]:
-            print(f"error sending angles: \n{response['error_msg']}")
-            return
-        print("angles sent successfully")
-
+        self.client.publish(self.base_endpoint + "control/angles", payload=payload, qos=2)
+        response = self.wait_until_response_recieved(self.base_endpoint + "response/control/angles")
+        return response
 
     def send_coords(
 		self,
@@ -86,12 +85,9 @@ class CobotMQTTClient:
         assert(type(speed) == int)
 
         payload = json.dumps({"args": {"coords": coord_list, "speed": speed}})
-        self.client.publish("control/coords", payload=payload, qos=2)
-        response = self.wait_until_response_recieved("response/control/coords")
-        if not response["success"]:
-            print(f"error sending coords: \n{response['error_msg']}")
-            return
-        print("coords sent successfully")
+        self.client.publish(self.base_endpoint + "control/coords", payload=payload, qos=2)
+        response = self.wait_until_response_recieved(self.base_endpoint + "response/control/coords")
+        return response
 
     def send_gripper_value(
 		self,
@@ -101,47 +97,41 @@ class CobotMQTTClient:
         assert(type(value) == int)
         assert(type(speed) == int)
 
-        payload = json.dumps({"args": {"value": value, "speed": speed}})
-        self.client.publish("control/gripper", payload=payload, qos=2)
-        response = self.wait_until_response_recieved("response/control/gripper")
-        if not response["success"]:
-            print(f"error sending gripper value: \n{response['error_msg']}")
-            return
-        print("gripper value sent successfully")
+        payload = json.dumps({"args": {"gripper_value": value, "speed": speed}})
+        self.client.publish(self.base_endpoint + "control/gripper", payload=payload, qos=2)
+        response = self.wait_until_response_recieved(self.base_endpoint + "response/control/gripper")
+        return response
 
     def get_angles(self):
         payload = json.dumps({"args": {}})
-        self.client.publish("query/angles", payload=payload, qos=2)
-        response = self.wait_until_response_recieved("response/query/angles")
-        if not response["success"]:
-            print("Error getting angles")
-            return None
-        array = np.array(response["angles"])
-        return array
+        self.client.publish(self.base_endpoint + "query/angles", payload=payload, qos=2)
+        response = self.wait_until_response_recieved(self.base_endpoint + "response/query/angles")
+        return response
 
     def get_coords(self):
         payload = json.dumps({"args": {}})
-        self.client.publish("query/coords", payload=payload, qos=2)
-        response = self.wait_until_response_recieved("response/query/coords")
-        if not response["success"]:
-            print("Error getting coords")
-            return None
-        array = np.array(response["coords"])
-        return array
+        self.client.publish(self.base_endpoint + "query/coords", payload=payload, qos=2)
+        response = self.wait_until_response_recieved(self.base_endpoint + "response/query/coords")
+        return response
 
-    def get_camera(self):
+    def get_camera(self, save_path=None):
         payload = json.dumps({"args": {}})
-        self.client.publish("query/camera", payload=payload, qos=2)
-        response = self.wait_until_response_recieved("response/query/camera")
+        self.client.publish(self.base_endpoint + "query/camera", payload=payload, qos=2)
+        response = self.wait_until_response_recieved(self.base_endpoint + "response/query/camera")
         if not response["success"]:
-            print(f"could not get image with error: \n{response['error_msg']}")
-            return None
-        array = np.array(response["image_pixels"])
-        array_shape = tuple(response["image_shape"])
-        array = array.reshape(array_shape)[:, :, ::-1]
-        return array
+            return response
+
+        b64_bytes = base64.b64decode(response["img_bytes"])
+        img_bytes = io.BytesIO(b64_bytes)
+        img = Image.open(img_bytes)
+
+        response["image"] = img
+        if save_path is not None:
+            img.save(save_path)
+
+        return response
 
 
 if __name__ == "__main__":
-    from my_secrets import HIVEMQ_HOST, HIVEMQ_PASSWORD, HIVEMQ_USERNAME
-    client = CobotMQTTClient(HIVEMQ_USERNAME, HIVEMQ_PASSWORD, HIVEMQ_HOST)
+    from my_secrets import HIVEMQ_HOST, HIVEMQ_PASSWORD, HIVEMQ_USERNAME, COBOT_ID
+    client = CobotMQTTClient(HIVEMQ_USERNAME, HIVEMQ_PASSWORD, HIVEMQ_HOST, COBOT_ID)
