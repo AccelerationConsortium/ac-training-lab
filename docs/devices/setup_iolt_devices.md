@@ -40,9 +40,9 @@ Watch [the two-minute video about hugging face spaces](https://youtu.be/3bSVKNKb
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/3bSVKNKb_PY?si=WO0nd23jt3djERLj" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
-Likewise, watch a follow-up video about [contributing to a Hugging Face Spaces repository from within VS Code]().
+Likewise, watch a follow-up video about [contributing to a Hugging Face Spaces repository from within VS Code](https://youtu.be/OqqBk8_4gmQ):
 
-
+<iframe width="560" height="315" src="https://www.youtube.com/embed/OqqBk8_4gmQ?si=qDA4oKt7XwFT8ktw" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
 Next, explore the code (see "files" tab) in the AC's various hardware control apps: https://huggingface.co/collections/AccelerationConsortium/hardware-control-66a4506f9876e9781c8a0808. New web apps will live next to these in the same list.
 
