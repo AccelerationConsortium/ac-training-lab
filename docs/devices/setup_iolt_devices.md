@@ -6,11 +6,11 @@ The AC Training Lab emphasizes not only repeatability, but also replicability. S
 
 ## MWE for functionality
 
-Typically, these go into a `src/ac_training_lab/*/_scripts` folder. This also makes it easier to iteratively develop (start with basic functionality of the device, gradually work towards the full implementation with MQTT).
+Typically, these go into a `src/ac_training_lab/*/_scripts` folder. This also makes it easier to iteratively develop (start with basic functionality of the device, gradually work towards the full implementation with MQTT). You can check out some examples of `_scripts` folders for the [digital pipette](https://github.com/AccelerationConsortium/ac-training-lab/tree/main/src/ac_training_lab/picow/digital-pipette/_scripts), [fan control](https://github.com/AccelerationConsortium/ac-training-lab/tree/main/src/ac_training_lab/picow/fan-control/_scripts), and [magnetometer](https://github.com/AccelerationConsortium/ac-training-lab/tree/main/src/ac_training_lab/picow/magnetometer/_scripts) demos.
 
 ## Accelerated discovery post
 
-This is used as a sort of "travel log" of work on the project. This one is more public facing, and easier for others to look at and contribute discussion to (easier than GitHub for those who are unfamiliar with GitHub). Periodic updates should be provided.
+This is used as a sort of "travel log" of work on the project. This one is more public facing, and easier for others to look at and contribute discussion to (easier than GitHub for those who are unfamiliar with GitHub). Check out [the examples](https://accelerated-discovery.org/tag/ac-training-lab). Periodic updates should be provided.
 
 ## MQTT orchestrator and device code
 
@@ -36,7 +36,33 @@ Each demo will typically have a streamlit app hosted on Hugging Face Spaces with
 
 Some additional context is available at https://ac-bo-hackathon.github.io/resources/ (scroll to bottom).
 
-I suggest starting with watching [a two-minute video about hugging face spaces](https://youtu.be/3bSVKNKb_PY?si=3qAScm2xfjNy1vrN) [[docs](https://hf.co/docs/hub/spaces)], then exploring the code (see "files" tab) in the AC's various hardware control apps: https://huggingface.co/collections/AccelerationConsortium/hardware-control-66a4506f9876e9781c8a0808. New web apps will live next to these in the same list.
+Watch [the two-minute video about hugging face spaces](https://youtu.be/3bSVKNKb_PY?si=3qAScm2xfjNy1vrN) [[docs](https://hf.co/docs/hub/spaces)]:
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/3bSVKNKb_PY?si=WO0nd23jt3djERLj" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+Likewise, watch a follow-up video about [contributing to a Hugging Face Spaces repository from within VS Code]().
+
+
+
+Next, explore the code (see "files" tab) in the AC's various hardware control apps: https://huggingface.co/collections/AccelerationConsortium/hardware-control-66a4506f9876e9781c8a0808. New web apps will live next to these in the same list.
+
+In particular, the [light-mixing app](https://huggingface.co/spaces/AccelerationConsortium/light-mixing/blob/main/app.py) is an example of sending a command and receiving a single set of sensor data. The [Digital Pipette app](https://huggingface.co/spaces/AccelerationConsortium/digital-pipette/blob/main/app.py) is an example of sending a command without feedback or a response. The [fan control app](https://huggingface.co/spaces/AccelerationConsortium/fan-control) is an example of sending a command and receiving a continuous flow of data back.
+
+In general, you should cache the MQTT client to avoid creating a new connection every time a button is clicked.
+
+```python
+# Singleton: https://docs.streamlit.io/develop/api-reference/caching-and-state/st.cache_resource
+@st.cache_resource
+def create_paho_client(tls=True):
+    client = mqtt.Client(protocol=mqtt.MQTTv5)
+    if tls:
+        client.tls_set(tls_version=mqtt.ssl.PROTOCOL_TLS_CLIENT)
+    return client
+```
+
+Paho MQTT is the preferred MQTT package. Generally, you won't need threading or asynchrony, and these don't work well with the Streamlit package anyway, which is primarily designed for synchronous code.
+
+The AC Training Lab apps typically have public test credentials given, but depending on the hardware and broker being used (e.g., the AC's HiveMQ Starter Plan broker to allow for temporary access control), the credentials should be accessed via [Hugging Face Spaces secrets](https://discuss.huggingface.co/t/how-to-manage-user-secrets-and-api-keys/67948/4).
 
 ## Video demo
 
@@ -62,8 +88,14 @@ Examples:
 
 ## Embedding into Gather Town
 
+The AC Training Lab has recently become virtual 😎. After running the [Bayesian optimization hackathon](https://ac-bo-hackathon.github.io/) in March 2024 using https://www.gather.town/, I decided I would give it a try for the AC Training Lab. The devices have embedded Streamlit web apps hosted on Hugging Face Spaces (see below). The physical hardware shown here are typically set up in Toronto, ON, with plans to add interfaces to communicate with hardware in other locations.
+
+<img src="../_static/images/gather-town.png" width=250>
+
+You can check the space out yourself by clicking on the invite link below. If you find something not working or have a suggestion, please feel free to [open an issue](https://github.com/AccelerationConsortium/ac-training-lab/issues/new).
+
 Invite link: https://app.gather.town/invite?token=XkfecjxCSLuT5kvhtLci
 
 Password: `japanese-envelope-spoken` (subject to change in case access needs to be refreshed for some reason)
 
-![image](https://github.com/user-attachments/assets/0fade265-76f1-471d-a202-ad8c7ae847c1)
+<iframe width="560" height="315" src="https://www.youtube.com/embed/DIYvp_6L4kY?si=lKFYES5GAIW7_fuB" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
