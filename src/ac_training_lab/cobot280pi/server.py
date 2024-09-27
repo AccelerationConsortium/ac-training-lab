@@ -2,15 +2,22 @@ from my_secrets import *
 from utils import *
 
 import cv2
-import time, json, base64, io, sys, argparse
+import time
+import json
+import base64
+import io
+import sys
+import argparse
 from PIL import Image
 from queue import Queue
 import paho.mqtt.client as paho
 from pymycobot.mycobot import MyCobot
 
+
 # cli args
 parser = argparse.ArgumentParser()
 parser.add_argument("--debug", "-d", action="store_true", help="runs in debug mode")
+cliargs = parser.parse_args()
 
 # Cobot action functions
 def handle_control_gripper(args, cobot):
@@ -22,6 +29,7 @@ def handle_control_gripper(args, cobot):
         logger.critical(f"control gripper error: {str(e)}")
         return {"success": False, "error_msg": str(e)}
 
+
 def handle_control_angles(args, cobot):
     logger.info(f"running command control/angle with {args}")
     try:
@@ -31,6 +39,7 @@ def handle_control_angles(args, cobot):
         logger.critical(f"control angle error: {str(e)}")
         return {"success": False, "error_msg": str(e)}
 
+
 def handle_control_coords(args, cobot):
     logger.info(f"running command control/coord with {args}")
     try:
@@ -39,6 +48,7 @@ def handle_control_coords(args, cobot):
     except Exception as e:
         logger.critical(f"control coords error: {str(e)}")
         return {"success": False, "error_msg": str(e)}
+
 
 def handle_query_angles(args, cobot):
     logger.info(f"running command query/angle with {args}")
@@ -51,6 +61,7 @@ def handle_query_angles(args, cobot):
         logger.critical(f"query angle error: {str(e)}")
         return {"success": False, "error_msg": str(e)}
 
+
 def handle_query_coords(args, cobot):
     logger.info(f"running command query/coord with {args}")
     try:
@@ -62,6 +73,7 @@ def handle_query_coords(args, cobot):
         logger.critical(f"query coord error: {str(e)}")
         return {"success": False, "error_msg": str(e)}
 
+
 def handle_query_gripper(args, cobot):
     logger.info(f"running command query/coord with {args}")
     try:
@@ -71,14 +83,17 @@ def handle_query_gripper(args, cobot):
         logger.critical(f"query gripper error: {str(e)}")
         return {"success": False, "error_msg": str(e)}
 
+
 def handle_query_camera(args):
     logger.info(f"running command query/camera with {args}")
     try:
-        webcam = cv2.VideoCapture(0)
-        _, frame = webcam.read()
-        webcam.release()
-
-        img = Image.fromarray(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
+        if not cliargs.debug:
+            webcam = cv2.VideoCapture(0)
+            _, frame = webcam.read()
+            webcam.release()
+            img = Image.fromarray(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
+        else:
+            img = cobot.get_camera(**args)
         compressed_bytes = io.BytesIO()
         img.save(compressed_bytes, format="JPEG", quality=args["quality"])
         compressed_bytes.seek(0)
@@ -93,8 +108,10 @@ def handle_query_camera(args):
 def on_connect(client, userdata, flags, rc, properties=None):
     logger.info("Connection received with code %s." % rc)
 
+
 def on_publish(client, userdata, mid, properties=None):
     logger.info("Successful publish.")
+
 
 def handle_message(msg, cobot):
     # Parse payload to json dict
@@ -134,21 +151,21 @@ def handle_message(msg, cobot):
             "error": "invalid command"
         }
 
-if __name__ == "__main__":
-    logger = setup_logger()
-    task_queue = Queue()
-    args = parser.parse_args()
 
-    try:
-        cobot = MyCobot("/dev/ttyAMA0", 1000000)
-        logger.info("Cobot object initialized...")
-    except Exception as e:
-        logger.critical(f"could not initialize cobot with error {str(e)}")
-        if not args.debug:
-            logger.info("exiting...")
+if __name__ == "__main__":
+    task_queue = Queue()
+    logger = setup_logger()
+
+    if not cliargs.debug:
+        try:
+            cobot = MyCobot("/dev/ttyAMA0", 1000000)
+            logger.info("Cobot object initialized...")
+        except Exception as e:
+            logger.critical(f"could not initialize cobot with error {str(e)}")
             sys.exit(1)
-        else:
-            cobot = None
+    else:
+        from dummy_cobot import DummyCobot
+        cobot = DummyCobot()
 
     def on_message(client, userdata, msg):
         logger.info(
