@@ -4,6 +4,10 @@
 
 The AC Training Lab emphasizes not only repeatability, but also replicability. Solutions within the training lab should be chosen, designed, implemented, and documented with this in mind. In other words, if someone can take a look at something within the AC training lab and replicate it easily within their own lab with minimal frustration, the AC Training Lab is serving one of its most fundamental purposes. To achieve that, the following items are typically present when taking an Internet of Laboratory Things (IolT) device and demo from start to finish.
 
+## GitHub Issues
+
+Core tasks and sub-projects will be tracked using the [AC Training Lab GitHub issues](https://github.com/AccelerationConsortium/ac-training-lab/issues?q=sort%3Aupdated-desc+is%3Aissue+is%3Aopen). See for example [setting up the OT-2 liquid handler](https://github.com/AccelerationConsortium/ac-training-lab/issues/26) and [RS232 control of digital scale](https://github.com/AccelerationConsortium/ac-training-lab/issues/20). Many of these will also be surfaced to [the corresponding GitHub Project](https://github.com/orgs/AccelerationConsortium/projects/3?query=sort%3Aupdated-desc+is%3Aopen) (private) and any applicable [training lab milestones](https://github.com/AccelerationConsortium/ac-training-lab/milestone/1).
+
 ## MWE for functionality
 
 Typically, these go into a `src/ac_training_lab/*/_scripts` folder. This also makes it easier to iteratively develop (start with basic functionality of the device, gradually work towards the full implementation with MQTT). You can check out some examples of `_scripts` folders for the [digital pipette](https://github.com/AccelerationConsortium/ac-training-lab/tree/main/src/ac_training_lab/picow/digital-pipette/_scripts), [fan control](https://github.com/AccelerationConsortium/ac-training-lab/tree/main/src/ac_training_lab/picow/fan-control/_scripts), and [magnetometer](https://github.com/AccelerationConsortium/ac-training-lab/tree/main/src/ac_training_lab/picow/magnetometer/_scripts) demos.
