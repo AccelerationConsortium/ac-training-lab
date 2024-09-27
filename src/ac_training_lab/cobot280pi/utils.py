@@ -3,7 +3,7 @@ import sys
 
 def setup_logger(logfile_name: str = "mqttcobot.log"):
 	logger = logging.getLogger('logger')
-	logger.setLevel(logging.NOTSET)
+	logger.setLevel(logging.INFO)
 
 	console_handler = logging.StreamHandler(sys.stdout)
 	file_handler = logging.FileHandler(logfile_name)
@@ -12,9 +12,12 @@ def setup_logger(logfile_name: str = "mqttcobot.log"):
 	console_handler.setFormatter(formatter)
 	file_handler.setFormatter(formatter)
 
-	logger.addHandler(console_handler)
-	logger.addHandler(file_handler)
+	if not logger.hasHandlers():
+		logger.addHandler(console_handler)
+		logger.addHandler(file_handler)
+	logger.propagate = False
 	return logger
+
 
 def truncate_string(s, max_length = 50):
     if len(s) <= max_length:
