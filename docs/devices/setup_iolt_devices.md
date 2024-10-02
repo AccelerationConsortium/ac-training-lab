@@ -1,4 +1,4 @@
-# Setting Up IoLT Devices (WIP)
+# Setting Up IoLT Devices
 
 <!-- This document provides comprehensive instructions for setting up new IoLT devices, including documentation and demo for each device. Follow the steps below to ensure proper setup and configuration. -->
 
