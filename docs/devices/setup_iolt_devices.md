@@ -10,7 +10,7 @@ Core tasks and sub-projects will be tracked using the [AC Training Lab GitHub is
 
 ## Pull Requests
 
-When you start writing some code for a device, create a new branch and open a draft pull request (PR) pointing to the training lab repo `main` branch. AC Training staff will have write access to anything other than the `main` branch, so if this applies to you, you can simply clone the repo and create a new branch. You're welcome to fork the repo if that's more straightforward for you. These PRs make it easier to have tight feedback cycles.
+When you start writing some code for a device, create a new branch and open a draft pull request (PR) pointing to the training lab repo `main` branch. AC Training staff will have write access to anything other than the `main` branch, so if this applies to you, you can simply clone the repo and create a new branch. You're welcome to fork the repo if that's more straightforward for you. These PRs make it easier to have tight feedback cycles. See for example [mycobot 280 implementation](https://github.com/AccelerationConsortium/ac-training-lab/pull/52).
 
 ## MWE for functionality
 
