@@ -6,21 +6,6 @@ import json
 import lookhere
 import time
 
-# Author: Enrui (Edison) Lin 
-
-
-# The lookhere.py file contains the following variables:
-# broker = "your_broker_address"
-# port = 8883
-# username = "your_username"
-# password = "your_password"
-# Both lookhere.py and this script should be in the same directory on the Pioreactor.
-
-# This script should be run on the Pioreactor. It listens for commands from the MQTT broker and interacts with the Pioreactor API accordingly.
-
-# It should be run with: python on_reactor.py >/dev/null 2>&1 & disown
-# This will run the script in the background and suppress the output.
-
 # --- PioReactor API Functions ---
 def create_experiment(experiment, description="", mediaUsed="", organismUsed=""):
     url = "http://pioreactor.local/api/experiments"
@@ -65,26 +50,38 @@ def remove_worker_from_experiment(worker, experiment):
     else:
         print(f"Failed to remove worker {worker}. Status code: {response.status_code}")
 
-def start_stirring(worker, experiment, rpm):
+def start_stirring(worker, experiment):
     url = f"http://pioreactor.local/api/units/{worker}/jobs/run/job_name/stirring/experiments/{experiment}"
     headers = {"Content-Type": "application/json"}
-    payload = {"options": {"target_rpm": rpm}}
+    payload = {"env": {"EXPERIMENT": experiment, "JOB_SOURCE": "user"}}
 
     response = requests.patch(url, headers=headers, data=json.dumps(payload))
     if response.status_code == 202:
-        print(f"Stirring started at {rpm} RPM for worker {worker}.")
+        print(f"Stirring started for worker {worker}")
     else:
         print(f"Failed to start stirring. Status code: {response.status_code}")
 
 def stop_stirring(worker, experiment):
-    url = f"http://pioreactor.local/api/units/{worker}/jobs/stop/job_name/stirring/experiments/{experiment}"
+    url = f"http://pioreactor.local/api/units/{worker}/jobs/update/job_name/stirring/experiments/{experiment}"
     headers = {"Content-Type": "application/json"}
+    payload = {"settings" : {"$state": "disconnected"}}
 
-    response = requests.patch(url, headers=headers)
+    response = requests.patch(url, headers=headers, data=json.dumps(payload))
     if response.status_code == 202:
         print(f"Stirring stopped for worker {worker}.")
     else:
         print(f"Failed to stop stirring. Status code: {response.status_code}")
+
+def update_stirring_rpm(worker, experiment, rpm):
+    url = f"http://pioreactor.local/api/units/{worker}/jobs/update/job_name/stirring/experiments/{experiment}"
+    headers = {"Content-Type": "application/json"}
+    payload = {"settings": {"target_rpm": rpm}}
+
+    response = requests.patch(url, headers=headers, data=json.dumps(payload))
+    if response.status_code == 202:
+        print(f"Stirring RPM updated to {rpm} for worker {worker}.")
+    else:
+        print(f"Failed to update stirring RPM. Status code: {response.status_code}")
 
 def set_led_intensity(worker, experiment, brightness_value):
     url = f"http://pioreactor.local/api/workers/{worker}/jobs/run/job_name/led_intensity/experiments/{experiment}"
@@ -203,22 +200,25 @@ def get_worker(client, reactor):
 
     stats = response2.json()
 
-    # print(stats)
+    print(stats)
 
-    task = stats["task_id"]
+    # task = stats.get("task_id", None)
 
-    response3 = get_task_status(task)
+    # if task is None:
+    #     return None
+
+    # response3 = get_task_status(task)
 
     # print(response3)
 
     running = []
 
-    for item in response3["result"][reactor]:
+    for item in stats:
         running.append(item["name"])
 
     print(running)
 
-    running.remove("watchdog")
+    # running.remove("watchdog")
     running.remove("mqtt_to_db_streaming")
     running.remove("monitor")
 
@@ -238,6 +238,7 @@ def set_temperature_automation(client, worker, experiment, automation_name, temp
     if automation_name == 'only_record_temperature':
         payload = {
             "args": [],
+            "env": {"EXPERIMENT": experiment, "JOB_SOURCE": "user"},
             "options": {
                 "automation_name": automation_name  # Set the desired automation name
             }
@@ -245,6 +246,7 @@ def set_temperature_automation(client, worker, experiment, automation_name, temp
     elif automation_name == 'thermostat':
         payload = {
             "args": [],
+            "env": {"EXPERIMENT": experiment, "JOB_SOURCE": "user"},
             "options": {
                 "automation_name": automation_name,  # Set the desired automation name
                 "skip_first_run": 0,
@@ -270,6 +272,31 @@ def set_temperature_automation(client, worker, experiment, automation_name, temp
         print(f"Failed to set automation. Status code: {response.status_code}")
         print(f"Response: {response.text}")
 
+def temp_update(client, worker, experiment, settings):
+    # Construct the URL for the request
+    url = f"http://pioreactor.local/api/workers/{worker}/jobs/update/job_name/temperature_automation/experiments/{experiment}"
+    
+    # Prepare the payload
+    payload = {
+        "args": [],
+        "settings": settings
+    }
+    
+    # Set the headers
+    headers = {
+        "Content-Type": "application/json"
+    }
+    
+    # Send the PATCH request to set the automation
+    response = requests.patch(url, headers=headers, data=json.dumps(payload))
+    
+    # Check the response status code
+    if response.status_code == 202:
+        print(f"Automation settings updated successfully on worker {worker} for experiment {experiment}!")
+    else:
+        print(f"Failed to update automation settings. Status code: {response.status_code}")
+        print(f"Response: {response.text}")
+
 # --- MQTT Functions ---
 def on_connect(client, userdata, flags, rc):
     print(f"Connected with result code {rc}")
@@ -284,7 +311,10 @@ def on_message(client, userdata, msg):
 
         # Dispatch commands to respective functions
         if command == 'start_stirring':
-            start_stirring(reactor, experiment, message['rpm'])
+            start_stirring(reactor, experiment)
+            if message.get('rpm'):
+                time.sleep(1)
+                update_stirring_rpm(reactor, experiment, message['rpm'])
         elif command == 'stop_stirring':
             stop_stirring(reactor, experiment)
         elif command == 'set_led_intensity':
@@ -301,6 +331,8 @@ def on_message(client, userdata, msg):
             get_worker(client, reactor)
         elif command == 'set_temperature_automation':
             set_temperature_automation(client, reactor, experiment, message['automation'], message.get('temp'))
+        elif command == 'temp_update':
+            temp_update(client, reactor, experiment, message['settings'])
         else:
             print(f"Unknown command: {command}")
     except json.JSONDecodeError as e:
