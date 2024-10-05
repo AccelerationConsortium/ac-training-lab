@@ -55,3 +55,5 @@ MANIFEST
 
 **/my_secrets.py
 ac-training-lab.code-workspace
+
+src/ac_training_lab/pioreactor/lookhere.py
