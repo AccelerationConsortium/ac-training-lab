@@ -216,7 +216,7 @@ def get_worker(client, reactor):
     for item in stats:
         running.append(item["name"])
 
-    print(running)
+    # print(running)
 
     # running.remove("watchdog")
     running.remove("mqtt_to_db_streaming")
@@ -227,7 +227,7 @@ def get_worker(client, reactor):
         "running": running
     }
 
-    print("Publishing worker")
+    # print("Publishing worker")
     client.publish(f"pioreactor/{reactor}/worker", json.dumps(payload))
 
 def set_temperature_automation(client, worker, experiment, automation_name, temp=None):
@@ -317,6 +317,8 @@ def on_message(client, userdata, msg):
                 update_stirring_rpm(reactor, experiment, message['rpm'])
         elif command == 'stop_stirring':
             stop_stirring(reactor, experiment)
+        elif command == 'update_stirring_rpm':
+            update_stirring_rpm(reactor, experiment, message['rpm'])
         elif command == 'set_led_intensity':
             set_led_intensity(reactor, experiment, message['brightness'])
         elif command == 'get_temperature_readings':
