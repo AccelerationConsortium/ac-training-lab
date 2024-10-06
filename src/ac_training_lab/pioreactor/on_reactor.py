@@ -101,8 +101,9 @@ def get_temperature_readings(client, reactor, experiment, filter_mod, lookback):
     response = requests.get(url, params=params)
     if response.status_code == 200:
         print(f"Temperature readings retrieved for experiment {experiment}.")
+        print(response.json())
         temperature_data = response.json()
-        client.publish('pioreactor/temperature', json.dumps(temperature_data))
+        client.publish(f'pioreactor/{reactor}/temperature', json.dumps(temperature_data))
     else:
         print(f"Failed to retrieve temperature readings. Status code: {response.status_code}")
 
