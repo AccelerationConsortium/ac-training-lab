@@ -200,7 +200,7 @@ def get_worker(client, reactor):
 
     stats = response2.json()
 
-    print(stats)
+    # print(stats)
 
     # task = stats.get("task_id", None)
 
@@ -230,7 +230,7 @@ def get_worker(client, reactor):
     # print("Publishing worker")
     client.publish(f"pioreactor/{reactor}/worker", json.dumps(payload))
 
-def set_temperature_automation(client, worker, experiment, automation_name, temp=None):
+def set_temperature_automation(worker, experiment, automation_name, temp=None):
     # Construct the URL for the request
     url = f"http://pioreactor.local/api/workers/{worker}/jobs/run/job_name/temperature_automation/experiments/{experiment}"
     
@@ -272,7 +272,7 @@ def set_temperature_automation(client, worker, experiment, automation_name, temp
         print(f"Failed to set automation. Status code: {response.status_code}")
         print(f"Response: {response.text}")
 
-def temp_update(client, worker, experiment, settings):
+def temp_update(worker, experiment, settings):
     # Construct the URL for the request
     url = f"http://pioreactor.local/api/workers/{worker}/jobs/update/job_name/temperature_automation/experiments/{experiment}"
     
@@ -296,6 +296,14 @@ def temp_update(client, worker, experiment, settings):
     else:
         print(f"Failed to update automation settings. Status code: {response.status_code}")
         print(f"Response: {response.text}")
+
+def temp_restart(worker, experiment, automation, temp=None):
+    # Update automation to stop then start new automation
+    print("Restarting temperature automation")
+    temp_update(worker, experiment, {"$state": "disconnected"})
+    time.sleep(3)
+    set_temperature_automation(worker, experiment, automation, temp)
+
 
 # --- MQTT Functions ---
 def on_connect(client, userdata, flags, rc):
@@ -332,9 +340,11 @@ def on_message(client, userdata, msg):
         elif command == 'get_worker':
             get_worker(client, reactor)
         elif command == 'set_temperature_automation':
-            set_temperature_automation(client, reactor, experiment, message['automation'], message.get('temp'))
+            set_temperature_automation(reactor, experiment, message['automation'], message.get('temp'))
         elif command == 'temp_update':
-            temp_update(client, reactor, experiment, message['settings'])
+            temp_update(reactor, experiment, message['settings'])
+        elif command == 'temp_restart':
+            temp_restart(reactor, experiment, message['automation'], message.get('temp', None))
         else:
             print(f"Unknown command: {command}")
     except json.JSONDecodeError as e:
