@@ -305,6 +305,49 @@ def temp_restart(worker, experiment, automation, temp=None):
     time.sleep(3)
     set_temperature_automation(worker, experiment, automation, temp)
 
+def stop_od_reading(reactor, experiment):
+    url = f"http://pioreactor.local/api/workers/{reactor}/jobs/update/job_name/od_reading/experiments/{experiment}"
+    headers = {"Content-Type": "application/json"}
+    payload = {"settings" : {"$state": "disconnected"}}
+
+    response = requests.patch(url, headers=headers, data=json.dumps(payload))
+    if response.status_code == 202:
+        print(f"OD reading stopped for worker {reactor}.")
+    else:
+        print(f"Failed to stop OD reading. Status code: {response.status_code}")
+
+def start_od_reading(reactor, experiment):
+    url = f"http://pioreactor.local/api/workers/{reactor}/jobs/run/job_name/od_reading/experiments/{experiment}"
+    headers = {"Content-Type": "application/json"}
+    payload = {"env": {"EXPERIMENT": experiment, "JOB_SOURCE": "user"}}
+
+    response = requests.patch(url, headers=headers, data=json.dumps(payload))
+    if response.status_code == 202:
+        print(f"OD reading started for worker {reactor}")
+    else:
+        print(f"Failed to start OD reading. Status code: {response.status_code}")
+
+def stop_growth_rate(reactor, experiment):
+    url = f"http://pioreactor.local/api/workers/{reactor}/jobs/update/job_name/growth_rate_calculating/experiments/{experiment}"
+    headers = {"Content-Type": "application/json"}
+    payload = {"settings" : {"$state": "disconnected"}}
+
+    response = requests.patch(url, headers=headers, data=json.dumps(payload))
+    if response.status_code == 202:
+        print(f"Growth rate stopped for worker {reactor}.")
+    else:
+        print(f"Failed to stop growth rate. Status code: {response.status_code}")
+    
+def start_growth_rate(reactor, experiment):
+    url = f"http://pioreactor.local/api/workers/{reactor}/jobs/run/job_name/growth_rate_calculating/experiments/{experiment}"
+    headers = {"Content-Type": "application/json"}
+    payload = {"env": {"EXPERIMENT": experiment, "JOB_SOURCE": "user"}}
+
+    response = requests.patch(url, headers=headers, data=json.dumps(payload))
+    if response.status_code == 202:
+        print(f"Growth rate started for worker {reactor}")
+    else:
+        print(f"Failed to start growth rate. Status code: {response.status_code}")
 
 # --- MQTT Functions ---
 def on_connect(client, userdata, flags, rc):
@@ -346,6 +389,14 @@ def on_message(client, userdata, msg):
             temp_update(reactor, experiment, message['settings'])
         elif command == 'temp_restart':
             temp_restart(reactor, experiment, message['automation'], message.get('temp', None))
+        elif command == 'stop_od_reading':
+            stop_od_reading(reactor, experiment)
+        elif command == 'start_od_reading':
+            start_od_reading(reactor, experiment)
+        elif command == 'stop_growth_rate':
+            stop_growth_rate(reactor, experiment)
+        elif command == 'start_growth_rate':
+            start_growth_rate(reactor, experiment)
         else:
             print(f"Unknown command: {command}")
     except json.JSONDecodeError as e:
