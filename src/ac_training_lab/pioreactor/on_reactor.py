@@ -349,6 +349,91 @@ def start_growth_rate(reactor, experiment):
     else:
         print(f"Failed to start growth rate. Status code: {response.status_code}")
 
+def get_readings(client, reactor, experiment, filter_mod, lookback, filter_mod2, lookback2, filter_mod3, lookback3, filter_mod4, lookback4, amount, amount2, amount3, amount4):
+    # Get the temperature readings
+    url = f"http://pioreactor.local/api/experiments/{experiment}/time_series/temperature_readings"
+    params = {"filter_mod_N": filter_mod, "lookback": lookback}
+
+    response = requests.get(url, params=params)
+    if response.status_code == 200:
+        print(f"Temperature readings retrieved for experiment {experiment}.")
+    else:
+        print(f"Failed to retrieve temperature readings. Status code: {response.status_code}")
+    
+    # Get the OD readings
+    url = f"http://pioreactor.local/api/experiments/{experiment}/time_series/od_readings"
+    params = {"filter_mod_N": filter_mod2, "lookback": lookback2}
+
+    response2 = requests.get(url, params=params)
+    if response2.status_code == 200:
+        print(f"OD readings retrieved for experiment {experiment}.")
+    else:
+        print(f"Failed to retrieve OD readings. Status code: {response2.status_code}")
+    
+    # Get the noremalized OD readings
+    url = f"http://pioreactor.local/api/experiments/{experiment}/time_series/od_readings_filtered"
+    params = {"filter_mod_N": filter_mod3, "lookback": lookback3}
+
+    response3 = requests.get(url, params=params)
+    if response3.status_code == 200:
+        print(f"Normalized OD readings retrieved for experiment {experiment}.")
+    else:
+        print(f"Failed to retrieve normalized OD readings. Status code: {response3.status_code}")
+
+    # Get the growth rate readings
+    url = f"http://pioreactor.local/api/experiments/{experiment}/time_series/growth_rates"
+    params = {"filter_mod_N": filter_mod4, "lookback": lookback4}
+
+    response4 = requests.get(url, params=params)
+    if response4.status_code == 200:
+        print(f"Growth rate readings retrieved for experiment {experiment}.")
+    else:
+        print(f"Failed to retrieve growth rate readings. Status code: {response4.status_code}")
+    
+    # Publish the readings to the MQTT topic
+    # Readings are 4 minutes apart
+    temp = response.json()
+    temp = temp.get("data", [])
+    temp = temp[0]
+    if amount == "1 hour":
+        temp = temp[-15:]
+    elif amount == "24 hours":
+        temp = temp[-360:]
+    
+    od = response2.json()
+    od = od.get("data", [])
+    od = od[0]
+    if amount2 == "1 hour":
+        od = od[-15:]
+    elif amount2 == "24 hours":
+        od = od[-360:]
+
+    norm_od = response3.json()
+    norm_od = norm_od.get("data", [])
+    norm_od = norm_od[0]
+    if amount3 == "1 hour":
+        norm_od = norm_od[-15:]
+    elif amount3 == "24 hours":
+        norm_od = norm_od[-360:]
+
+    growth_rate = response4.json()
+    growth_rate = growth_rate.get("data", [])
+    growth_rate = growth_rate[0]
+    if amount4 == "1 hour":
+        growth_rate = growth_rate[-15:]
+    elif amount4 == "24 hours":
+        growth_rate = growth_rate[-360:]
+
+    readings = {
+        "temperature": temp,
+        "od": od,
+        "normalized_od": norm_od,
+        "growth_rate": growth_rate
+    }
+
+    client.publish(f"pioreactor/{reactor}/readings", json.dumps(readings))
+    
+
 # --- MQTT Functions ---
 def on_connect(client, userdata, flags, rc):
     print(f"Connected with result code {rc}")
@@ -397,6 +482,8 @@ def on_message(client, userdata, msg):
             stop_growth_rate(reactor, experiment)
         elif command == 'start_growth_rate':
             start_growth_rate(reactor, experiment)
+        elif command == 'get_readings':
+            get_readings(client, reactor, experiment, message['filter_mod'], message['lookback'], message['filter_mod2'], message['lookback2'], message['filter_mod3'], message['lookback3'], message['filter_mod4'], message['lookback4'], message['amount'], message['amount2'], message['amount3'], message['amount4'])
         else:
             print(f"Unknown command: {command}")
     except json.JSONDecodeError as e:
