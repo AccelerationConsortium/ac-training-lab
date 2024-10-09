@@ -399,30 +399,32 @@ def get_readings(client, reactor, experiment, filter_mod, lookback, filter_mod2,
         temp = temp[-15:]
     elif amount == "24 hours":
         temp = temp[-360:]
+
+    # Readings are 12 times a minute
     
     od = response2.json()
     od = od.get("data", [])
     od = od[0]
     if amount2 == "1 hour":
-        od = od[-15:]
+        od = od[-720:]
     elif amount2 == "24 hours":
-        od = od[-360:]
+        od = od[-8640:]
 
     norm_od = response3.json()
     norm_od = norm_od.get("data", [])
     norm_od = norm_od[0]
     if amount3 == "1 hour":
-        norm_od = norm_od[-15:]
+        norm_od = norm_od[-720:]
     elif amount3 == "24 hours":
-        norm_od = norm_od[-360:]
+        norm_od = norm_od[-8640:]
 
     growth_rate = response4.json()
     growth_rate = growth_rate.get("data", [])
     growth_rate = growth_rate[0]
     if amount4 == "1 hour":
-        growth_rate = growth_rate[-15:]
+        growth_rate = growth_rate[-720:]
     elif amount4 == "24 hours":
-        growth_rate = growth_rate[-360:]
+        growth_rate = growth_rate[-8640:]
 
     readings = {
         "temperature": temp,
