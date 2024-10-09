@@ -408,7 +408,7 @@ def get_readings(client, reactor, experiment, filter_mod, lookback, filter_mod2,
     if amount2 == "1 hour":
         od = od[-720:]
     elif amount2 == "24 hours":
-        od = od[-8640:]
+        od = od[-17280:]
 
     norm_od = response3.json()
     norm_od = norm_od.get("data", [])
@@ -416,7 +416,7 @@ def get_readings(client, reactor, experiment, filter_mod, lookback, filter_mod2,
     if amount3 == "1 hour":
         norm_od = norm_od[-720:]
     elif amount3 == "24 hours":
-        norm_od = norm_od[-8640:]
+        norm_od = norm_od[-17280:]
 
     growth_rate = response4.json()
     growth_rate = growth_rate.get("data", [])
@@ -424,7 +424,7 @@ def get_readings(client, reactor, experiment, filter_mod, lookback, filter_mod2,
     if amount4 == "1 hour":
         growth_rate = growth_rate[-720:]
     elif amount4 == "24 hours":
-        growth_rate = growth_rate[-8640:]
+        growth_rate = growth_rate[-17280:]
 
     readings = {
         "temperature": temp,
