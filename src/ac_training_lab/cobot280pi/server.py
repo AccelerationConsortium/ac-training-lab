@@ -179,19 +179,18 @@ if __name__ == "__main__":
 
 	client.tls_set(tls_version=paho.ssl.PROTOCOL_TLS)
 	client.username_pw_set(HIVEMQ_USERNAME, HIVEMQ_PASSWORD)
-	client.connect(HIVEMQ_HOST, PORT)
-	client.subscribe(DEVICE_ID, qos=2)
+	client.connect(HIVEMQ_HOST, DEVICE_PORT)
+	client.subscribe(DEVICE_ENDPOINT, qos=2)
 	client.loop_start()
 	logger.info("Ready for tasks...")
-
-	response_endpoint = DEVICE_ID + "/response"
 
 	while True:
 		msg = task_queue.get()  # blocks if queue is empty
 		response_dict = handle_message(msg, cobot)
-		client.publish(
-			response_endpoint,
+		pub_handle = client.publish(
+			RESPONSE_ENDPOINT,
 			qos=2,
 			payload=json.dumps(response_dict)
 		)
+		pub_handle.wait_for_publish()
 		time.sleep(3)
