@@ -83,10 +83,13 @@ def update_stirring_rpm(worker, experiment, rpm):
     else:
         print(f"Failed to update stirring RPM. Status code: {response.status_code}")
 
-def set_led_intensity(worker, experiment, brightness_value):
+def set_led_intensity(worker, experiment, brightness_value, led):
     url = f"http://pioreactor.local/api/workers/{worker}/jobs/run/job_name/led_intensity/experiments/{experiment}"
     headers = {"Content-Type": "application/json"}
-    payload = {"options": {"B": brightness_value, "source_of_event": "UI"}}
+    payload = {
+        'env': {"EXPERIMENT": experiment, "JOB_SOURCE": "user"},
+        "options": {led: brightness_value, "source_of_event": "UI"}
+        }
 
     response = requests.patch(url, headers=headers, data=json.dumps(payload))
     if response.status_code == 202:
@@ -459,7 +462,7 @@ def on_message(client, userdata, msg):
         elif command == 'update_stirring_rpm':
             update_stirring_rpm(reactor, experiment, message['rpm'])
         elif command == 'set_led_intensity':
-            set_led_intensity(reactor, experiment, message['brightness'])
+            set_led_intensity(reactor, experiment, message['brightness'], message['led'])
         elif command == 'get_temperature_readings':
             get_temperature_readings(client, reactor, experiment, message['filter_mod'], message['lookback'])
         elif command == 'get_experiments':
