@@ -6,6 +6,8 @@ import json
 import lookhere
 import time
 
+automation_name = None
+
 # --- PioReactor API Functions ---
 def create_experiment(experiment, description="", mediaUsed="", organismUsed=""):
     url = "http://pioreactor.local/api/experiments"
@@ -220,6 +222,34 @@ def get_worker(client, reactor):
     for item in stats:
         running.append(item["name"])
 
+    if "temperature_automation" in running:
+        client2 = mqtt.Client()
+
+        def on_connect(client, userdata, flags, rc):
+            print(f"Connected with result code {rc}")
+            client.subscribe(f"pioreactor/{reactor}/{experiment}/temperature_automation/automation_name")
+        
+        def on_message(client, userdata, msg):
+            global automation_name
+            automation_name = msg.payload.decode('utf-8')
+            print(automation_name)
+        
+        client2.on_connect = on_connect
+        client2.on_message = on_message
+        client2.username_pw_set(lookhere.username_pio, lookhere.password_pio)
+
+        broker = reactor + ".local"
+
+        client2.connect(broker, lookhere.port_pio)
+
+        global automation_name
+        client2.loop_start()
+        time.sleep(1)
+        print(automation_name, "automation_name")
+        client2.loop_stop()
+
+
+
     # print(running)
 
     # running.remove("watchdog")
@@ -228,7 +258,8 @@ def get_worker(client, reactor):
 
     payload = {
         "experiment": experiment,
-        "running": running
+        "running": running,
+        "temperature_automation": automation_name,
     }
 
     # print("Publishing worker")
