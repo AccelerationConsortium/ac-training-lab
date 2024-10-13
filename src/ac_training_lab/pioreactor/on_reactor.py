@@ -7,6 +7,8 @@ import lookhere
 import time
 
 automation_name = None
+stirring_target_rpm = None
+led_data = None
 
 # --- PioReactor API Functions ---
 def create_experiment(experiment, description="", mediaUsed="", organismUsed=""):
@@ -222,9 +224,41 @@ def get_worker(client, reactor):
     for item in stats:
         running.append(item["name"])
 
-    if "temperature_automation" in running:
-        client2 = mqtt.Client()
+    
+    def on_connect(client, userdata, flags, rc):
+        print(f"Connected with result code {rc}")
+        client.subscribe(f"pioreactor/{reactor}/{experiment}/leds/intensity")
 
+    def on_message(client, userdata, msg):
+        global led_data
+        led_data = json.loads(msg.payload.decode('utf-8'))
+        print(led_data)
+
+    client_temp = mqtt.Client()
+
+    client_temp.on_connect = on_connect
+    client_temp.on_message = on_message
+
+    client_temp.username_pw_set(lookhere.username_pio, lookhere.password_pio)
+
+    client_temp.connect(reactor + ".local", lookhere.port_pio)
+
+    client_temp.loop_start()
+
+    # timeout = 5
+    # start = time.time()
+
+    # while len(led_data) < 5 and time.time() - start < timeout:  
+    #     time.sleep(1)
+
+    time.sleep(1)
+
+    client_temp.loop_stop()    
+    client_temp.disconnect()
+
+
+
+    if "temperature_automation" in running:
         def on_connect(client, userdata, flags, rc):
             print(f"Connected with result code {rc}")
             client.subscribe(f"pioreactor/{reactor}/{experiment}/temperature_automation/automation_name")
@@ -234,20 +268,44 @@ def get_worker(client, reactor):
             automation_name = msg.payload.decode('utf-8')
             print(automation_name)
         
-        client2.on_connect = on_connect
-        client2.on_message = on_message
-        client2.username_pw_set(lookhere.username_pio, lookhere.password_pio)
+        client_temp.on_connect = on_connect
+        client_temp.on_message = on_message
 
         broker = reactor + ".local"
 
-        client2.connect(broker, lookhere.port_pio)
+        client_temp.connect(broker, lookhere.port_pio)
 
         global automation_name
-        client2.loop_start()
+        client_temp.loop_start()
         time.sleep(1)
         print(automation_name, "automation_name")
-        client2.loop_stop()
+        client_temp.loop_stop()
+        client_temp.disconnect()
 
+    if "stirring" in running:
+        def on_connect(client, userdata, flags, rc):
+            print(f"Connected with result code {rc}")
+            client.subscribe(f"pioreactor/{reactor}/{experiment}/stirring/target_rpm")
+        
+        def on_message(client, userdata, msg):
+            global stirring_target_rpm
+            stirring_target_rpm = msg.payload.decode('utf-8')
+            print(stirring_target_rpm)
+        
+        client_temp.on_connect = on_connect
+        client_temp.on_message = on_message
+
+        broker = reactor + ".local"
+
+        client_temp.connect(broker, lookhere.port_pio)
+
+        global stirring_target_rpm
+        client_temp.loop_start()
+        time.sleep(1)
+        print(stirring_target_rpm, "stirring_target_rpm")
+        print(type(stirring_target_rpm))
+        client_temp.loop_stop()
+        client_temp.disconnect()
 
 
     # print(running)
@@ -260,6 +318,8 @@ def get_worker(client, reactor):
         "experiment": experiment,
         "running": running,
         "temperature_automation": automation_name,
+        "stirring": int(float(stirring_target_rpm)) if stirring_target_rpm is not None else None,
+        "leds": led_data if led_data is not None else None,
     }
 
     # print("Publishing worker")
