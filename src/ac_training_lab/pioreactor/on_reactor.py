@@ -224,6 +224,19 @@ def get_worker(client, reactor):
     for item in stats:
         running.append(item["name"])
 
+
+    url3 = f"http://pioreactor.local/api/experiments"
+
+    response3 = requests.get(url3, headers=headers)
+
+    experiments = response3.json()
+
+    exp_name = []
+
+    for e in experiments:
+        exp_name.append(e["experiment"])
+
+    exp_name.remove(experiment)
     
     def on_connect(client, userdata, flags, rc):
         print(f"Connected with result code {rc}")
@@ -314,12 +327,15 @@ def get_worker(client, reactor):
     running.remove("mqtt_to_db_streaming")
     running.remove("monitor")
 
+    print(experiment)
+
     payload = {
         "experiment": experiment,
         "running": running,
         "temperature_automation": automation_name,
         "stirring": int(float(stirring_target_rpm)) if stirring_target_rpm is not None else None,
         "leds": led_data if led_data is not None else None,
+        "experiments": exp_name
     }
 
     # print("Publishing worker")
@@ -488,37 +504,44 @@ def get_readings(client, reactor, experiment, filter_mod, lookback, filter_mod2,
     # Readings are 4 minutes apart
     temp = response.json()
     temp = temp.get("data", [])
-    temp = temp[0]
-    if amount == "1 hour":
-        temp = temp[-15:]
-    elif amount == "24 hours":
-        temp = temp[-360:]
+
+    if len(temp) != 0:
+        temp = temp[0]
+        if amount == "1 hour":
+            temp = temp[-15:]
+        elif amount == "24 hours":
+            temp = temp[-360:]
 
     # Readings are 12 times a minute
     
     od = response2.json()
     od = od.get("data", [])
-    od = od[0]
-    if amount2 == "1 hour":
-        od = od[-720:]
-    elif amount2 == "24 hours":
-        od = od[-17280:]
+
+    if len(od) != 0:
+        od = od[0]
+        if amount2 == "1 hour":
+            od = od[-720:]
+        elif amount2 == "24 hours":
+            od = od[-17280:]
 
     norm_od = response3.json()
     norm_od = norm_od.get("data", [])
-    norm_od = norm_od[0]
-    if amount3 == "1 hour":
-        norm_od = norm_od[-720:]
-    elif amount3 == "24 hours":
-        norm_od = norm_od[-17280:]
+
+    if len(norm_od) != 0:
+        norm_od = norm_od[0]
+        if amount3 == "1 hour":
+            norm_od = norm_od[-720:]
+        elif amount3 == "24 hours":
+            norm_od = norm_od[-17280:]
 
     growth_rate = response4.json()
     growth_rate = growth_rate.get("data", [])
-    growth_rate = growth_rate[0]
-    if amount4 == "1 hour":
-        growth_rate = growth_rate[-720:]
-    elif amount4 == "24 hours":
-        growth_rate = growth_rate[-17280:]
+    if len(growth_rate) != 0:
+        growth_rate = growth_rate[0]
+        if amount4 == "1 hour":
+            growth_rate = growth_rate[-720:]
+        elif amount4 == "24 hours":
+            growth_rate = growth_rate[-17280:]
 
     readings = {
         "temperature": temp,
@@ -527,8 +550,72 @@ def get_readings(client, reactor, experiment, filter_mod, lookback, filter_mod2,
         "growth_rate": growth_rate
     }
 
+    print(readings)
+
     client.publish(f"pioreactor/{reactor}/readings", json.dumps(readings))
+
+def new_experiment(experiment, description="", mediaUsed="", organismUsed=""):
+    url = "http://pioreactor.local/api/experiments"
+    created_at = datetime.now().isoformat()
     
+    payload = {
+        "experiment": experiment,
+        "created_at": created_at,
+        "description": description,
+        "mediaUsed": mediaUsed,
+        "organismUsed": organismUsed
+    }
+    
+    headers = {"Content-Type": "application/json"}
+    response = requests.post(url, headers=headers, data=json.dumps(payload))
+
+    if response.status_code == 200:
+        print("Experiment created successfully!")
+    else:
+        print(f"Failed to create experiment. Status code: {response.status_code}")
+    
+
+def change_experiment(experiment, experiment_new, reactor):
+    url = f"http://pioreactor.local/api/experiments/{experiment}/workers/{reactor}"
+
+    headers = {"Content-Type": "application/json"}
+
+    response = requests.delete(url, headers=headers)
+
+    if response.status_code == 200:
+        print("Experiment changed successfully!")
+    else:
+        print(f"Failed to change experiment. Status code: {response.status_code}")
+        return None
+
+    url = f"http://pioreactor.local/api/experiments/{experiment_new}/workers"
+
+    payload = {
+        "pioreactor_unit": reactor
+    }
+
+    response = requests.put(url, headers=headers, data=json.dumps(payload))
+
+    if response.status_code == 200:
+        print(f"Worker {reactor} assigned to experiment {experiment_new}.")
+    else:
+        print(f"Failed to assign worker {reactor}. Status code: {response.status_code}")
+
+    set_led_intensity(reactor, experiment_new, 0, "A")
+
+
+def delete_experiment(experiment):
+    url = f"http://pioreactor.local/api/experiments/{experiment}"
+
+    headers = {"Content-Type": "application/json"}
+
+    response = requests.delete(url, headers=headers)
+
+    if response.status_code == 200:
+        print("Experiment deleted successfully!")
+    else:
+        print(f"Failed to delete experiment. Status code: {response.status_code}")
+        return None
 
 # --- MQTT Functions ---
 def on_connect(client, userdata, flags, rc):
@@ -580,6 +667,12 @@ def on_message(client, userdata, msg):
             start_growth_rate(reactor, experiment)
         elif command == 'get_readings':
             get_readings(client, reactor, experiment, message['filter_mod'], message['lookback'], message['filter_mod2'], message['lookback2'], message['filter_mod3'], message['lookback3'], message['filter_mod4'], message['lookback4'], message['amount'], message['amount2'], message['amount3'], message['amount4'])
+        elif command == 'new_experiment':
+            new_experiment(message['experiment'], message.get('description', ""), message.get('mediaUsed', ""), message.get('organismUsed', ""))
+        elif command == 'change_experiment':
+            change_experiment(message['experiment'], message['experiment_new'], reactor)
+        elif command == 'delete_experiment':
+            delete_experiment(message['experiment'])
         else:
             print(f"Unknown command: {command}")
     except json.JSONDecodeError as e:
