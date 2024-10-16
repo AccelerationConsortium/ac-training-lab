@@ -6,6 +6,22 @@ import json
 import lookhere
 import time
 
+"""
+This script is used to interact with the PioReactor API to perform various operations such as creating experiments, assigning workers to experiments, starting/stopping stirring, setting LED intensity, etc.
+
+lookhere.py contains the following variables:
+- username: Username for the PioReactor
+- password: Password for the PioReactor
+- broker: MQTT broker address
+- port: MQTT broker port
+- username_pio: Username for the PioReactor
+- password_pio: Password for the PioReactor
+- port_pio: Port for the PioReactor
+It should be placed in the same directory as this script.
+
+Author: Enrui (Edison) Lin
+"""
+
 automation_name = None
 stirring_target_rpm = None
 led_data = None
