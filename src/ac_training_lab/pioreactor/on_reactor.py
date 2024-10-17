@@ -261,7 +261,7 @@ def get_worker(client, reactor):
     def on_message(client, userdata, msg):
         global led_data
         led_data = json.loads(msg.payload.decode('utf-8'))
-        print(led_data)
+        # print(led_data)
 
     client_temp = mqtt.Client()
 
@@ -307,7 +307,7 @@ def get_worker(client, reactor):
         global automation_name
         client_temp.loop_start()
         time.sleep(1)
-        print(automation_name, "automation_name")
+        # print(automation_name, "automation_name")
         client_temp.loop_stop()
         client_temp.disconnect()
 
@@ -331,8 +331,8 @@ def get_worker(client, reactor):
         global stirring_target_rpm
         client_temp.loop_start()
         time.sleep(1)
-        print(stirring_target_rpm, "stirring_target_rpm")
-        print(type(stirring_target_rpm))
+        # print(stirring_target_rpm, "stirring_target_rpm")
+        # print(type(stirring_target_rpm))
         client_temp.loop_stop()
         client_temp.disconnect()
 
@@ -343,7 +343,7 @@ def get_worker(client, reactor):
     running.remove("mqtt_to_db_streaming")
     running.remove("monitor")
 
-    print(experiment)
+    # print(experiment)
 
     payload = {
         "experiment": experiment,
@@ -482,7 +482,7 @@ def get_readings(client, reactor, experiment, filter_mod, lookback, filter_mod2,
 
     response = requests.get(url, headers=headers)
 
-    print(response.json())
+    # print(response.json())
 
     hour = response.json().get("delta_hours", None)
 
@@ -490,7 +490,7 @@ def get_readings(client, reactor, experiment, filter_mod, lookback, filter_mod2,
     filter_mod3 = filter_mod3 + hour
     filter_mod4 = filter_mod4 + hour
 
-    print(amount2)
+    # print(amount2)
 
     # Get the temperature readings
     url = f"http://pioreactor.local/api/experiments/{experiment}/time_series/temperature_readings"
@@ -576,7 +576,7 @@ def get_readings(client, reactor, experiment, filter_mod, lookback, filter_mod2,
                     od = od[i:]
                     break
         
-    print(lastTime)
+    # print(lastTime)
 
     norm_od = response3.json()
     norm_od = norm_od.get("data", [])
@@ -624,7 +624,7 @@ def get_readings(client, reactor, experiment, filter_mod, lookback, filter_mod2,
         "growth_rate": growth_rate
     }
 
-    print(len(od))
+    # print(len(od))
 
     client.publish(f"pioreactor/{reactor}/readings", json.dumps(readings))
 
