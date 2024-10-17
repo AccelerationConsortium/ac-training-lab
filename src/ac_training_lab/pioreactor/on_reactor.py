@@ -1,6 +1,6 @@
 import requests
 import json
-from datetime import datetime
+from datetime import datetime, timedelta
 import paho.mqtt.client as mqtt
 import json
 import lookhere
@@ -476,6 +476,22 @@ def start_growth_rate(reactor, experiment):
         print(f"Failed to start growth rate. Status code: {response.status_code}")
 
 def get_readings(client, reactor, experiment, filter_mod, lookback, filter_mod2, lookback2, filter_mod3, lookback3, filter_mod4, lookback4, amount, amount2, amount3, amount4):
+    # Get the experiment details
+    url = f"http://pioreactor.local/api/experiments/{experiment}"
+    headers = {"Content-Type": "application/json"}
+
+    response = requests.get(url, headers=headers)
+
+    print(response.json())
+
+    hour = response.json().get("delta_hours", None)
+
+    filter_mod2 = filter_mod2 + hour
+    filter_mod3 = filter_mod3 + hour
+    filter_mod4 = filter_mod4 + hour
+
+    print(amount2)
+
     # Get the temperature readings
     url = f"http://pioreactor.local/api/experiments/{experiment}/time_series/temperature_readings"
     params = {"filter_mod_N": filter_mod, "lookback": lookback}
@@ -524,9 +540,19 @@ def get_readings(client, reactor, experiment, filter_mod, lookback, filter_mod2,
     if len(temp) != 0:
         temp = temp[0]
         if amount == "1 hour":
-            temp = temp[-15:]
+            lastTime = temp[len(temp) - 1].get('x')
+            lastTime = datetime.strptime(lastTime, "%Y-%m-%dT%H:%M:%S.%fZ")
+            for i in range(len(temp), 0, -1):
+                if datetime.strptime(temp[i - 1].get('x'), "%Y-%m-%dT%H:%M:%S.%fZ") < lastTime - timedelta(hours=1):
+                    temp = temp[i:]
+                    break
         elif amount == "24 hours":
-            temp = temp[-360:]
+            lastTime = temp[len(temp) - 1].get('x')
+            lastTime = datetime.strptime(lastTime, "%Y-%m-%dT%H:%M:%S.%fZ")
+            for i in range(len(temp), 0, -1):
+                if datetime.strptime(temp[i - 1].get('x'), "%Y-%m-%dT%H:%M:%S.%fZ") < lastTime - timedelta(hours=24):
+                    temp = temp[i:]
+                    break
 
     # Readings are 12 times a minute
     
@@ -536,9 +562,21 @@ def get_readings(client, reactor, experiment, filter_mod, lookback, filter_mod2,
     if len(od) != 0:
         od = od[0]
         if amount2 == "1 hour":
-            od = od[-720:]
+            lastTime = od[len(od) - 1].get('x')
+            lastTime = datetime.strptime(lastTime, "%Y-%m-%dT%H:%M:%S.%fZ")
+            for i in range(len(od), 0, -1):
+                if datetime.strptime(od[i - 1].get('x'), "%Y-%m-%dT%H:%M:%S.%fZ") < lastTime - timedelta(hours=1):
+                    od = od[i:]
+                    break
         elif amount2 == "24 hours":
-            od = od[-17280:]
+            lastTime = od[len(od) - 1].get('x')
+            lastTime = datetime.strptime(lastTime, "%Y-%m-%dT%H:%M:%S.%fZ")
+            for i in range(len(od), 0, -1):
+                if datetime.strptime(od[i - 1].get('x'), "%Y-%m-%dT%H:%M:%S.%fZ") < lastTime - timedelta(hours=24):
+                    od = od[i:]
+                    break
+        
+    print(lastTime)
 
     norm_od = response3.json()
     norm_od = norm_od.get("data", [])
@@ -546,18 +584,38 @@ def get_readings(client, reactor, experiment, filter_mod, lookback, filter_mod2,
     if len(norm_od) != 0:
         norm_od = norm_od[0]
         if amount3 == "1 hour":
-            norm_od = norm_od[-720:]
+            lastTime = norm_od[len(norm_od) - 1].get('x')
+            lastTime = datetime.strptime(lastTime, "%Y-%m-%dT%H:%M:%S.%fZ")
+            for i in range(len(norm_od), 0, -1):
+                if datetime.strptime(norm_od[i - 1].get('x'), "%Y-%m-%dT%H:%M:%S.%fZ") < lastTime - timedelta(hours=1):
+                    norm_od = norm_od[i:]
+                    break
         elif amount3 == "24 hours":
-            norm_od = norm_od[-17280:]
+            lastTime = norm_od[len(norm_od) - 1].get('x')
+            lastTime = datetime.strptime(lastTime, "%Y-%m-%dT%H:%M:%S.%fZ")
+            for i in range(len(norm_od), 0, -1):
+                if datetime.strptime(norm_od[i - 1].get('x'), "%Y-%m-%dT%H:%M:%S.%fZ") < lastTime - timedelta(hours=24):
+                    norm_od = norm_od[i:]
+                    break
 
     growth_rate = response4.json()
     growth_rate = growth_rate.get("data", [])
     if len(growth_rate) != 0:
         growth_rate = growth_rate[0]
         if amount4 == "1 hour":
-            growth_rate = growth_rate[-720:]
+            lastTime = growth_rate[len(growth_rate) - 1].get('x')
+            lastTime = datetime.strptime(lastTime, "%Y-%m-%dT%H:%M:%S.%fZ")
+            for i in range(len(growth_rate), 0, -1):
+                if datetime.strptime(growth_rate[i - 1].get('x'), "%Y-%m-%dT%H:%M:%S.%fZ") < lastTime - timedelta(hours=1):
+                    growth_rate = growth_rate[i:]
+                    break
         elif amount4 == "24 hours":
-            growth_rate = growth_rate[-17280:]
+            lastTime = growth_rate[len(growth_rate) - 1].get('x')
+            lastTime = datetime.strptime(lastTime, "%Y-%m-%dT%H:%M:%S.%fZ")
+            for i in range(len(growth_rate), 0, -1):
+                if datetime.strptime(growth_rate[i - 1].get('x'), "%Y-%m-%dT%H:%M:%S.%fZ") < lastTime - timedelta(hours=24):
+                    growth_rate = growth_rate[i:]
+                    break
 
     readings = {
         "temperature": temp,
@@ -566,7 +624,7 @@ def get_readings(client, reactor, experiment, filter_mod, lookback, filter_mod2,
         "growth_rate": growth_rate
     }
 
-    print(readings)
+    print(len(od))
 
     client.publish(f"pioreactor/{reactor}/readings", json.dumps(readings))
 
