@@ -1,7 +1,7 @@
 import time
 import board
 import busio
-import adafruit_bme680
+import scripts.tempSensor.lib.adafruit_bme680 as adafruit_bme680
 
 i2c = busio.I2C(scl=board.GP17, sda=board.GP16)
 sensor = adafruit_bme680.Adafruit_BME680_I2C(i2c)
