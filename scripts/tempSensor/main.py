@@ -2,13 +2,10 @@ import time
 import machine
 import scripts.tempSensor.lib.adafruit_bme680 as adafruit_bme680
 
-# Initialize I2C (using GPIO pins directly)
-i2c = machine.I2C(0, scl=machine.Pin(5), sda=machine.Pin(4))  # Use I2C0 on GPIO4 (SDA) and GPIO5 (SCL)
+i2c = machine.I2C(0, scl=machine.Pin(5), sda=machine.Pin(4))  
 
-# Initialize BME680 sensor
 bme680 = adafruit_bme680.Adafruit_BME680_I2C(i2c)
 
-# Adjust for temperature offset
 temperature_offset = -5
 
 while True:
