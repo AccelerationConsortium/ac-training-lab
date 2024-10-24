@@ -5,7 +5,7 @@ def show():
     # import pymongo.mongo_client
     import requests
     import streamlit as st
-    from my_secrets import api_token, base_url, brokerip, uri
+    from my_secrets import HIVEMQ_API_TOKEN, HIVEMQ_BASE_URL, HIVEMQ_BROKER, MONGODB_URI
     from pymongo.mongo_client import MongoClient
 
     # SET UP ON DATABASE you need to make a variable for the time called the
@@ -23,7 +23,7 @@ def show():
     ]
     brokerport = "8883"
 
-    client = MongoClient(uri)
+    client = MongoClient(MONGODB_URI)
     db = client[database_name]
     collection = db[collection_name]
 
@@ -45,9 +45,9 @@ def show():
             return f"An error occurred: {e}"
 
     def create_user(username, password):
-        api_url = base_url + "/mqtt/credentials"
+        api_url = HIVEMQ_BASE_URL + "/mqtt/credentials"
         headers = {
-            "Authorization": f"Bearer {api_token}",
+            "Authorization": f"Bearer {HIVEMQ_API_TOKEN}",
             "Content-Type": "application/json",
         }
 
@@ -57,19 +57,19 @@ def show():
 
     def delete_user(username):
         headers = {
-            "Authorization": f"Bearer {api_token}",
+            "Authorization": f"Bearer {HIVEMQ_API_TOKEN}",
             "Content-Type": "application/json",
         }
 
-        api_url = base_url + "/mqtt/credentials/username/" + username
+        api_url = HIVEMQ_BASE_URL + "/mqtt/credentials/username/" + username
         requests.delete(api_url, headers=headers)
 
     def role_user(username, role):
         headers = {
-            "Authorization": f"Bearer {api_token}",
+            "Authorization": f"Bearer {HIVEMQ_API_TOKEN}",
             "Content-Type": "application/json",
         }
-        api_url = base_url + "/user/" + username + "/roles/" + role + "/attach"
+        api_url = HIVEMQ_BASE_URL + "/user/" + username + "/roles/" + role + "/attach"
         requests.put(api_url, headers=headers)
 
     def update_variable(variable_name, new_value):
@@ -114,7 +114,7 @@ def show():
 
     st.write("Keys will last 30 minutes before being overridable")
     st.write("Broker IP:")
-    st.code(brokerip)
+    st.code(HIVEMQ_BROKER)
     st.write("Broker port:")
     st.code(brokerport)
     st.write("Usernames:")
