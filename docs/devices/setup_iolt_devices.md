@@ -111,7 +111,9 @@ Password: `japanese-envelope-spoken` (subject to change in case access needs to 
 You can add create sprites for new Gather Town "devices" using the following steps:
 1. Snap a picture of or find an online image of the physical hardware and save to https://github.com/AccelerationConsortium/ac-training-lab/tree/main/reports/figures/gather-town
 1. Use the Adobe Express background remover on the image and save to https://github.com/AccelerationConsortium/ac-training-lab/tree/main/reports/figures/gather-town with `-bg` appended to the filename (e.g., `mycobot-280.png` --> `mycobot-280-bg.png`).
-1. Use https://giventofly.github.io/pixelit/#tryit to create the pixelated image (may need to play around with the settings)
-    - Each block is 32 pixels<sup>2</sup>
+2. Use https://giventofly.github.io/pixelit/#tryit to create the pixelated image (may need to play around with the settings)
+    - Each block is 32 pixels<sup>2</sup>, and you can set the max width and max height settings as needed (see below)
     - For larger devices or devices with more detail that you want to expose, you can take up multiple "blocks" within Gather Town
     - Try not to take up more than a 2x2 grid
+
+![pixelit interface](docs\_static\images\pixelit-interface.png)
