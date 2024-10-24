@@ -116,4 +116,4 @@ You can add create sprites for new Gather Town "devices" using the following ste
     - For larger devices or devices with more detail that you want to expose, you can take up multiple "blocks" within Gather Town
     - Try not to take up more than a 2x2 grid
 
-![pixelit interface](docs\_static\images\pixelit-interface.png)
+<img src="../_static/images/pixelit-interface.png" width=300>
