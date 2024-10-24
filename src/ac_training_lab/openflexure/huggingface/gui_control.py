@@ -3,8 +3,8 @@ def show():
     # caption='PIL Image', use_column_width=True)
     import streamlit as st
     from microscope_demo_client import MicroscopeDemo
+    from my_secrets import HIVEMQ_BROKER
 
-    host = "marooncarder-nvscfy.a02.usw2.aws.hivemq.cloud"
     port = 8883
     microscopes = [
         "microscope",
@@ -15,7 +15,7 @@ def show():
 
     def get_pos_button():
         microscope = MicroscopeDemo(
-            host,
+            HIVEMQ_BROKER,
             port,
             microscopeselection + "clientuser",
             access_key,
@@ -30,7 +30,7 @@ def show():
 
     def take_image_button():
         microscope = MicroscopeDemo(
-            host,
+            HIVEMQ_BROKER,
             port,
             microscopeselection + "clientuser",
             access_key,
@@ -46,7 +46,7 @@ def show():
 
     def focus_button():
         microscope = MicroscopeDemo(
-            host,
+            HIVEMQ_BROKER,
             port,
             microscopeselection + "clientuser",
             access_key,
@@ -59,7 +59,7 @@ def show():
 
     def move_button():
         microscope = MicroscopeDemo(
-            host,
+            HIVEMQ_BROKER,
             port,
             microscopeselection + "clientuser",
             access_key,
