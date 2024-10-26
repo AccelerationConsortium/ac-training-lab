@@ -690,6 +690,138 @@ def delete_experiment(experiment):
     else:
         print(f"Failed to delete experiment. Status code: {response.status_code}")
         return None
+    
+def pump_add_media(reactor, experiment, volume=None, duration=None, continuous=False):
+    url = f"http://pioreactor.local/api/workers/{reactor}/jobs/run/job_name/add_media/experiments/{experiment}"
+
+    if volume is not None:
+        payload = {
+            "env": {"EXPERIMENT": experiment, "JOB_SOURCE": "user"},
+            "options": {"ml": volume, "source_of_event": "UI"}
+        }
+    elif duration is not None:
+        payload = {
+            "env": {"EXPERIMENT": experiment, "JOB_SOURCE": "user"},
+            "options": {"duration": duration, "source_of_event": "UI"}
+        }
+    elif continuous:
+        return # Don't think we should support this
+        payload = {
+            "env": {"EXPERIMENT": experiment, "JOB_SOURCE": "user"},
+            "options": {"continuously": "null", "source_of_event": "UI"}
+        }
+    else:
+        print("Please provide either volume or duration.")
+        return
+    
+    headers = {"Content-Type": "application/json"}
+
+    response = requests.patch(url, headers=headers, data=json.dumps(payload))
+
+    if response.status_code == 202:
+        print(f"Media added to reactor {reactor}.")
+    else:
+        print(f"Failed to add media. Status code: {response.status_code}")
+
+def pump_remove_media(reactor, experiment, volume=None, duration=None, continuous=False):
+    url = f"http://pioreactor.local/api/workers/{reactor}/jobs/run/job_name/remove_waste/experiments/{experiment}"
+
+    if volume is not None:
+        payload = {
+            "env": {"EXPERIMENT": experiment, "JOB_SOURCE": "user"},
+            "options": {"ml": volume, "source_of_event": "UI"}
+        }
+    elif duration is not None:
+        payload = {
+            "env": {"EXPERIMENT": experiment, "JOB_SOURCE": "user"},
+            "options": {"duration": duration, "source_of_event": "UI"}
+        }
+    elif continuous:
+        return # Don't think we should support this
+        payload = {
+            "env": {"EXPERIMENT": experiment, "JOB_SOURCE": "user"},
+            "options": {"continuously": "null", "source_of_event": "UI"}
+        }
+    else:
+        print("Please provide either volume or duration.")
+        return
+    
+    headers = {"Content-Type": "application/json"}
+
+    response = requests.patch(url, headers=headers, data=json.dumps(payload))
+
+    if response.status_code == 202:
+        print(f"Media removed from reactor {reactor}.")
+    else:
+        print(f"Failed to remove media. Status code: {response.status_code}")
+
+def add_alt_media(reactor, experiment, media, volume=None, duration=None, continuous=False):
+    url = f"http://pioreactor.local/api/workers/{reactor}/jobs/run/job_name/add_alt_media/experiments/{experiment}"
+
+    if volume is not None:
+        payload = {
+            "env": {"EXPERIMENT": experiment, "JOB_SOURCE": "user"},
+            "options": {"ml": volume, "source_of_event": "UI", "media": media}
+        }
+    elif duration is not None:
+        payload = {
+            "env": {"EXPERIMENT": experiment, "JOB_SOURCE": "user"},
+            "options": {"duration": duration, "source_of_event": "UI", "media": media}
+        }
+    elif continuous:
+        return # Don't think we should support this
+        payload = {
+            "env": {"EXPERIMENT": experiment, "JOB_SOURCE": "user"},
+            "options": {"continuously": "null", "source_of_event": "UI", "media": media}
+        }
+    else:
+        print("Please provide either volume or duration.")
+        return
+    
+    headers = {"Content-Type": "application/json"}
+
+    response = requests.patch(url, headers=headers, data=json.dumps(payload))
+
+    if response.status_code == 202:
+        print(f"Media added to reactor {reactor}.")
+    else:
+        print(f"Failed to add media. Status code: {response.status_code}")
+
+
+def circulate_media(reactor, experiment, duration):
+    url = f"http://pioreactor.local/api/workers/{reactor}/jobs/run/job_name/circulate_media/experiments/{experiment}"
+
+    payload = {
+        "env": {"EXPERIMENT": experiment, "JOB_SOURCE": "user"},
+        "options": {"duration": duration, "source_of_event": "UI"}
+    }
+
+    headers = {"Content-Type": "application/json"}
+
+    response = requests.patch(url, headers=headers, data=json.dumps(payload))
+
+    if response.status_code == 202:
+        print(f"Media circulated in reactor {reactor}.")
+    else:
+        print(f"Failed to circulate media. Status code: {response.status_code}")
+
+
+def circulate_alt_media(reactor, experiment, media, duration):
+    url = f"http://pioreactor.local/api/workers/{reactor}/jobs/run/job_name/circulate_alt_media/experiments/{experiment}"
+
+    payload = {
+        "env": {"EXPERIMENT": experiment, "JOB_SOURCE": "user"},
+        "options": {"duration": duration, "source_of_event": "UI", "media": media}
+    }
+
+    headers = {"Content-Type": "application/json"}
+
+    response = requests.patch(url, headers=headers, data=json.dumps(payload))
+
+    if response.status_code == 202:
+        print(f"Media circulated in reactor {reactor}.")
+    else:
+        print(f"Failed to circulate media. Status code: {response.status_code}")
 
 # --- MQTT Functions ---
 def on_connect(client, userdata, flags, rc):
@@ -747,6 +879,16 @@ def on_message(client, userdata, msg):
             change_experiment(message['experiment'], message['experiment_new'], reactor)
         elif command == 'delete_experiment':
             delete_experiment(message['experiment'])
+        elif command == 'pump_add_media':
+            pump_add_media(reactor, experiment, message.get('volume'), message.get('duration'), message.get('continuous', False))
+        elif command == 'pump_remove_media':
+            pump_remove_media(reactor, experiment, message.get('volume'), message.get('duration'), message.get('continuous', False))
+        elif command == 'add_alt_media':
+            add_alt_media(reactor, experiment, message['media'], message.get('volume'), message.get('duration'), message.get('continuous', False))
+        elif command == 'circulate_media':
+            circulate_media(reactor, experiment, message['duration'])
+        elif command == 'circulate_alt_media':
+            circulate_alt_media(reactor, experiment, message['media'], message['duration'])
         else:
             print(f"Unknown command: {command}")
     except json.JSONDecodeError as e:
