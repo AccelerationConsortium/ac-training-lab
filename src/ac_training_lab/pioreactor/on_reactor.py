@@ -255,7 +255,7 @@ def get_worker(client, reactor):
     exp_name.remove(experiment)
     
     def on_connect(client, userdata, flags, rc):
-        print(f"Connected with result code {rc}")
+        print(f"PIO connected with result code {rc}")
         client.subscribe(f"pioreactor/{reactor}/{experiment}/leds/intensity")
 
     def on_message(client, userdata, msg):
@@ -289,7 +289,7 @@ def get_worker(client, reactor):
 
     if "temperature_automation" in running:
         def on_connect(client, userdata, flags, rc):
-            print(f"Connected with result code {rc}")
+            print(f"PIO connected with result code {rc}")
             client.subscribe(f"pioreactor/{reactor}/{experiment}/temperature_automation/automation_name")
         
         def on_message(client, userdata, msg):
@@ -313,7 +313,7 @@ def get_worker(client, reactor):
 
     if "stirring" in running:
         def on_connect(client, userdata, flags, rc):
-            print(f"Connected with result code {rc}")
+            print(f"PIO connected with result code {rc}")
             client.subscribe(f"pioreactor/{reactor}/{experiment}/stirring/target_rpm")
         
         def on_message(client, userdata, msg):
