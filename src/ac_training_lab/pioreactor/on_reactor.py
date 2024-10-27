@@ -540,15 +540,15 @@ def get_readings(client, reactor, experiment, filter_mod, lookback, filter_mod2,
     if len(temp) != 0:
         temp = temp[0]
         if amount == "1 hour":
-            lastTime = temp[len(temp) - 1].get('x')
-            lastTime = datetime.strptime(lastTime, "%Y-%m-%dT%H:%M:%S.%fZ")
+            lastTime = datetime.now()
+            # lastTime = datetime.strptime(lastTime, "%Y-%m-%dT%H:%M:%S.%fZ")
             for i in range(len(temp), 0, -1):
                 if datetime.strptime(temp[i - 1].get('x'), "%Y-%m-%dT%H:%M:%S.%fZ") < lastTime - timedelta(hours=1):
                     temp = temp[i:]
                     break
         elif amount == "24 hours":
-            lastTime = temp[len(temp) - 1].get('x')
-            lastTime = datetime.strptime(lastTime, "%Y-%m-%dT%H:%M:%S.%fZ")
+            lastTime = datetime.now()
+            # lastTime = datetime.strptime(lastTime, "%Y-%m-%dT%H:%M:%S.%fZ")
             for i in range(len(temp), 0, -1):
                 if datetime.strptime(temp[i - 1].get('x'), "%Y-%m-%dT%H:%M:%S.%fZ") < lastTime - timedelta(hours=24):
                     temp = temp[i:]
@@ -562,15 +562,15 @@ def get_readings(client, reactor, experiment, filter_mod, lookback, filter_mod2,
     if len(od) != 0:
         od = od[0]
         if amount2 == "1 hour":
-            lastTime = od[len(od) - 1].get('x')
-            lastTime = datetime.strptime(lastTime, "%Y-%m-%dT%H:%M:%S.%fZ")
+            lastTime = datetime.now()
+            # lastTime = datetime.strptime(lastTime, "%Y-%m-%dT%H:%M:%S.%fZ")
             for i in range(len(od), 0, -1):
                 if datetime.strptime(od[i - 1].get('x'), "%Y-%m-%dT%H:%M:%S.%fZ") < lastTime - timedelta(hours=1):
                     od = od[i:]
                     break
         elif amount2 == "24 hours":
-            lastTime = od[len(od) - 1].get('x')
-            lastTime = datetime.strptime(lastTime, "%Y-%m-%dT%H:%M:%S.%fZ")
+            lastTime = datetime.now()
+            # lastTime = datetime.strptime(lastTime, "%Y-%m-%dT%H:%M:%S.%fZ")
             for i in range(len(od), 0, -1):
                 if datetime.strptime(od[i - 1].get('x'), "%Y-%m-%dT%H:%M:%S.%fZ") < lastTime - timedelta(hours=24):
                     od = od[i:]
@@ -584,15 +584,15 @@ def get_readings(client, reactor, experiment, filter_mod, lookback, filter_mod2,
     if len(norm_od) != 0:
         norm_od = norm_od[0]
         if amount3 == "1 hour":
-            lastTime = norm_od[len(norm_od) - 1].get('x')
-            lastTime = datetime.strptime(lastTime, "%Y-%m-%dT%H:%M:%S.%fZ")
+            lastTime = datetime.now()
+            # lastTime = datetime.strptime(lastTime, "%Y-%m-%dT%H:%M:%S.%fZ")
             for i in range(len(norm_od), 0, -1):
                 if datetime.strptime(norm_od[i - 1].get('x'), "%Y-%m-%dT%H:%M:%S.%fZ") < lastTime - timedelta(hours=1):
                     norm_od = norm_od[i:]
                     break
         elif amount3 == "24 hours":
-            lastTime = norm_od[len(norm_od) - 1].get('x')
-            lastTime = datetime.strptime(lastTime, "%Y-%m-%dT%H:%M:%S.%fZ")
+            lastTime = datetime.now()
+            # lastTime = datetime.strptime(lastTime, "%Y-%m-%dT%H:%M:%S.%fZ")
             for i in range(len(norm_od), 0, -1):
                 if datetime.strptime(norm_od[i - 1].get('x'), "%Y-%m-%dT%H:%M:%S.%fZ") < lastTime - timedelta(hours=24):
                     norm_od = norm_od[i:]
@@ -603,15 +603,15 @@ def get_readings(client, reactor, experiment, filter_mod, lookback, filter_mod2,
     if len(growth_rate) != 0:
         growth_rate = growth_rate[0]
         if amount4 == "1 hour":
-            lastTime = growth_rate[len(growth_rate) - 1].get('x')
-            lastTime = datetime.strptime(lastTime, "%Y-%m-%dT%H:%M:%S.%fZ")
+            lastTime = datetime.now()
+            # lastTime = datetime.strptime(lastTime, "%Y-%m-%dT%H:%M:%S.%fZ")
             for i in range(len(growth_rate), 0, -1):
                 if datetime.strptime(growth_rate[i - 1].get('x'), "%Y-%m-%dT%H:%M:%S.%fZ") < lastTime - timedelta(hours=1):
                     growth_rate = growth_rate[i:]
                     break
         elif amount4 == "24 hours":
-            lastTime = growth_rate[len(growth_rate) - 1].get('x')
-            lastTime = datetime.strptime(lastTime, "%Y-%m-%dT%H:%M:%S.%fZ")
+            lastTime = datetime.now()
+            # lastTime = datetime.strptime(lastTime, "%Y-%m-%dT%H:%M:%S.%fZ")
             for i in range(len(growth_rate), 0, -1):
                 if datetime.strptime(growth_rate[i - 1].get('x'), "%Y-%m-%dT%H:%M:%S.%fZ") < lastTime - timedelta(hours=24):
                     growth_rate = growth_rate[i:]
@@ -623,6 +623,8 @@ def get_readings(client, reactor, experiment, filter_mod, lookback, filter_mod2,
         "normalized_od": norm_od,
         "growth_rate": growth_rate
     }
+
+    # print(temp)
 
     # print(len(od))
 
