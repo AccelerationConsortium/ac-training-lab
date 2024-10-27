@@ -707,10 +707,10 @@ def pump_add_media(reactor, experiment, volume=None, duration=None, continuous=F
             "options": {"duration": duration, "source_of_event": "UI"}
         }
     elif continuous:
-        return # Don't think we should support this
+        # return # Don't think we should support this
         payload = {
             "env": {"EXPERIMENT": experiment, "JOB_SOURCE": "user"},
-            "options": {"continuously": "null", "source_of_event": "UI"}
+            "options": {"continuously": None, "source_of_event": "UI"}
         }
     else:
         print("Please provide either volume or duration.")
@@ -739,10 +739,10 @@ def pump_remove_media(reactor, experiment, volume=None, duration=None, continuou
             "options": {"duration": duration, "source_of_event": "UI"}
         }
     elif continuous:
-        return # Don't think we should support this
+        # return # Don't think we should support this
         payload = {
             "env": {"EXPERIMENT": experiment, "JOB_SOURCE": "user"},
-            "options": {"continuously": "null", "source_of_event": "UI"}
+            "options": {"continuously": None, "source_of_event": "UI"}
         }
     else:
         print("Please provide either volume or duration.")
@@ -757,24 +757,24 @@ def pump_remove_media(reactor, experiment, volume=None, duration=None, continuou
     else:
         print(f"Failed to remove media. Status code: {response.status_code}")
 
-def add_alt_media(reactor, experiment, media, volume=None, duration=None, continuous=False):
+def add_alt_media(reactor, experiment, volume=None, duration=None, continuous=False):
     url = f"http://pioreactor.local/api/workers/{reactor}/jobs/run/job_name/add_alt_media/experiments/{experiment}"
 
     if volume is not None:
         payload = {
             "env": {"EXPERIMENT": experiment, "JOB_SOURCE": "user"},
-            "options": {"ml": volume, "source_of_event": "UI", "media": media}
+            "options": {"ml": volume, "source_of_event": "UI"}
         }
     elif duration is not None:
         payload = {
             "env": {"EXPERIMENT": experiment, "JOB_SOURCE": "user"},
-            "options": {"duration": duration, "source_of_event": "UI", "media": media}
+            "options": {"duration": duration, "source_of_event": "UI"}
         }
     elif continuous:
-        return # Don't think we should support this
+        # return # Don't think we should support this
         payload = {
             "env": {"EXPERIMENT": experiment, "JOB_SOURCE": "user"},
-            "options": {"continuously": "null", "source_of_event": "UI", "media": media}
+            "options": {"continuously": None, "source_of_event": "UI"}
         }
     else:
         print("Please provide either volume or duration.")
@@ -791,21 +791,45 @@ def add_alt_media(reactor, experiment, media, volume=None, duration=None, contin
 
 
 def circulate_media(reactor, experiment, duration):
-    url = f"http://pioreactor.local/api/workers/{reactor}/jobs/run/job_name/circulate_media/experiments/{experiment}"
+    pump_add_media(reactor, experiment, continuous=True)
+    pump_remove_media(reactor, experiment, continuous=True)
 
-    payload = {
-        "env": {"EXPERIMENT": experiment, "JOB_SOURCE": "user"},
-        "options": {"duration": duration, "source_of_event": "UI"}
-    }
+    time.sleep(duration)
 
+    url = f"http://pioreactor.local/api/workers/{reactor}/jobs/stop/job_name/add_media/experiments/{experiment}"
     headers = {"Content-Type": "application/json"}
 
-    response = requests.patch(url, headers=headers, data=json.dumps(payload))
+    response = requests.patch(url, headers=headers)
 
     if response.status_code == 202:
         print(f"Media circulated in reactor {reactor}.")
     else:
         print(f"Failed to circulate media. Status code: {response.status_code}")
+
+    url = f"http://pioreactor.local/api/workers/{reactor}/jobs/stop/job_name/remove_waste/experiments/{experiment}"
+
+    response = requests.patch(url, headers=headers)
+
+    if response.status_code == 202:
+        print(f"Media circulated in reactor {reactor}.")
+    else:
+        print(f"Failed to circulate media. Status code: {response.status_code}")
+
+    # url = f"http://pioreactor.local/api/workers/{reactor}/jobs/run/job_name/circulate_media/experiments/{experiment}"
+
+    # payload = {
+    #     "env": {"EXPERIMENT": experiment, "JOB_SOURCE": "user"},
+    #     "options": {"duration": duration, "source_of_event": "UI"}
+    # }
+
+    # headers = {"Content-Type": "application/json"}
+
+    # response = requests.patch(url, headers=headers, data=json.dumps(payload))
+
+    # if response.status_code == 202:
+    #     print(f"Media circulated in reactor {reactor}.")
+    # else:
+    #     print(f"Failed to circulate media. Status code: {response.status_code}")
 
 
 def circulate_alt_media(reactor, experiment, media, duration):
