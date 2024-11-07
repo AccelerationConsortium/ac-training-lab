@@ -34,7 +34,7 @@ Device
 - https://github.com/AccelerationConsortium/ac-training-lab/blob/main/src/ac_training_lab/picow/digital-pipette/main.py
 - https://github.com/AccelerationConsortium/ac-training-lab/blob/main/src/ac_training_lab/picow/magnetometer/main.py
 
-Please upload the device code to an appropriate directory (you may need to create a new one) within https://github.com/AccelerationConsortium/ac-training-lab/tree/main/src/ac_training_lab. For MicroPython implementations, please include a `main.py` that should be run by the user and any dependencies that are required in a `lib` subdirectory. For non-MicroPython implementations (e.g., Python), 
+Please upload the device code to an appropriate directory (you may need to create a new one) within https://github.com/AccelerationConsortium/ac-training-lab/tree/main/src/ac_training_lab. For MicroPython implementations, please include a `main.py` that should be run by the user and any dependencies that are required in a `lib` subdirectory. For non-MicroPython implementations (e.g., Python), please include a `device.py` (meant to be run by user), `__init__.py`, and `requirements.txt` file. You can include other modules at the same level as `device.py` or in subdirectories of your choice (e.g., `utils`, don't use `lib` so that we can avoid confusion). Special instructions can go in a `README.md` file.
 
 ## MongoDB logging setup
 
