@@ -119,3 +119,5 @@ You can add create sprites for new Gather Town "devices" using the following ste
     - Try not to take up more than a 2x2 grid
 
 <img src="../_static/images/pixelit-interface.png" width=300>
+
+See the [Gather Town instructions](https://support.gather.town/hc/en-us/articles/15909788073236-Custom-Objects) for adding custom objects.
