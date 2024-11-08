@@ -1,6 +1,9 @@
-import paho.mqtt.client as paho
-import json, io, base64
+import base64
+import io
+import json
 from queue import Queue
+
+import paho.mqtt.client as paho
 from PIL import Image
 
 
@@ -41,31 +44,31 @@ class CobotController:
         self.client.publish(self.publish_endpoint, payload=payload, qos=2)
         return self.response_queue.get(block=True)
 
-    def send_angles(
-        self,
-        angle_list: list[float] = [0.0] * 6,
-        speed: int = 50
-    ):
-        payload = json.dumps({"command": "control/angles",
-                             "args": {"angles": angle_list, "speed": speed}})
+    def send_angles(self, angle_list: list[float] = [0.0] * 6, speed: int = 50):
+        payload = json.dumps(
+            {
+                "command": "control/angles",
+                "args": {"angles": angle_list, "speed": speed},
+            }
+        )
         return self.handle_publish_and_response(payload)
 
-    def send_coords(
-        self,
-        coord_list: list[float] = [0.0] * 6,
-        speed: int = 50
-    ):
-        payload = json.dumps({"command": "control/coords",
-                             "args": {"coords": coord_list, "speed": speed}})
+    def send_coords(self, coord_list: list[float] = [0.0] * 6, speed: int = 50):
+        payload = json.dumps(
+            {
+                "command": "control/coords",
+                "args": {"coords": coord_list, "speed": speed},
+            }
+        )
         return self.handle_publish_and_response(payload)
 
-    def send_gripper_value(
-        self,
-        value: int = 100,
-        speed: int = 50
-    ):
-        payload = json.dumps({"command": "control/gripper",
-                             "args": {"gripper_value": value, "speed": speed}})
+    def send_gripper_value(self, value: int = 100, speed: int = 50):
+        payload = json.dumps(
+            {
+                "command": "control/gripper",
+                "args": {"gripper_value": value, "speed": speed},
+            }
+        )
         return self.handle_publish_and_response(payload)
 
     def get_angles(self):
@@ -95,14 +98,3 @@ class CobotController:
             img.save(save_path)
 
         return response
-
-if __name__ == "__main__":
-	from my_secrets import *
-    
-	cobot = CobotController(
-        HIVEMQ_USERNAME,
-        HIVEMQ_PASSWORD,
-        HIVEMQ_HOST,
-        DEVICE_PORT,
-        DEVICE_ENDPOINT
-	)
