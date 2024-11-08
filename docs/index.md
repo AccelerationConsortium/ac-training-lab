@@ -112,7 +112,7 @@ Supported workflows (i.e., non-permanent setups) that are planned, in developmen
 
 | Name                                 | Diagram | Description                                                                                                                         | Status      |
 | ------------------------------------ | ------- | ----------------------------------------------------------------------------------------------------------------------------------- | ----------- |
-| Alkaline Catalysis Lifecycle Testing |         | Adjust the stress-cycling conditions of a nickel electrode in a KOH solution to investigate the cause of catalyst degredation       | Development |
+| Alkaline Catalysis Lifecycle Testing |         | Adjust the stress-cycling conditions of a nickel electrode in a KOH solution to investigate the cause of catalyst degredation       | Ready |
 | Material recycling                   |         | Incorporate the use of "waste" experimental samples as part of a recycling workflow using mixed red, yellow, and blue solid powders | Development |
 
 
