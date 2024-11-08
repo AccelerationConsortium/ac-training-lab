@@ -1,5 +1,6 @@
-from utils import setup_logger
 from PIL import Image
+from utils import setup_logger
+
 
 # A dummy class for easier testing without physically having the cobot
 class DummyCobot:
@@ -22,7 +23,7 @@ class DummyCobot:
 
     def get_coords(self, **kwargs):
         self.logger.info(f"tried to get coords with args {kwargs}")
-        return [0, 0, 0, 0, 0, 0] 
+        return [0, 0, 0, 0, 0, 0]
 
     def get_gripper_value(self, **kwargs):
         self.logger.info(f"tried to get gripper value with args {kwargs}")
@@ -30,4 +31,4 @@ class DummyCobot:
 
     def get_camera(self, **kwargs):
         self.logger.info(f"tried to get camera with args {kwargs}")
-        return Image.new('RGB', (1920, 1080), color='black')
+        return Image.new("RGB", (1920, 1080), color="black")
