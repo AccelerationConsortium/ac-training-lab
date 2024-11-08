@@ -103,6 +103,6 @@ if __name__ == "__main__":
         HIVEMQ_USERNAME,
         HIVEMQ_PASSWORD,
         HIVEMQ_HOST,
-        PORT,
-        DEVICE_ID
+        DEVICE_PORT,
+        DEVICE_ENDPOINT
 	)

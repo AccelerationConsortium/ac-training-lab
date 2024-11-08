@@ -1,6 +1,5 @@
-from my_secrets import *
-from utils import *
-
+from my_secrets import DEVICE_ENDPOINT, HIVEMQ_USERNAME, HIVEMQ_PASSWORD, HIVEMQ_HOST, DEVICE_PORT
+from utils import setup_logger
 import cv2
 import time
 import json
@@ -12,7 +11,6 @@ from PIL import Image
 from queue import Queue
 import paho.mqtt.client as paho
 from pymycobot.mycobot import MyCobot
-
 
 # cli args
 parser = argparse.ArgumentParser()
@@ -188,7 +186,7 @@ if __name__ == "__main__":
 		msg = task_queue.get()  # blocks if queue is empty
 		response_dict = handle_message(msg, cobot)
 		pub_handle = client.publish(
-			RESPONSE_ENDPOINT,
+			DEVICE_ENDPOINT + "/response",
 			qos=2,
 			payload=json.dumps(response_dict)
 		)
