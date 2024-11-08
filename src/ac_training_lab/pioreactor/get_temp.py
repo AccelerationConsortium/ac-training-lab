@@ -1,13 +1,18 @@
-import paho.mqtt.client as mqtt
-import json
-import lookhere
-import time
 import asyncio
+import json
+
+import lookhere
+import paho.mqtt.client as mqtt
+
+# import time
+
 
 """
-This script demonstrates how to use the Paho MQTT client to send and receive messages from a broker.
+This script demonstrates how to use the Paho MQTT client to
+send and receive messages from a broker.
 
-This script sends a request to the Pioreactor to get temperature readings, and prints the received data.
+This script sends a request to the Pioreactor to get temperature readings,
+and prints the received data.
 
 This script makes the requests asynchronously using the asyncio library.
 
@@ -16,11 +21,12 @@ Author: Enrui (Edison) Lin
 
 BROKER = lookhere.broker
 PORT = lookhere.port
-REQUEST_TOPIC = 'pioreactor/control'
-RESPONSE_TOPIC = 'pioreactor/temperature'
+REQUEST_TOPIC = "pioreactor/control"
+RESPONSE_TOPIC = "pioreactor/temperature"
 USERNAME = lookhere.username
 PASSWORD = lookhere.password
 REQUEST_INTERVAL = 60
+
 
 # Define the MQTT Client class
 class PioreactorMQTTClient:
@@ -66,25 +72,33 @@ class PioreactorMQTTClient:
         except json.JSONDecodeError:
             print(f"Error: Invalid JSON payload received: {payload}")
 
-    async def publish_temperature_request(self, experiment, filter_mod_N, lookback, reactor):
+    async def publish_temperature_request(
+        self, experiment, filter_mod_N, lookback, reactor
+    ):
         """Publish a temperature request to the request topic."""
         payload = {
             "command": "get_temperature_readings",
             "experiment": experiment,
             "filter_mod": filter_mod_N,
             "lookback": lookback,
-            "reactor": reactor
+            "reactor": reactor,
         }
         payload_str = json.dumps(payload)
         self.client.publish(self.request_topic, payload_str)
         print(f"Published request for temperature readings: {payload_str}")
 
-    async def periodic_temperature_requests(self, experiment, filter_mod_N, lookback, interval, reactor):
+    async def periodic_temperature_requests(
+        self, experiment, filter_mod_N, lookback, interval, reactor
+    ):
         """Asynchronously send temperature requests at regular intervals."""
         try:
             while True:
-                await self.publish_temperature_request(experiment, filter_mod_N, lookback, reactor)
-                await asyncio.sleep(interval)  # Use asyncio sleep to not block the event loop
+                await self.publish_temperature_request(
+                    experiment, filter_mod_N, lookback, reactor
+                )
+                await asyncio.sleep(
+                    interval
+                )  # Use asyncio sleep to not block the event loop
         except asyncio.CancelledError:
             print("Periodic temperature request loop cancelled")
 
@@ -92,13 +106,17 @@ class PioreactorMQTTClient:
 # Main function to run the MQTT client asynchronously
 async def run_mqtt_client():
     # Initialize the client
-    pioreactor_client = PioreactorMQTTClient(BROKER, PORT, REQUEST_TOPIC, RESPONSE_TOPIC)
+    pioreactor_client = PioreactorMQTTClient(
+        BROKER, PORT, REQUEST_TOPIC, RESPONSE_TOPIC
+    )
 
     # Connect to the broker
     pioreactor_client.connect()
 
     # Start the periodic request function
-    await pioreactor_client.periodic_temperature_requests("Edi", 1, 10000000, REQUEST_INTERVAL, "pio1")
+    await pioreactor_client.periodic_temperature_requests(
+        "Edi", 1, 10000000, REQUEST_INTERVAL, "pio1"
+    )
 
 
 if __name__ == "__main__":

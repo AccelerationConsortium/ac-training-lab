@@ -1,7 +1,9 @@
-import paho.mqtt.client as mqtt
 import json
+
 import lookhere
-import time
+import paho.mqtt.client as mqtt
+
+# import time
 
 
 """
@@ -15,19 +17,21 @@ Author: Enrui (Edison) Lin
 # Define the MQTT broker details
 broker = lookhere.broker
 port = lookhere.port
-topic = 'pioreactor/control'
+topic = "pioreactor/control"
 username = lookhere.username
 password = lookhere.password
 
 
-broker = 'pio1.local'
+broker = "pio1.local"
 port = 1883
-username = 'pioreactor'
-password = 'raspberry'
+username = "pioreactor"
+password = "raspberry"
+
 
 def on_connect(client, userdata, flags, rc):
     print(f"Connected with result code {rc}")
     client.subscribe(topic)
+
 
 def publish_start_stirring():
     # Create the MQTT client
@@ -39,9 +43,7 @@ def publish_start_stirring():
     client.connect(broker, port)
 
     # Create the JSON payload for starting stirring
-    payload = {
-        "command": "start_stirring"
-    }
+    payload = {"command": "start_stirring"}
 
     # Convert the payload to a JSON string
     payload_str = json.dumps(payload)
@@ -49,7 +51,7 @@ def publish_start_stirring():
     # Publish the message to the topic
     res = client.publish(topic, payload_str)
     print(f"res: {res}")
-    print(f"Published command to start stirring")
+    print("Published command to start stirring")
 
     # Disconnect from the broker
     client.disconnect()
@@ -58,17 +60,13 @@ def publish_start_stirring():
 # Example usage
 # publish_start_stirring()  # Set the RPM value to 200 or any value you want
 
-payload = {
-    "command": "stop_stirring",
-    "reactor": "pio1",
-    "experiment": "Edi"
-}
+payload = {"command": "stop_stirring", "reactor": "pio1", "experiment": "Edi"}
 
 payload = {
     "command": "start_stirring",
     "rpm": 300,
     "reactor": "pio1",
-    "experiment": "Edi"
+    "experiment": "Edi",
 }
 
 # payload = {
@@ -85,7 +83,7 @@ payload = {
     "command": "set_temperature_automation",
     "automation": "only_record_temperature",
     "reactor": "pio1",
-    "experiment": "Edi"
+    "experiment": "Edi",
 }
 
 # payload = {
@@ -133,8 +131,11 @@ def connect_mqtt():
 
 
 def publish(client):
-    result = client.publish("pioreactor/Edi/temperature_automation/temperature", payload_str)
+    result = client.publish(
+        "pioreactor/Edi/temperature_automation/temperature", payload_str
+    )
     print(f"Send `{payload_str}` to topic `{topic}`")
+    print(f"result: {result}")
 
 
 def run():
@@ -144,5 +145,5 @@ def run():
     client.loop_stop()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     run()
