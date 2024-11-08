@@ -3,7 +3,7 @@ import sys
 import os
 import subprocess
 
-SCRIPT_URL="https://raw.githubusercontent.com/Jonathan-Woo/AC-jwoo/refs/heads/main/cam.py"
+SCRIPT_URL="https://raw.githubusercontent.com/AccelerationConsortium/ac-training-lab/refs/heads/jwoo-camera/src/ac_training_lab/picam/cam.py"
 
 def internet(host="8.8.8.8", port=53, timeout=3):
     """
