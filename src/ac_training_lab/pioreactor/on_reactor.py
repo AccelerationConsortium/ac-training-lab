@@ -24,7 +24,7 @@ It should be placed in the same directory as this script.
 Author: Enrui (Edison) Lin
 """
 
-HTTP = "http://pioreactor.local/api"
+HTTP = "HTTP://pioreactor.local/api"
 
 automation_name = None
 stirring_target_rpm = None
@@ -33,7 +33,7 @@ led_data = None
 
 # --- PioReactor API Functions ---
 def create_experiment(experiment, description="", mediaUsed="", organismUsed=""):
-    url = "HTTP/experiments"
+    url = f"{HTTP}/experiments"
     created_at = datetime.now().isoformat()
 
     payload = {
@@ -56,7 +56,7 @@ def create_experiment(experiment, description="", mediaUsed="", organismUsed="")
 
 
 def assign_worker_to_experiment(worker, experiment):
-    url = f"HTTP/experiments/{experiment}/workers"
+    url = f"{HTTP}/experiments/{experiment}/workers"
     payload = {"pioreactor_unit": worker}
     headers = {"Content-Type": "application/json"}
 
@@ -68,7 +68,7 @@ def assign_worker_to_experiment(worker, experiment):
 
 
 def remove_worker_from_experiment(worker, experiment):
-    url = f"HTTP/experiments/{experiment}/workers/{worker}"
+    url = f"{HTTP}/experiments/{experiment}/workers/{worker}"
     headers = {"Content-Type": "application/json"}
 
     response = requests.delete(url, headers=headers)
@@ -79,7 +79,7 @@ def remove_worker_from_experiment(worker, experiment):
 
 
 def start_stirring(worker, experiment):
-    url = f"HTTP/units/{worker}/jobs/run/job_name/stirring/experiments/{experiment}"
+    url = f"{HTTP}/units/{worker}/jobs/run/job_name/stirring/experiments/{experiment}"
     headers = {"Content-Type": "application/json"}
     payload = {"env": {"EXPERIMENT": experiment, "JOB_SOURCE": "user"}}
 
@@ -91,7 +91,9 @@ def start_stirring(worker, experiment):
 
 
 def stop_stirring(worker, experiment):
-    url = f"HTTP/units/{worker}/jobs/update/job_name/stirring/experiments/{experiment}"
+    url = (
+        f"{HTTP}/units/{worker}/jobs/update/job_name/stirring/experiments/{experiment}"
+    )
     headers = {"Content-Type": "application/json"}
     payload = {"settings": {"$state": "disconnected"}}
 
@@ -103,7 +105,9 @@ def stop_stirring(worker, experiment):
 
 
 def update_stirring_rpm(worker, experiment, rpm):
-    url = f"HTTP/units/{worker}/jobs/update/job_name/stirring/experiments/{experiment}"
+    url = (
+        f"{HTTP}/units/{worker}/jobs/update/job_name/stirring/experiments/{experiment}"
+    )
     headers = {"Content-Type": "application/json"}
     payload = {"settings": {"target_rpm": rpm}}
 
@@ -116,7 +120,7 @@ def update_stirring_rpm(worker, experiment, rpm):
 
 def set_led_intensity(worker, experiment, brightness_value, led):
     url = (
-        f"HTTP/workers/{worker}/jobs/run/job_name/"
+        f"{HTTP}/workers/{worker}/jobs/run/job_name/"
         "led_intensity/experiments/{experiment}"
     )
     headers = {"Content-Type": "application/json"}
@@ -133,7 +137,7 @@ def set_led_intensity(worker, experiment, brightness_value, led):
 
 
 def get_temperature_readings(client, reactor, experiment, filter_mod, lookback):
-    url = f"HTTP/experiments/{experiment}/time_series/temperature_readings"
+    url = f"{HTTP}/experiments/{experiment}/time_series/temperature_readings"
     params = {"filter_mod_N": filter_mod, "lookback": lookback}
 
     response = requests.get(url, params=params)
@@ -149,7 +153,7 @@ def get_temperature_readings(client, reactor, experiment, filter_mod, lookback):
 
 
 def get_experiments(client):
-    url = "HTTP/experiments"
+    url = f"{HTTP}/experiments"
     headers = {"Content-Type": "application/json"}
 
     response = requests.get(url, headers=headers)
@@ -161,7 +165,7 @@ def get_experiments(client):
 
 
 def get_reactors(client, experiment):
-    url = f"HTTP/experiments/{experiment}/workers"
+    url = f"{HTTP}/experiments/{experiment}/workers"
     headers = {"Content-Type": "application/json"}
 
     response = requests.get(url, headers=headers)
@@ -173,7 +177,7 @@ def get_reactors(client, experiment):
 
 
 def get_reactor_stats(client, reactor):
-    url = f"HTTP/units/{reactor}/jobs/running"
+    url = f"{HTTP}/units/{reactor}/jobs/running"
     headers = {"Content-Type": "application/json"}
 
     response = requests.get(url, headers=headers)
@@ -186,7 +190,7 @@ def get_reactor_stats(client, reactor):
 
 def get_task_status(task_id):
     # Construct the URL for getting the task status
-    url = f"http://pioreactor.local/unit_api/task_results/{task_id}"
+    url = f"{HTTP}://pioreactor.local/unit_api/task_results/{task_id}"
 
     # Set the headers
     headers = {"Content-Type": "application/json"}
@@ -206,7 +210,7 @@ def get_task_status(task_id):
 
 def get_worker(client, reactor):
     # Construct the URL for getting the worker
-    url = "HTTP/workers/assignments"
+    url = f"{HTTP}/workers/assignments"
 
     # Set the headers
     headers = {"Content-Type": "application/json"}
@@ -236,7 +240,7 @@ def get_worker(client, reactor):
         print(f"Failed to retrieve experiment for worker {reactor}")
         return None
 
-    url2 = f"HTTP/units/{reactor}/jobs/running"
+    url2 = f"{HTTP}/units/{reactor}/jobs/running"
 
     response2 = requests.get(url2, headers=headers)
 
@@ -255,10 +259,12 @@ def get_worker(client, reactor):
 
     running = []
 
-    for item in stats:
-        running.append(item["name"])
+    print(stats)
 
-    url3 = "HTTP/experiments"
+    for item in stats:
+        running.append(item["job_name"])
+
+    url3 = f"{HTTP}/experiments"
 
     response3 = requests.get(url3, headers=headers)
 
@@ -382,8 +388,8 @@ def get_worker(client, reactor):
 def set_temperature_automation(worker, experiment, automation_name, temp=None):
     # Construct the URL for the request
     url = (
-        f"HTTP/workers/{worker}/jobs/run/job_name/temperature_automation/"
-        "experiments/{experiment}"
+        f"{HTTP}/workers/{worker}/jobs/run/job_name/temperature_automation/"
+        f"experiments/{experiment}"
     )
 
     # Prepare the payload
@@ -419,7 +425,7 @@ def set_temperature_automation(worker, experiment, automation_name, temp=None):
     if response.status_code == 202:
         print(
             f"Automation '{automation_name}' set successfully on worker {worker}"
-            " for experiment {experiment}!"
+            f" for experiment {experiment}!"
         )
     else:
         print(f"Failed to set automation. Status code: {response.status_code}")
@@ -429,8 +435,8 @@ def set_temperature_automation(worker, experiment, automation_name, temp=None):
 def temp_update(worker, experiment, settings):
     # Construct the URL for the request
     url = (
-        f"HTTP/workers/{worker}/jobs/update/job_name/temperature_automation/"
-        "experiments/{experiment}"
+        f"{HTTP}/workers/{worker}/jobs/update/job_name/temperature_automation/"
+        f"experiments/{experiment}"
     )
 
     # Prepare the payload
@@ -446,7 +452,7 @@ def temp_update(worker, experiment, settings):
     if response.status_code == 202:
         print(
             f"Automation settings updated successfully on worker {worker} for "
-            "experiment {experiment}!"
+            f"experiment {experiment}!"
         )
     else:
         print(
@@ -465,8 +471,8 @@ def temp_restart(worker, experiment, automation, temp=None):
 
 def stop_od_reading(reactor, experiment):
     url = (
-        f"HTTP/workers/{reactor}/jobs/update/job_name/od_reading/"
-        "experiments/{experiment}"
+        f"{HTTP}/workers/{reactor}/jobs/update/job_name/od_reading/"
+        f"experiments/{experiment}"
     )
     headers = {"Content-Type": "application/json"}
     payload = {"settings": {"$state": "disconnected"}}
@@ -480,8 +486,8 @@ def stop_od_reading(reactor, experiment):
 
 def start_od_reading(reactor, experiment):
     url = (
-        f"HTTP/workers/{reactor}/jobs/run/job_name/"
-        "od_reading/experiments/{experiment}"
+        f"{HTTP}/workers/{reactor}/jobs/run/job_name/"
+        f"od_reading/experiments/{experiment}"
     )
     headers = {"Content-Type": "application/json"}
     payload = {"env": {"EXPERIMENT": experiment, "JOB_SOURCE": "user"}}
@@ -495,8 +501,8 @@ def start_od_reading(reactor, experiment):
 
 def stop_growth_rate(reactor, experiment):
     url = (
-        f"HTTP/workers/{reactor}/jobs/update/job_name/"
-        "growth_rate_calculating/experiments/{experiment}"
+        f"{HTTP}/workers/{reactor}/jobs/update/job_name/"
+        f"growth_rate_calculating/experiments/{experiment}"
     )
     headers = {"Content-Type": "application/json"}
     payload = {"settings": {"$state": "disconnected"}}
@@ -510,8 +516,8 @@ def stop_growth_rate(reactor, experiment):
 
 def start_growth_rate(reactor, experiment):
     url = (
-        f"HTTP/workers/{reactor}/jobs/run/job_name/growth_rate_calculating/"
-        "experiments/{experiment}"
+        f"{HTTP}/workers/{reactor}/jobs/run/job_name/growth_rate_calculating/"
+        f"experiments/{experiment}"
     )
     headers = {"Content-Type": "application/json"}
     payload = {"env": {"EXPERIMENT": experiment, "JOB_SOURCE": "user"}}
@@ -541,7 +547,7 @@ def get_readings(
     amount4,
 ):
     # Get the experiment details
-    url = f"HTTP/experiments/{experiment}"
+    url = f"{HTTP}/experiments/{experiment}"
     headers = {"Content-Type": "application/json"}
 
     response = requests.get(url, headers=headers)
@@ -557,7 +563,7 @@ def get_readings(
     # print(amount2)
 
     # Get the temperature readings
-    url = f"HTTP/experiments/{experiment}/time_series/temperature_readings"
+    url = f"{HTTP}/experiments/{experiment}/time_series/temperature_readings"
     params = {"filter_mod_N": filter_mod, "lookback": lookback}
 
     response = requests.get(url, params=params)
@@ -570,7 +576,7 @@ def get_readings(
         )
 
     # Get the OD readings
-    url = f"HTTP/experiments/{experiment}/time_series/od_readings"
+    url = f"{HTTP}/experiments/{experiment}/time_series/od_readings"
     params = {"filter_mod_N": filter_mod2, "lookback": lookback2}
 
     response2 = requests.get(url, params=params)
@@ -580,7 +586,7 @@ def get_readings(
         print(f"Failed to retrieve OD readings. Status code: {response2.status_code}")
 
     # Get the noremalized OD readings
-    url = f"HTTP/experiments/{experiment}/time_series/od_readings_filtered"
+    url = f"{HTTP}/experiments/{experiment}/time_series/od_readings_filtered"
     params = {"filter_mod_N": filter_mod3, "lookback": lookback3}
 
     response3 = requests.get(url, params=params)
@@ -593,7 +599,7 @@ def get_readings(
         )
 
     # Get the growth rate readings
-    url = f"HTTP/experiments/{experiment}/time_series/growth_rates"
+    url = f"{HTTP}/experiments/{experiment}/time_series/growth_rates"
     params = {"filter_mod_N": filter_mod4, "lookback": lookback4}
 
     response4 = requests.get(url, params=params)
@@ -721,7 +727,7 @@ def get_readings(
 
 
 def new_experiment(experiment, description="", mediaUsed="", organismUsed=""):
-    url = "HTTP/experiments"
+    url = f"{HTTP}/experiments"
     created_at = datetime.now().isoformat()
 
     payload = {
@@ -742,7 +748,7 @@ def new_experiment(experiment, description="", mediaUsed="", organismUsed=""):
 
 
 def change_experiment(experiment, experiment_new, reactor):
-    url = f"HTTP/experiments/{experiment}/workers/{reactor}"
+    url = f"{HTTP}/experiments/{experiment}/workers/{reactor}"
 
     headers = {"Content-Type": "application/json"}
 
@@ -754,7 +760,7 @@ def change_experiment(experiment, experiment_new, reactor):
         print(f"Failed to change experiment. Status code: {response.status_code}")
         return None
 
-    url = f"HTTP/experiments/{experiment_new}/workers"
+    url = f"{HTTP}/experiments/{experiment_new}/workers"
 
     payload = {"pioreactor_unit": reactor}
 
@@ -769,7 +775,7 @@ def change_experiment(experiment, experiment_new, reactor):
 
 
 def delete_experiment(experiment):
-    url = f"HTTP/experiments/{experiment}"
+    url = f"{HTTP}/experiments/{experiment}"
 
     headers = {"Content-Type": "application/json"}
 
@@ -783,7 +789,9 @@ def delete_experiment(experiment):
 
 
 def pump_add_media(reactor, experiment, volume=None, duration=None, continuous=False):
-    url = f"HTTP/workers/{reactor}/jobs/run/job_name/add_media/experiments/{experiment}"
+    url = (
+        f"{HTTP}/workers/{reactor}/jobs/run/job_name/add_media/experiments/{experiment}"
+    )
 
     if volume is not None:
         payload = {
@@ -819,8 +827,8 @@ def pump_remove_media(
     reactor, experiment, volume=None, duration=None, continuous=False
 ):
     url = (
-        f"HTTP/workers/{reactor}/jobs/run/job_name/"
-        "remove_waste/experiments/{experiment}"
+        f"{HTTP}/workers/{reactor}/jobs/run/job_name/"
+        f"remove_waste/experiments/{experiment}"
     )
 
     if volume is not None:
@@ -855,8 +863,8 @@ def pump_remove_media(
 
 def add_alt_media(reactor, experiment, volume=None, duration=None, continuous=False):
     url = (
-        f"HTTP/workers/{reactor}/jobs/run/job_name/"
-        "add_alt_media/experiments/{experiment}"
+        f"{HTTP}/workers/{reactor}/jobs/run/job_name/"
+        f"add_alt_media/experiments/{experiment}"
     )
 
     if volume is not None:
@@ -896,8 +904,8 @@ def circulate_media(reactor, experiment, duration):
     time.sleep(duration)
 
     url = (
-        f"HTTP/workers/{reactor}/jobs/stop/job_name/"
-        "add_media/experiments/{experiment}"
+        f"{HTTP}/workers/{reactor}/jobs/stop/job_name/"
+        f"add_media/experiments/{experiment}"
     )
     headers = {"Content-Type": "application/json"}
 
@@ -909,8 +917,8 @@ def circulate_media(reactor, experiment, duration):
         print(f"Failed to circulate media. Status code: {response.status_code}")
 
     url = (
-        f"HTTP/workers/{reactor}/jobs/stop/job_name/"
-        "remove_waste/experiments/{experiment}"
+        f"{HTTP}/workers/{reactor}/jobs/stop/job_name/"
+        f"remove_waste/experiments/{experiment}"
     )
 
     response = requests.patch(url, headers=headers)
@@ -920,7 +928,7 @@ def circulate_media(reactor, experiment, duration):
     else:
         print(f"Failed to circulate media. Status code: {response.status_code}")
 
-    # url = f"HTTP/workers/{reactor}/jobs/run/job_name/" \
+    # url = f"{HTTP}/workers/{reactor}/jobs/run/job_name/" \
     # "circulate_media/experiments/{experiment}"
 
     # payload = {
@@ -940,8 +948,8 @@ def circulate_media(reactor, experiment, duration):
 
 def circulate_alt_media(reactor, experiment, media, duration):
     url = (
-        f"HTTP/workers/{reactor}/jobs/run/job_name/"
-        "circulate_alt_media/experiments/{experiment}"
+        f"{HTTP}/workers/{reactor}/jobs/run/job_name/"
+        f"circulate_alt_media/experiments/{experiment}"
     )
 
     payload = {
