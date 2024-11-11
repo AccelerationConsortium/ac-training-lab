@@ -12,7 +12,6 @@ from my_secrets import HIVEMQ_HOST, HIVEMQ_PASSWORD, HIVEMQ_USERNAME, PASSWORD, 
 from netman import connectWiFi
 from ubinascii import hexlify
 
-
 # Set timezone offset; adjust as needed for daylight savings time changes
 TIMEZONE_OFFSET = -5
 
