@@ -3,18 +3,13 @@ import json
 import ssl
 from collections import OrderedDict
 
+import machine
 import ntptime
 import utime
 from machine import unique_id
-import machine
 from mqtt_as import MQTTClient, config
-from my_secrets import (
-    HIVEMQ_HOST,
-    HIVEMQ_PASSWORD,
-    HIVEMQ_USERNAME,
-    PASSWORD,
-    SSID,
-)
+from my_secrets import (HIVEMQ_HOST, HIVEMQ_PASSWORD, HIVEMQ_USERNAME,
+                        PASSWORD, SSID)
 from netman import connectWiFi
 from ubinascii import hexlify
 
