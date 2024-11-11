@@ -8,10 +8,10 @@ import ntptime
 import utime
 from machine import unique_id
 from mqtt_as import MQTTClient, config
-from my_secrets import (HIVEMQ_HOST, HIVEMQ_PASSWORD, HIVEMQ_USERNAME,
-                        PASSWORD, SSID)
+from my_secrets import HIVEMQ_HOST, HIVEMQ_PASSWORD, HIVEMQ_USERNAME, PASSWORD, SSID
 from netman import connectWiFi
 from ubinascii import hexlify
+
 
 # Set timezone offset; adjust as needed for daylight savings time changes
 TIMEZONE_OFFSET = -5
@@ -100,12 +100,8 @@ async def read_scale_data(client):
                 else:
                     weight = "0g"
                 current = get_local_time()
-                current_date = (
-                    f"{current[0]:04}-{current[1]:02}-{current[2]:02}"
-                )
-                current_time = (
-                    f"{current[3]:02}:{current[4]:02}:{current[5]:02}"
-                )
+                current_date = f"{current[0]:04}-{current[1]:02}-{current[2]:02}"
+                current_time = f"{current[3]:02}:{current[4]:02}:{current[5]:02}"
                 data = OrderedDict(
                     [
                         ("Current Weight", weight),
@@ -116,9 +112,7 @@ async def read_scale_data(client):
 
                 message = json.dumps(data)
                 print(f"Publishing scale data: {message}")
-                await client.publish(
-                    mqtt_topic, message, qos=1
-                )  # Publish the data to the MQTT topic
+                await client.publish(mqtt_topic, message, qos=1)  # Publish data
                 last_publish = utime.time()  # Update the last publish time
 
             await asyncio.sleep(1)
