@@ -1,0 +1,73 @@
+{
+    "ordering": [
+        [
+            "A1"
+        ],
+        [
+            "A2"
+        ]
+    ],
+    "brand": {
+        "brand": "AC",
+        "brandId": []
+    },
+    "metadata": {
+        "displayName": "ac color sensor charging port",
+        "displayCategory": "tipRack",
+        "displayVolumeUnits": "µL",
+        "tags": []
+    },
+    "dimensions": {
+        "xDimension": 128,
+        "yDimension": 86,
+        "zDimension": 100
+    },
+    "wells": {
+        "A1": {
+            "depth": 84,
+            "totalLiquidVolume": 1000,
+            "shape": "circular",
+            "diameter": 66,
+            "x": 36,
+            "y": 43,
+            "z": 16
+        },
+        "A2": {
+            "depth": 84,
+            "totalLiquidVolume": 1000,
+            "shape": "circular",
+            "diameter": 66,
+            "x": 91.95,
+            "y": 43,
+            "z": 16
+        }
+    },
+    "groups": [
+        {
+            "metadata": {},
+            "wells": [
+                "A1",
+                "A2"
+            ]
+        }
+    ],
+    "parameters": {
+        "format": "irregular",
+        "quirks": [
+            "centerMultichannelOnWells",
+            "touchTipDisabled"
+        ],
+        "isTiprack": true,
+        "tipLength": 84,
+        "isMagneticModuleCompatible": false,
+        "loadName": "ac_color_sensor_charging_port"
+    },
+    "namespace": "custom_beta",
+    "version": 1,
+    "schemaVersion": 2,
+    "cornerOffsetFromSlot": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+    }
+}
