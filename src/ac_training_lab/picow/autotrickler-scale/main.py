@@ -130,7 +130,6 @@ async def read_scale_data(client):
             await asyncio.sleep(5)
 
 
-
 async def messages(client):
     async for topic, msg, retained in client.queue:
         print(f"Received message on topic {topic}: {msg.decode()}")
