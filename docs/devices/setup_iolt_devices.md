@@ -121,3 +121,7 @@ You can add create sprites for new Gather Town "devices" using the following ste
 <img src="../_static/images/pixelit-interface.png" width=300>
 
 See the [Gather Town instructions](https://support.gather.town/hc/en-us/articles/15909788073236-Custom-Objects) for adding custom objects.
+
+Finally, enter a short name for the device in "Prompt Message" under advanced settings for the object. This is what users will see pop up when they go nearby the device.
+
+![image](https://github.com/user-attachments/assets/26ac593b-0421-4357-a317-b035f62888b3)
