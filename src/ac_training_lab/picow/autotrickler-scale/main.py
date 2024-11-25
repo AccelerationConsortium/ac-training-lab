@@ -39,7 +39,7 @@ connectWiFi(SSID, PASSWORD)
 my_id = hexlify(unique_id()).decode()
 
 # MQTT topic
-# Current scale model/pico id = FX-120i/e6632c8593690c30
+# Current scale model/pico id = FX-120i/e6613008e3659f2f
 mqtt_topic = f"FX-120i/{my_id}"
 
 
