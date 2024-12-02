@@ -96,8 +96,8 @@ async def read_scale_data(client):
                 scale_data = uart.read().decode("utf-8").strip()
                 if scale_data:
                     weight = scale_data.splitlines()[0].strip()
-                    # Remove "ST," prefix if it exists in the data
-                    weight = weight.replace("ST,", "").strip()
+                    # Remove "ST," or "US," prefixes if they exist in the data
+                    weight = weight.replace("ST,", "").replace("US,", "").strip()
                 else:
                     weight = "0g"
 
