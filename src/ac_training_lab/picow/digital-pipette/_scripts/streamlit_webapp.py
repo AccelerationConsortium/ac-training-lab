@@ -1,4 +1,8 @@
-"""This streamlit implementation is preferred over the gradio implementation"""
+"""This streamlit implementation is preferred over the gradio implementation
+
+(EDIT: 2024-11-01 - Gradio offers easy remote API access, so in general starting
+to prefer Gradio)
+"""
 
 import json
 
