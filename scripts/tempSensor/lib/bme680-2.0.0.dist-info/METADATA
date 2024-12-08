@@ -1,0 +1,156 @@
+Metadata-Version: 2.3
+Name: bme680
+Version: 2.0.0
+Summary: Python library for the BME680 temperature, humidity and gas sensor
+Project-URL: GitHub, https://www.github.com/pimoroni/bme680-python
+Project-URL: Homepage, https://www.pimoroni.com
+Author-email: Philip Howard <phil@pimoroni.com>
+Maintainer-email: Philip Howard <phil@pimoroni.com>
+License: MIT License
+        
+        Copyright (c) 2018 Pimoroni Ltd
+        
+        Permission is hereby granted, free of charge, to any person obtaining a copy
+        of this software and associated documentation files (the "Software"), to deal
+        in the Software without restriction, including without limitation the rights
+        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+        copies of the Software, and to permit persons to whom the Software is
+        furnished to do so, subject to the following conditions:
+        
+        The above copyright notice and this permission notice shall be included in all
+        copies or substantial portions of the Software.
+        
+        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+        SOFTWARE.
+License-File: LICENSE
+Keywords: Pi,Raspberry
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: POSIX :: Linux
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Topic :: Software Development
+Classifier: Topic :: Software Development :: Libraries
+Classifier: Topic :: System :: Hardware
+Requires-Python: >=3.7
+Requires-Dist: smbus2
+Description-Content-Type: text/markdown
+
+# BME680
+
+[![Build Status](https://img.shields.io/github/actions/workflow/status/pimoroni/bme680-python/test.yml?branch=main)](https://github.com/pimoroni/bme680-python/actions/workflows/test.yml)
+[![Coverage Status](https://coveralls.io/repos/github/pimoroni/bme680-python/badge.svg?branch=main)](https://coveralls.io/github/pimoroni/bme680-python?branch=main)
+[![PyPi Package](https://img.shields.io/pypi/v/bme680.svg)](https://pypi.python.org/pypi/bme680)
+[![Python Versions](https://img.shields.io/pypi/pyversions/bme680.svg)](https://pypi.python.org/pypi/bme680)
+
+https://shop.pimoroni.com/products/bme680
+
+The state-of-the-art BME680 breakout lets you measure temperature, pressure, humidity, and indoor air quality.
+
+## Installing
+
+### Full install (recommended):
+
+We've created an easy installation script that will install all pre-requisites and get your BME680
+up and running with minimal efforts. To run it, fire up Terminal which you'll find in Menu -> Accessories -> Terminal
+on your Raspberry Pi desktop, as illustrated below:
+
+![Finding the terminal](http://get.pimoroni.com/resources/github-repo-terminal.png)
+
+In the new terminal window type the command exactly as it appears below (check for typos) and follow the on-screen instructions:
+
+```bash
+git clone https://github.com/pimoroni/bme680-python
+cd bme680-python
+./install.sh
+```
+
+**Note** Libraries will be installed in the "pimoroni" virtual environment, you will need to activate it to run examples:
+
+```
+source ~/.virtualenvs/pimoroni/bin/activate
+```
+
+### Development:
+
+If you want to contribute, or like living on the edge of your seat by having the latest code, you can install the development version like so:
+
+```bash
+git clone https://github.com/pimoroni/bme680-python
+cd bme680-python
+./install.sh --unstable
+```
+
+In all cases you will have to enable the i2c bus:
+
+```
+sudo raspi-config nonint do_i2c 0
+```
+
+## Documentation & Support
+
+* Guides and tutorials - https://learn.pimoroni.com/bme680-breakout
+* Get help - http://forums.pimoroni.com/c/support
+
+
+2.0.0
+-----
+
+* Repackage to hatch/pyproject.toml
+* Drop Python 2.7 support
+* Switch from smbu2 to smbus2
+
+1.1.1
+-----
+
+* New: constants to clarify heater on/off states
+
+1.1.0
+-----
+
+* New: support for BME688 "high" gas resistance variant
+* New: set/get gas heater disable bit
+* Enhancement: fail with descriptive RuntimeError when chip is not detected
+
+1.0.5
+-----
+
+* New: set_temp_offset to calibrate temperature offset in degrees C
+
+1.0.4
+-----
+
+* Fix to range_sw_err for extremely high gas readings
+* Convert to unsigned int to fix negative gas readings
+
+1.0.3
+-----
+
+* Merged temperature compensation fix from Bosch's BME680_driver 3.5.3
+
+1.0.2
+-----
+
+* Fixed set_gas_heater_temperature to avoid i2c TypeError
+
+1.0.1
+-----
+
+* Added Manifest to Python package
+
+1.0.0
+-----
+
+* Initial release
+
