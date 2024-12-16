@@ -15,7 +15,7 @@ picam2.configure(picam2.create_video_configuration())  # Video configuration
 picam2.start()
 
 # Start the preview window
-picam2.start_preview(Preview.QTGL)  # Use OpenGL for hardware-accelerated preview (QTGL)
+picam2.start_preview(Preview.QTGL)  # Use OpenGL for hardwar`e-accelerated preview (QTGL)
 
 # Create the ffmpeg command for streaming
 ffmpeg_cmd = [

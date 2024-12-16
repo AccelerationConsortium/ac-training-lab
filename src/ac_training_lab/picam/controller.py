@@ -41,10 +41,11 @@ if __name__ == '__main__':
     # Either use the previous stream key or input a new one
     # Check if a previous stream key exists
     try:
-        with open(os.path.join(os.path.dirname(__file__), ".saved_key") "r") as f:
+        with open(os.path.join(os.path.dirname(__file__), ".saved_key"), "r") as f:
             previous_key = f.read()
+        print(f"Using previous stream key: {previous_key}")
+    except FileNotFoundError:
+        print("No previous stream key found. Exiting.")
+        exit()
 
-    print("Previous stream key:", previous_key)
-    print("Update? [y/n] (auto advancing in 5s)")
-
-
+    
