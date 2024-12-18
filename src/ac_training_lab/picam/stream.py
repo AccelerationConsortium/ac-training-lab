@@ -9,7 +9,7 @@ from picamera2 import Picamera2, Preview
 from picamera2.outputs import FfmpegOutput
 from picamera2.encoders import H264Encoder
 
-SCRIPT_URL = "https://raw.githubusercontent.com/AccelerationConsortium/ac-training-lab/refs/heads/jwoo-camera/src/ac_training_lab/picam/controller.py"
+SCRIPT_URL = "https://raw.githubusercontent.com/AccelerationConsortium/ac-training-lab/refs/heads/jwoo-camera/src/ac_training_lab/picam/stream.py"
 
 
 def stream(stream_key):
