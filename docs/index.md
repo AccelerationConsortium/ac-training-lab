@@ -1,7 +1,7 @@
 # 🏢 AC Training Lab
 
-```{warning}
-This is an ongoing project. If you would like to participate or are interested in contributing, please [introduce yourself](https://github.com/AccelerationConsortium/ac-training-lab/discussions/2) or reach out to sterling.baird@utoronto.ca.
+```{note}
+If you would like to participate or are interested in contributing, please [introduce yourself](https://github.com/AccelerationConsortium/ac-training-lab/discussions/2) or reach out to sterling.baird@utoronto.ca.
 ```
 
 The [Acceleration Consortium](https://github.com/AccelerationConsortium) (AC)
