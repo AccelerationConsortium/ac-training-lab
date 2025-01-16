@@ -29,7 +29,7 @@ pip install -r requirements.txt
 ```
 7. Create an account on [HiveMQ](https://www.hivemq.com/). Once you do, create a free serverless cluster. In the Overview > Connection details section, take note of the **URL** and **Port** parameters.
 8. Then, in the Access Management section, create new credentials. Choose a **Username** and **Password** and take note of these parameters too. For the Permission dropdown, select **Publish and Subscribe**, and then Save your new credentials.
-9. Create a file in the `ac-training-lab/src/ac_training_lab/cobot280pi/` directory named `my_secrets.py`. Paste the following contents into the file. Replace the <...> attributes with your own values as noted above. Make sure to keep these credentials secret! 
+9. Create a file in the `ac-training-lab/src/ac_training_lab/cobot280pi/` directory named `my_secrets.py`. Paste the following contents into the file. Replace the <...> attributes with your own values as noted above. Make sure to keep these credentials secret!
 ```
 HIVEMQ_USERNAME = "<HiveMQ credential username>"
 HIVEMQ_PASSWORD = "<HiveMQ credential password>"
