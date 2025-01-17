@@ -967,6 +967,82 @@ def circulate_alt_media(reactor, experiment, media, duration):
         print(f"Failed to circulate media. Status code: {response.status_code}")
 
 
+def start_relay(reactor, experiment, relay):
+    url = (
+        f"{HTTP}/workers/{reactor}/jobs/run/job_name/" f"relay/experiments/{experiment}"
+    )
+
+    payload = {
+        "env": {"EXPERIMENT": experiment, "JOB_SOURCE": "user"},
+        "options": {},
+    }
+
+    headers = {"Content-Type": "application/json"}
+
+    response = requests.patch(url, headers=headers, data=json.dumps(payload))
+
+    if response.status_code == 202:
+        print(f"Relay {relay} started in reactor {reactor}.")
+    else:
+        print(f"Failed to start relay. Status code: {response.status_code}")
+
+
+def stop_relay(reactor, experiment, relay):
+    url = (
+        f"{HTTP}/workers/{reactor}/jobs/update/job_name/"
+        f"relay/experiments/{experiment}"
+    )
+
+    payload = {
+        "settings": {"$state": "disconnected"},
+    }
+
+    headers = {"Content-Type": "application/json"}
+
+    response = requests.patch(url, headers=headers, data=json.dumps(payload))
+
+    if response.status_code == 202:
+        print(f"Relay {relay} stopped in reactor {reactor}.")
+    else:
+        print(f"Failed to stop relay. Status code: {response.status_code}")
+
+
+def relay_on(reactor, experiment, relay):
+    url = (
+        f"{HTTP}/workers/{reactor}/jobs/update/job_name/"
+        f"relay/experiments/{experiment}"
+    )
+
+    payload = {"settings": {"is_relay_on": 1}}
+
+    headers = {"Content-Type": "application/json"}
+
+    response = requests.patch(url, headers=headers, data=json.dumps(payload))
+
+    if response.status_code == 202:
+        print(f"Relay {relay} turned on in reactor {reactor}.")
+    else:
+        print(f"Failed to turn on relay. Status code: {response.status_code}")
+
+
+def relay_off(reactor, experiment, relay):
+    url = (
+        f"{HTTP}/workers/{reactor}/jobs/update/job_name/"
+        f"relay/experiments/{experiment}"
+    )
+
+    payload = {"settings": {"is_relay_on": 0}}
+
+    headers = {"Content-Type": "application/json"}
+
+    response = requests.patch(url, headers=headers, data=json.dumps(payload))
+
+    if response.status_code == 202:
+        print(f"Relay {relay} turned off in reactor {reactor}.")
+    else:
+        print(f"Failed to turn off relay. Status code: {response.status_code}")
+
+
 # --- MQTT Functions ---
 def on_connect(client, userdata, flags, rc):
     print(f"Connected with result code {rc}")
@@ -1084,6 +1160,14 @@ def on_message(client, userdata, msg):
             circulate_alt_media(
                 reactor, experiment, message["media"], message["duration"]
             )
+        elif command == "start_relay":
+            start_relay(reactor, experiment, message["relay"])
+        elif command == "stop_relay":
+            stop_relay(reactor, experiment, message["relay"])
+        elif command == "relay_on":
+            relay_on(reactor, experiment, message["relay"])
+        elif command == "relay_off":
+            relay_off(reactor, experiment, message["relay"])
         else:
             print(f"Unknown command: {command}")
     except json.JSONDecodeError as e:
