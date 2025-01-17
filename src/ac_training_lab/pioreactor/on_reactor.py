@@ -1164,9 +1164,9 @@ def on_message(client, userdata, msg):
             start_relay(reactor, experiment, "a")
         elif command == "stop_relay":
             stop_relay(reactor, experiment, "a")
-        elif command == "relay_on":
-            relay_on(reactor, experiment, "a")
         elif command == "relay_off":
+            relay_on(reactor, experiment, "a")
+        elif command == "relay_on":
             relay_off(reactor, experiment, "a")
         else:
             print(f"Unknown command: {command}")
