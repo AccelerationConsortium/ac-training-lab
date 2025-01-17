@@ -1161,13 +1161,13 @@ def on_message(client, userdata, msg):
                 reactor, experiment, message["media"], message["duration"]
             )
         elif command == "start_relay":
-            start_relay(reactor, experiment, message["relay"])
+            start_relay(reactor, experiment, "a")
         elif command == "stop_relay":
-            stop_relay(reactor, experiment, message["relay"])
+            stop_relay(reactor, experiment, "a")
         elif command == "relay_on":
-            relay_on(reactor, experiment, message["relay"])
+            relay_on(reactor, experiment, "a")
         elif command == "relay_off":
-            relay_off(reactor, experiment, message["relay"])
+            relay_off(reactor, experiment, "a")
         else:
             print(f"Unknown command: {command}")
     except json.JSONDecodeError as e:
