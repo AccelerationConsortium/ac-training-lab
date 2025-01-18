@@ -21,15 +21,20 @@ sudo apt-get install git
 5. Clone the repository containing the code for the server run by the Cobot.
 ```
 git clone https://github.com/AccelerationConsortium/ac-training-lab.git
-cd ac-training-lab/src/ac_training_lab/cobot280pi/
 ```
-6. Install the required python packages for running the server.
+7. Since we only need the files in the `ac-training-lab/src/ac_training_lab/cobot280pi/` directory, we move them out and delete the rest of the repository.
+```
+mv ac-training-lab/src/ac_training_lab/cobot280pi ./
+rm -rf ./ac-training-lab
+cd ./cobot280pi
+```
+8. Install the required python packages for running the server.
 ```
 pip install -r requirements.txt
 ```
-7. Create an account on [HiveMQ](https://www.hivemq.com/). Once you do, create a free serverless cluster. In the Overview > Connection details section, take note of the **URL** and **Port** parameters.
-8. Then, in the Access Management section, create new credentials. Choose a **Username** and **Password** and take note of these parameters too. For the Permission dropdown, select **Publish and Subscribe**, and then Save your new credentials.
-9. Create a file in the `ac-training-lab/src/ac_training_lab/cobot280pi/` directory named `my_secrets.py`. Paste the following contents into the file. Replace the <...> attributes with your own values as noted above. Make sure to keep these credentials secret!
+9. Create an account on [HiveMQ](https://www.hivemq.com/). Once you do, create a free serverless cluster. In the Overview > Connection details section, take note of the **URL** and **Port** parameters.
+10. Then, in the Access Management section, create new credentials. Choose a **Username** and **Password** and take note of these parameters too. For the Permission dropdown, select **Publish and Subscribe**, and then Save your new credentials.
+11. Create a file in the `ac-training-lab/src/ac_training_lab/cobot280pi/` directory named `my_secrets.py`. Paste the following contents into the file. Replace the <...> attributes with your own values as noted above. Make sure to keep these credentials secret!
 ```
 HIVEMQ_USERNAME = "<HiveMQ credential username>"
 HIVEMQ_PASSWORD = "<HiveMQ credential password>"
@@ -37,8 +42,8 @@ HIVEMQ_HOST = "<host URL from HiveMQ>"
 DEVICE_PORT = <port from HiveMQ>
 DEVICE_ENDPOINT = "cobot280pi/cobot1"
 ```
-10. Run the server with the following command.
+12. Run the server with the following command.
 ```
 python server.py
 ```
-11. Your server is now running! You can use the `CobotController` class from the `client.py` file to control your cobot. Initialize it with the same parameters as in your `my_secrets.py` file.
+13. Your server is now running! You can use the `CobotController` class from the `client.py` file to control your cobot. Initialize it with the same parameters as in your `my_secrets.py` file.
