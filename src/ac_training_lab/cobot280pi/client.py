@@ -15,10 +15,10 @@ class CobotController:
         hive_mq_password: str,
         hive_mq_cloud: str,
         port: int,
-        cobot_id: str,
+        device_endpoint: str,
     ):
-        self.publish_endpoint = cobot_id
-        self.response_endpoint = cobot_id + "/response"
+        self.publish_endpoint = device_endpoint
+        self.response_endpoint = device_endpoint + "/response"
         self.client = paho.Client(client_id="", userdata=None, protocol=paho.MQTTv5)
         self.client.tls_set()
         self.client.username_pw_set(hive_mq_username, hive_mq_password)
