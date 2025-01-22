@@ -24,7 +24,9 @@ It should be placed in the same directory as this script.
 Author: Enrui (Edison) Lin
 """
 
-HTTP = "HTTP://pioreactor.local/api"
+
+# This should reflect the domain_alias in the PioReactor Configuration
+HTTP = "http://piobio.local/api"
 
 automation_name = None
 stirring_target_rpm = None
@@ -79,7 +81,8 @@ def remove_worker_from_experiment(worker, experiment):
 
 
 def start_stirring(worker, experiment):
-    url = f"{HTTP}/units/{worker}/jobs/run/job_name/stirring/experiments/{experiment}"
+    url = f"{HTTP}/workers/{worker}/jobs/run/job_name/stirring/experiments/{experiment}"
+    print(url)
     headers = {"Content-Type": "application/json"}
     payload = {"env": {"EXPERIMENT": experiment, "JOB_SOURCE": "user"}}
 
@@ -91,9 +94,8 @@ def start_stirring(worker, experiment):
 
 
 def stop_stirring(worker, experiment):
-    url = (
-        f"{HTTP}/units/{worker}/jobs/update/job_name/stirring/experiments/{experiment}"
-    )
+    url = f"{HTTP}/workers/{worker}/jobs/update/"
+    f"job_name/stirring/experiments/{experiment}"
     headers = {"Content-Type": "application/json"}
     payload = {"settings": {"$state": "disconnected"}}
 
@@ -105,9 +107,8 @@ def stop_stirring(worker, experiment):
 
 
 def update_stirring_rpm(worker, experiment, rpm):
-    url = (
-        f"{HTTP}/units/{worker}/jobs/update/job_name/stirring/experiments/{experiment}"
-    )
+    url = f"{HTTP}/workers/{worker}/jobs/update/"
+    f"job_name/stirring/experiments/{experiment}"
     headers = {"Content-Type": "application/json"}
     payload = {"settings": {"target_rpm": rpm}}
 
@@ -121,7 +122,7 @@ def update_stirring_rpm(worker, experiment, rpm):
 def set_led_intensity(worker, experiment, brightness_value, led):
     url = (
         f"{HTTP}/workers/{worker}/jobs/run/job_name/"
-        "led_intensity/experiments/{experiment}"
+        f"led_intensity/experiments/{experiment}"
     )
     headers = {"Content-Type": "application/json"}
     payload = {
@@ -440,7 +441,7 @@ def temp_update(worker, experiment, settings):
     )
 
     # Prepare the payload
-    payload = {"args": [], "settings": settings}
+    payload = {"settings": settings}
 
     # Set the headers
     headers = {"Content-Type": "application/json"}
