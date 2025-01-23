@@ -13,4 +13,4 @@
 7. Docs page and tutorial (BoM, setup, etc.)
 8. Embedding into Gather Town
 
-Periodic updates to Accelerated Discovery. 
+Periodic updates to Accelerated Discovery.
