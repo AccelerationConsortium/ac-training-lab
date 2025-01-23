@@ -182,7 +182,7 @@
           <mxGeometry x="215" y="228.9" width="68" height="21" as="geometry" />
         </mxCell>
         <mxCell id="vQ2HYrr8znaOnQDePJ01-73" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=https://seeklogo.com/images/G/gradio-logo-C1E1266F61-seeklogo.com.png;clipPath=inset(33.33% 2% 34.33% 2%);" vertex="1" parent="1">
-          <mxGeometry x="110" y="280" width="55.49" height="18.69" as="geometry" />
+          <mxGeometry x="81.51" y="270" width="55.49" height="18.69" as="geometry" />
         </mxCell>
         <mxCell id="vQ2HYrr8znaOnQDePJ01-74" value="" style="endArrow=none;dashed=1;html=1;dashPattern=1 3;strokeWidth=2;rounded=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;exitX=0;exitY=0.25;exitDx=0;exitDy=0;" edge="1" parent="1" source="4h0UEBvIdxbQDaqQv4KU-7" target="vQ2HYrr8znaOnQDePJ01-73">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
