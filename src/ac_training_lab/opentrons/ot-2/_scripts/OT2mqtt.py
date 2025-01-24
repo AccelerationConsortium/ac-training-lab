@@ -122,10 +122,10 @@ def mix_color(payload):
     print("Sending status to HF...")
 
     payload = (
-    f'{{"status": {{"sensor_status":"in_place"}}, '
-    f'"experiment_id": "{experiment_id}", '
-    f'"session_id": "{session_id}"}}'
-)
+        f'{{"status": {{"sensor_status":"in_place"}}, '
+        f'"experiment_id": "{experiment_id}", '
+        f'"session_id": "{session_id}"}}'
+    )
 
     client.publish(OT2_STATUS_TOPIC, payload, qos=2)  # send a status message back to HF
 
@@ -139,10 +139,10 @@ def move_sensor_back(payload):
     # protocol.home()
 
     payload = (
-    f'{{"status": {{"sensor_status":"charging"}}, '
-    f'"experiment_id": "{experiment_id}", '
-    f'"session_id": "{session_id}"}}'
-)
+        f'{{"status": {{"sensor_status":"charging"}}, '
+        f'"experiment_id": "{experiment_id}", '
+        f'"session_id": "{session_id}"}}'
+    )
     client.publish(OT2_STATUS_TOPIC, payload, qos=2)  # send a status message back to HF
 
     if results_status == "sensor_timeout":
