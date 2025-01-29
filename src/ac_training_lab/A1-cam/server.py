@@ -21,13 +21,14 @@ def on_message(client, userdata, msg):
     if command == "capture":
         print("Capturing image...")
         # only keeping one local copy at any given time called image.jpg
-        file_path = "image.jpg"
+        file_path = "image.png"
 
+        picam2.autofocus_cycle()
         picam2.capture_file(file_path)
 
         # using the current timestamp as the unique object ID
-        object_name = datetime.utcnow().strftime("%Y%m%d%H%M%S%f") + ".jpg"
-        # need to setup S3 bucket with ACL and public access
+        object_name = datetime.utcnow().strftime("%Y-%m-%d-%H:%M:%S") + ".jpg"
+        # make sure to setup S3 bucket with ACL and public access so that the link works publically
         s3.upload_file(
             file_path, BUCKET_NAME, object_name, ExtraArgs={"ACL": "public-read"}
         )
@@ -38,13 +39,14 @@ def on_message(client, userdata, msg):
 
 # camera setup
 picam2 = Picamera2()
-picam2.set_controls({"AfMode": controls.AfModeEnum.Continuous})
+picam2.set_controls({"AfMode": "auto"})
+picam2.options["compress_level"] = 0
 config = picam2.create_still_configuration(transform=Transform(vflip=1))
 picam2.configure(config)
 picam2.start()
 
-BUCKET_NAME = "jwoo-picam-bucket"
-AWS_REGION = "us-east-1"
+BUCKET_NAME = ""
+AWS_REGION = ""
 s3 = boto3.client("s3", region_name=AWS_REGION)
 
 # Initialize the MQTT Client
