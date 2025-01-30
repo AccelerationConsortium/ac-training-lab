@@ -363,10 +363,10 @@ def get_worker(client, reactor):
         client_temp.loop_stop()
         client_temp.disconnect()
 
-    # print(running)
+    print(running)
 
     # running.remove("watchdog")
-    running.remove("mqtt_to_db_streaming")
+    # running.remove("mqtt_to_db_streaming")
     running.remove("monitor")
 
     # print(experiment)
