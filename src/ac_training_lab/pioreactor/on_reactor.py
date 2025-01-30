@@ -367,7 +367,13 @@ def get_worker(client, reactor):
 
     # running.remove("watchdog")
     # running.remove("mqtt_to_db_streaming")
-    running.remove("monitor")
+    # running.remove("monitor")
+    if "mqtt_to_db_streaming" in running:
+        running.remove("mqtt_to_db_streaming")
+    if "watchdog" in running:
+        running.remove("watchdog")
+    if "monitor" in running:
+        running.remove("monitor")
 
     # print(experiment)
 
