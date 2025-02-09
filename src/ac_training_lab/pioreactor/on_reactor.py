@@ -94,10 +94,14 @@ def start_stirring(worker, experiment):
 
 
 def stop_stirring(worker, experiment):
-    url = f"{HTTP}/workers/{worker}/jobs/update/"
-    f"job_name/stirring/experiments/{experiment}"
+    url = (
+        f"{HTTP}/workers/{worker}/jobs/update/"
+        f"job_name/stirring/experiments/{experiment}"
+    )
     headers = {"Content-Type": "application/json"}
     payload = {"settings": {"$state": "disconnected"}}
+
+    print(url)
 
     response = requests.patch(url, headers=headers, data=json.dumps(payload))
     if response.status_code == 202:
@@ -107,8 +111,10 @@ def stop_stirring(worker, experiment):
 
 
 def update_stirring_rpm(worker, experiment, rpm):
-    url = f"{HTTP}/workers/{worker}/jobs/update/"
-    f"job_name/stirring/experiments/{experiment}"
+    url = (
+        f"{HTTP}/workers/{worker}/jobs/update/"
+        f"job_name/stirring/experiments/{experiment}"
+    )
     headers = {"Content-Type": "application/json"}
     payload = {"settings": {"target_rpm": rpm}}
 
@@ -975,9 +981,7 @@ def circulate_alt_media(reactor, experiment, media, duration):
 
 
 def start_relay(reactor, experiment, relay):
-    url = (
-        f"{HTTP}/workers/{reactor}/jobs/run/job_name/" f"relay/experiments/{experiment}"
-    )
+    url = f"{HTTP}/workers/{reactor}/jobs/run/job_name/relay/experiments/{experiment}"
 
     payload = {
         "env": {"EXPERIMENT": experiment, "JOB_SOURCE": "user"},
