@@ -21,7 +21,10 @@ It contains the following variables:
     - MQTT_TOPIC_REQUEST
     - MQTT_TOPIC_RESPONSE
     
-The bambulabs_api module is required and should be installed via pip.
+The bambulabs_api module is required and should be installed via pip. Virtual environment is recommended.
+
+To run in background:
+nohup python3 receive.py &
     
 Author: Enrui (Edison) Lin
 """
