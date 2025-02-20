@@ -21,6 +21,8 @@ It contains the following variables:
     - MQTT_TOPIC_REQUEST
     - MQTT_TOPIC_RESPONSE
     
+The bambulabs_api module is required and should be installed via pip.
+    
 Author: Enrui (Edison) Lin
 """
 
