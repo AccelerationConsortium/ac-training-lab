@@ -24,7 +24,9 @@ It should be placed in the same directory as this script.
 Author: Enrui (Edison) Lin
 """
 
-HTTP = "HTTP://pioreactor.local/api"
+
+# This should reflect the domain_alias in the PioReactor Configuration
+HTTP = "http://piobio.local/api"
 
 automation_name = None
 stirring_target_rpm = None
@@ -79,7 +81,8 @@ def remove_worker_from_experiment(worker, experiment):
 
 
 def start_stirring(worker, experiment):
-    url = f"{HTTP}/units/{worker}/jobs/run/job_name/stirring/experiments/{experiment}"
+    url = f"{HTTP}/workers/{worker}/jobs/run/job_name/stirring/experiments/{experiment}"
+    print(url)
     headers = {"Content-Type": "application/json"}
     payload = {"env": {"EXPERIMENT": experiment, "JOB_SOURCE": "user"}}
 
@@ -92,10 +95,13 @@ def start_stirring(worker, experiment):
 
 def stop_stirring(worker, experiment):
     url = (
-        f"{HTTP}/units/{worker}/jobs/update/job_name/stirring/experiments/{experiment}"
+        f"{HTTP}/workers/{worker}/jobs/update/"
+        f"job_name/stirring/experiments/{experiment}"
     )
     headers = {"Content-Type": "application/json"}
     payload = {"settings": {"$state": "disconnected"}}
+
+    print(url)
 
     response = requests.patch(url, headers=headers, data=json.dumps(payload))
     if response.status_code == 202:
@@ -106,7 +112,8 @@ def stop_stirring(worker, experiment):
 
 def update_stirring_rpm(worker, experiment, rpm):
     url = (
-        f"{HTTP}/units/{worker}/jobs/update/job_name/stirring/experiments/{experiment}"
+        f"{HTTP}/workers/{worker}/jobs/update/"
+        f"job_name/stirring/experiments/{experiment}"
     )
     headers = {"Content-Type": "application/json"}
     payload = {"settings": {"target_rpm": rpm}}
@@ -121,7 +128,7 @@ def update_stirring_rpm(worker, experiment, rpm):
 def set_led_intensity(worker, experiment, brightness_value, led):
     url = (
         f"{HTTP}/workers/{worker}/jobs/run/job_name/"
-        "led_intensity/experiments/{experiment}"
+        f"led_intensity/experiments/{experiment}"
     )
     headers = {"Content-Type": "application/json"}
     payload = {
@@ -362,11 +369,17 @@ def get_worker(client, reactor):
         client_temp.loop_stop()
         client_temp.disconnect()
 
-    # print(running)
+    print(running)
 
     # running.remove("watchdog")
-    running.remove("mqtt_to_db_streaming")
-    running.remove("monitor")
+    # running.remove("mqtt_to_db_streaming")
+    # running.remove("monitor")
+    if "mqtt_to_db_streaming" in running:
+        running.remove("mqtt_to_db_streaming")
+    if "watchdog" in running:
+        running.remove("watchdog")
+    if "monitor" in running:
+        running.remove("monitor")
 
     # print(experiment)
 
@@ -440,7 +453,7 @@ def temp_update(worker, experiment, settings):
     )
 
     # Prepare the payload
-    payload = {"args": [], "settings": settings}
+    payload = {"settings": settings}
 
     # Set the headers
     headers = {"Content-Type": "application/json"}
@@ -967,6 +980,80 @@ def circulate_alt_media(reactor, experiment, media, duration):
         print(f"Failed to circulate media. Status code: {response.status_code}")
 
 
+def start_relay(reactor, experiment, relay):
+    url = f"{HTTP}/workers/{reactor}/jobs/run/job_name/relay/experiments/{experiment}"
+
+    payload = {
+        "env": {"EXPERIMENT": experiment, "JOB_SOURCE": "user"},
+        "options": {},
+    }
+
+    headers = {"Content-Type": "application/json"}
+
+    response = requests.patch(url, headers=headers, data=json.dumps(payload))
+
+    if response.status_code == 202:
+        print(f"Relay {relay} started in reactor {reactor}.")
+    else:
+        print(f"Failed to start relay. Status code: {response.status_code}")
+
+
+def stop_relay(reactor, experiment, relay):
+    url = (
+        f"{HTTP}/workers/{reactor}/jobs/update/job_name/"
+        f"relay/experiments/{experiment}"
+    )
+
+    payload = {
+        "settings": {"$state": "disconnected"},
+    }
+
+    headers = {"Content-Type": "application/json"}
+
+    response = requests.patch(url, headers=headers, data=json.dumps(payload))
+
+    if response.status_code == 202:
+        print(f"Relay {relay} stopped in reactor {reactor}.")
+    else:
+        print(f"Failed to stop relay. Status code: {response.status_code}")
+
+
+def relay_on(reactor, experiment, relay):
+    url = (
+        f"{HTTP}/workers/{reactor}/jobs/update/job_name/"
+        f"relay/experiments/{experiment}"
+    )
+
+    payload = {"settings": {"is_relay_on": 1}}
+
+    headers = {"Content-Type": "application/json"}
+
+    response = requests.patch(url, headers=headers, data=json.dumps(payload))
+
+    if response.status_code == 202:
+        print(f"Relay {relay} turned on in reactor {reactor}.")
+    else:
+        print(f"Failed to turn on relay. Status code: {response.status_code}")
+
+
+def relay_off(reactor, experiment, relay):
+    url = (
+        f"{HTTP}/workers/{reactor}/jobs/update/job_name/"
+        f"relay/experiments/{experiment}"
+    )
+
+    payload = {"settings": {"is_relay_on": 0}}
+
+    headers = {"Content-Type": "application/json"}
+
+    response = requests.patch(url, headers=headers, data=json.dumps(payload))
+
+    if response.status_code == 202:
+        print(f"Relay {relay} turned off in reactor {reactor}.")
+    else:
+        print(f"Failed to turn off relay. Status code: {response.status_code}")
+
+
 # --- MQTT Functions ---
 def on_connect(client, userdata, flags, rc):
     print(f"Connected with result code {rc}")
@@ -1084,6 +1171,14 @@ def on_message(client, userdata, msg):
             circulate_alt_media(
                 reactor, experiment, message["media"], message["duration"]
             )
+        elif command == "start_relay":
+            start_relay(reactor, experiment, "a")
+        elif command == "stop_relay":
+            stop_relay(reactor, experiment, "a")
+        elif command == "relay_off":
+            relay_on(reactor, experiment, "a")
+        elif command == "relay_on":
+            relay_off(reactor, experiment, "a")
         else:
             print(f"Unknown command: {command}")
     except json.JSONDecodeError as e:
