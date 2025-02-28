@@ -1,0 +1,25 @@
+# A Prefect worker that runs on the same machine as the Prefect server
+# This allows for scripts to be run on the same machine as the Prefect server
+# Author: Enrui (Edison) Lin
+
+version: "3.9"
+
+services:
+  prefect-worker:
+    image: prefecthq/prefect:3-latest  # Use Prefect v3 as the base image
+    container_name: prefect-worker
+    restart: unless-stopped
+    environment:
+      PREFECT_API_URL: "http://192.168.2.144:4200/api"
+      PREFECT_LOGGING_LEVEL: "INFO"
+    command: >
+      sh -c "pip install --no-cache-dir prefect-docker &&
+             prefect worker start -p docker-pool"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - prefect_prefect-network
+
+networks:
+  prefect_prefect-network:
+    external: true  # Ensures it connects to the Prefect server
