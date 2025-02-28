@@ -26,6 +26,7 @@ logging.basicConfig(
 )
 logger = logging.getLogger("device")
 
+
 def on_message(client, userdata, message):
     data = json.loads(message.payload)
     command = data["command"]
@@ -64,14 +65,17 @@ def on_message(client, userdata, message):
             logging.error(f"Error uploading to S3: {e}")
 
         file_uri = f"https://{BUCKET_NAME}.s3.{AWS_REGION}.amazonaws.com/{object_name}"
-        logging.info("Begin MQTT publish")
+
         try:
             client.publish(CAMERA_WRITE_ENDPOINT, json.dumps({"image_url": file_uri}))
             logging.info(f"Published {file_uri} to {CAMERA_WRITE_ENDPOINT}")
         except Exception as e:
-            logging.error(f"Error publishing {file_uri} to {CAMERA_WRITE_ENDPOINT}: {e}")
+            logging.error(
+                f"Error publishing {file_uri} to {CAMERA_WRITE_ENDPOINT}: {e}"
+            )
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     # RPI Camera
     logging.info("Configuring camera")
     try:
@@ -90,8 +94,8 @@ if __name__ == '__main__':
     # AWS S3
     logging.info("Configuring AWS S3")
     try:
-        BUCKET_NAME = "jwoo-picam-bucket"
-        AWS_REGION = "us-east-1"
+        BUCKET_NAME = ""
+        AWS_REGION = ""
         s3 = boto3.client("s3", region_name=AWS_REGION)
         logging.info("Successfully configured AWS S3")
     except Exception as e:
