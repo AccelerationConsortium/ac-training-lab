@@ -1,16 +1,15 @@
+import os
 import socket
 import sys
-import os
-import wget
-
 import time
-from picamera2 import Picamera2, Preview
-from picamera2.outputs import FfmpegOutput
-from picamera2.encoders import H264Encoder
 
+import wget
 from libcamera import Transform
+from picamera2 import Picamera2, Preview
+from picamera2.encoders import H264Encoder
+from picamera2.outputs import FfmpegOutput
 
-SCRIPT_URL = "https://raw.githubusercontent.com/AccelerationConsortium/ac-training-lab/refs/heads/jwoo-camera/src/ac_training_lab/picam/stream.py"
+SCRIPT_URL = "https://raw.githubusercontent.com/AccelerationConsortium/ac-training-lab/refs/heads/jwoo-camera/src/ac_training_lab/picam/stream.py"  # noqa: E501
 
 
 def stream(stream_key):
@@ -22,7 +21,9 @@ def stream(stream_key):
 
     # Configure the camera for video capture (set resolution to 1280x720)
     picam2.configure(
-        picam2.create_video_configuration(main={"size": (1280, 720)}, transform=Transform(hflip=1, vflip=1))
+        picam2.create_video_configuration(
+            main={"size": (1280, 720)}, transform=Transform(hflip=1, vflip=1)
+        )
     )  # Video configuration
 
     picam2.start_preview(Preview.QTGL)
