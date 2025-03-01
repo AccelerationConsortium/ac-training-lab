@@ -1,13 +1,12 @@
 import paho.mqtt.client as mqtt
 import wget
-
 from my_secrets import (
     CAMERA_READ_ENDPOINT,
     CLIENT_READ_ENDPOINT,
-    PORT,
     HIVEMQ_HOST,
     HIVEMQ_PASSWORD,
     HIVEMQ_USERNAME,
+    PORT,
 )
 
 
