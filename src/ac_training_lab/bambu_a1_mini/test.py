@@ -1,7 +1,8 @@
-import paho.mqtt.client as mqtt
-import time
-import info
 import json
+import time
+
+import info
+import paho.mqtt.client as mqtt
 
 BROKER = info.MQTT_BROKER
 PORT = info.MQTT_PORT
@@ -9,8 +10,10 @@ TOPIC = info.MQTT_TOPIC_REQUEST
 USERNAME = info.MQTT_USERNAME
 PASSWORD = info.MQTT_PASSWORD
 
+
 def on_connect(client, userdata, flags, rc):
     print("Connected to HiveMQ broker with result code " + str(rc))
+
 
 client = mqtt.Client()
 client.on_connect = on_connect
