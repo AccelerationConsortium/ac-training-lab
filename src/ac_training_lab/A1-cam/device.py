@@ -1,23 +1,20 @@
-import paho.mqtt.client as mqtt
-import boto3
 import json
+import logging
+import sys
 from datetime import datetime
-import time
 
-from picamera2 import Picamera2
-from libcamera import controls, Transform
-
+import boto3
+import paho.mqtt.client as mqtt
+from libcamera import Transform  # , controls
 from my_secrets import (
     CAMERA_READ_ENDPOINT,
     CAMERA_WRITE_ENDPOINT,
-    MQTT_PORT,
     MQTT_HOST,
     MQTT_PASSWORD,
+    MQTT_PORT,
     MQTT_USERNAME,
 )
-
-import logging
-import sys
+from picamera2 import Picamera2
 
 logging.basicConfig(
     level=logging.INFO,
@@ -52,7 +49,8 @@ def on_message(client, userdata, message):
         except Exception as e:
             logging.error(f"Error capturing image: {e}")
 
-        # make sure to setup S3 bucket with ACL and public access so that the link works publically
+        # make sure to setup S3 bucket with ACL and public access
+        # so that the link works publically
         # using the current timestamp as the unique object ID
         object_name = datetime.utcnow().strftime("%Y-%m-%d-%H:%M:%S") + ".jpeg"
         logging.info("Begin upload to S3")
