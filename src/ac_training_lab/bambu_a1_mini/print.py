@@ -1,22 +1,24 @@
-import time
 import os
-import bambulabs_api as bl
-from io import BytesIO
+import time
 import zipfile
+from io import BytesIO
 
-IP = '192.168.1.124'
-SERIAL = '0309CA471800852'
-ACCESS_CODE = '14011913'
+import bambulabs_api as bl
 
-INPUT_FILE_PATH = 'test_square_3.gcode'
-UPLOAD_FILE_NAME = 'test_square.gcode'
+IP = "192.168.1.124"
+SERIAL = "0309CA471800852"
+ACCESS_CODE = "14011913"
+
+INPUT_FILE_PATH = "test_square_3.gcode"
+UPLOAD_FILE_NAME = "test_square.gcode"
 
 env = os.getenv("env", "debug")
 plate = os.getenv("plate", "true").lower() == "true"
 
+
 def create_zip_archive_in_memory(
-        text_content: str,
-        text_file_name: str = 'file.txt') -> BytesIO:
+    text_content: str, text_file_name: str = "file.txt"
+) -> BytesIO:
     """
     Create a zip archive in memory
 
@@ -29,17 +31,18 @@ def create_zip_archive_in_memory(
         io.BytesIO: zip archive in memory
     """
     zip_buffer = BytesIO()
-    with zipfile.ZipFile(zip_buffer, 'w', zipfile.ZIP_DEFLATED) as zipf:
+    with zipfile.ZipFile(zip_buffer, "w", zipfile.ZIP_DEFLATED) as zipf:
         zipf.writestr(text_file_name, text_content)
     zip_buffer.seek(0)
     return zip_buffer
 
-if __name__ == '__main__':
-    print('Starting bambulabs_api example')
-    print('Connecting to BambuLab 3D printer')
-    print(f'IP: {IP}')
-    print(f'Serial: {SERIAL}')
-    print(f'Access Code: {ACCESS_CODE}')
+
+if __name__ == "__main__":
+    print("Starting bambulabs_api example")
+    print("Connecting to BambuLab 3D printer")
+    print(f"IP: {IP}")
+    print(f"Serial: {SERIAL}")
+    print(f"Access Code: {ACCESS_CODE}")
 
     # Create a new instance of the API
     printer = bl.Printer(IP, ACCESS_CODE, SERIAL)
@@ -49,7 +52,6 @@ if __name__ == '__main__':
 
     time.sleep(2)
 
-   
     with open(INPUT_FILE_PATH, "r") as file:
         gcode = file.read()
 
@@ -64,23 +66,18 @@ if __name__ == '__main__':
             print("Done Uploading/Sending Start Print Command")
             printer.start_print(UPLOAD_FILE_NAME, 1)
             print("Start Print Command Sent")
-    
+
     time.sleep(2)
-    
-     # Get the printer status
+
+    # Get the printer status
     status = printer.get_state()
-    print(f'Printer status: {status}')
+    print(f"Printer status: {status}")
 
     bed_temperature = printer.get_bed_temperature()
     nozzle_temperature = printer.get_nozzle_temperature()
     speed = printer.get_print_speed()
     print(
-        f'Printer status: {status}, Bed temp: {bed_temperature}, '
-        f'Nozzle temp: {nozzle_temperature},'
-        f'Print speed: {speed}')
-
-
-
-  
-
-
+        f"Printer status: {status}, Bed temp: {bed_temperature}, "
+        f"Nozzle temp: {nozzle_temperature},"
+        f"Print speed: {speed}"
+    )
