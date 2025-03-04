@@ -38,12 +38,12 @@ repos:
 #     ]
 
 - repo: https://github.com/PyCQA/isort
-  rev: 5.13.2
+  rev: 6.0.1
   hooks:
   - id: isort
 
 - repo: https://github.com/psf/black
-  rev: 24.10.0
+  rev: 25.1.0
   hooks:
   - id: black
     language_version: python3
@@ -56,7 +56,7 @@ repos:
     additional_dependencies: [black]
 
 - repo: https://github.com/PyCQA/flake8
-  rev: 7.1.1
+  rev: 7.1.2
   hooks:
   - id: flake8
     exclude: ^src/ac_training_lab/picow/
