@@ -1,0 +1,11 @@
+Metadata-Version: 2.1
+Name: unique-id
+Version: 1.0.1
+Summary: Unique-ID is a small lib to generate unique ids - string values.
+Home-page: 
+Download-URL: https://github.com/slawek87/unique-id
+Author: Sławomir Kabik
+Author-email: slawek@redsoftware.pl
+Keywords: Python Unique ID,Python ID,Python Unique string
+Requires-Dist: setuptools
+
