@@ -6,25 +6,20 @@
 # Various improvements contributed by Kevin Köck.
 
 import gc
+import time
+from sys import platform
 
+import network
+import uasyncio as asyncio
 import usocket as socket
 import ustruct as struct
-
-gc.collect()
-import uasyncio as asyncio
+from machine import unique_id
+from micropython import const
 from ubinascii import hexlify
-
-gc.collect()
 from uerrno import EINPROGRESS, ETIMEDOUT
 from utime import ticks_diff, ticks_ms
 
 gc.collect()
-import network
-from machine import unique_id
-from micropython import const
-
-gc.collect()
-from sys import platform
 
 VERSION = (0, 7, 1)
 
@@ -33,11 +28,18 @@ VERSION = (0, 7, 1)
 _DEFAULT_MS = const(20)
 _SOCKET_POLL_DELAY = const(5)  # 100ms added greatly to publish latency
 
-# Legitimate errors while waiting on a socket. See uasyncio __init__.py open_connection().
+# Legitimate errors while waiting on a socket.
+# See uasyncio __init__.py open_connection().
 ESP32 = platform == "esp32"
 RP2 = platform == "rp2"
+
 if ESP32:
-    BUSY_ERRORS = [EINPROGRESS, ETIMEDOUT, 118, 119]  # Add in weird ESP32 errors
+    BUSY_ERRORS = [
+        EINPROGRESS,
+        ETIMEDOUT,
+        118,  # Add in weird ESP32 errors
+        119,
+    ]
 elif RP2:
     BUSY_ERRORS = [EINPROGRESS, ETIMEDOUT, -110]
 else:
@@ -47,8 +49,9 @@ ESP8266 = platform == "esp8266"
 PYBOARD = platform == "pyboard"
 
 
-# Default "do little" coro for optional user replacement
-async def eliza(*_):  # e.g. via set_wifi_handler(coro): see test program
+# Default "do little" coroutine for optional user replacement
+async def eliza(*_):
+    """Example: set_wifi_handler(coro) - see test program"""
     await asyncio.sleep_ms(_DEFAULT_MS)
 
 
@@ -118,76 +121,69 @@ def pid_gen():
 
 
 def qos_check(qos):
-    if not (qos == 0 or qos == 1):
+    if qos not in {0, 1}:
         raise ValueError("Only qos 0 and 1 are supported.")
 
 
-# MQTT_base class. Handles MQTT protocol on
-# the basis of
-# a good connection.
-# Exceptions from connectivity failures
-# are handled by
-# MQTTClient subclass.
+# MQTT_base class - Handles MQTT protocol
 class MQTT_base:
     REPUB_COUNT = 0  # TEST
     DEBUG = False
 
     def __init__(self, config):
         self._events = config["queue_len"] > 0
-        # MQTT config
         self._client_id = config["client_id"]
         self._user = config["user"]
         self._pswd = config["password"]
         self._keepalive = config["keepalive"]
         if self._keepalive >= 65536:
-            raise ValueError("invalid keepalive time")
-        self._response_time = (
-            config["response_time"] * 1000
-        )  # Repub if no PUBACK received (ms).
+            raise ValueError("Invalid keepalive time")
+        self._response_time = config["response_time"] * 1000
         self._max_repubs = config["max_repubs"]
-        self._clean_init = config[
-            "clean_init"
-        ]  # clean_session state on first connection
-        self._clean = config["clean"]  # clean_session state on reconnect
+        self._clean_init = config["clean_init"]
+        self._clean = config["clean"]
+
         will = config["will"]
         if will is None:
             self._lw_topic = False
         else:
             self._set_last_will(*will)
+
         # WiFi config
-        self._ssid = config["ssid"]  # Required for ESP32 / Pyboard D. Optional ESP8266
+        self._ssid = config["ssid"]
         self._wifi_pw = config["wifi_pw"]
         self._ssl = config["ssl"]
         self._ssl_params = config["ssl_params"]
-        # Callbacks and coros
+
+        # Callbacks and coroutines
         if self._events:
             self.up = asyncio.Event()
             self.down = asyncio.Event()
             self.queue = MsgQueue(config["queue_len"])
-        else:  # Callbacks
+        else:
             self._cb = config["subs_cb"]
             self._wifi_handler = config["wifi_coro"]
             self._connect_handler = config["connect_coro"]
-        # Network
-        self.port = config["port"]
-        if self.port == 0:
-            self.port = 8883 if self._ssl else 1883
+
+        # Network settings
+        self.port = config["port"] or (8883 if self._ssl else 1883)
         self.server = config["server"]
+
         if self.server is None:
-            raise ValueError("no server specified.")
+            raise ValueError("No server specified.")
+
         self._sock = None
         self._sta_if = network.WLAN(network.STA_IF)
         self._sta_if.active(True)
-        if config["gateway"]:  # Called from gateway (hence ESP32).
+
+        if config["gateway"]:  # Called from gateway (hence ESP32)
             import aioespnow  # Set up ESPNOW
 
             while not (sta := self._sta_if).active():
                 time.sleep(0.1)
             sta.config(pm=sta.PM_NONE)  # No power management
             sta.active(True)
-            self._espnow = (
-                aioespnow.AIOESPNow()
-            )  # Returns AIOESPNow enhanced with async support
+            self._espnow = aioespnow.AIOESPNow()
             self._espnow.active(True)
 
         self.newpid = pid_gen()
@@ -211,15 +207,9 @@ class MQTT_base:
     def _timeout(self, t):
         return ticks_diff(ticks_ms(), t) > self._response_time
 
-    async def _as_read(self, n, sock=None):  # OSError caught by superclass
+    async def _as_read(self, n, sock=None):
         if sock is None:
             sock = self._sock
-        # Declare a byte array of size n.
-        # That space is needed anyway, better
-        # to just 'allocate' it in one go
-        # instead of appending to an
-        # existing object, this prevents
-        # reallocation and fragmentation.
         data = bytearray(n)
         buffer = memoryview(data)
         size = 0
@@ -309,7 +299,6 @@ class MQTT_base:
             sz += 2 + len(self._lw_topic) + 2 + len(self._lw_msg)
             msg[6] |= 0x4 | (self._lw_qos & 0x1) << 3 | (self._lw_qos & 0x2) << 3
             msg[6] |= self._lw_retain << 5
-
         i = 1
         while sz > 0x7F:
             premsg[i] = (sz & 0x7F) | 0x80

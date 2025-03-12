@@ -67,6 +67,13 @@ def connectWiFi(ssid, password, country=None, wifi_energy_saver=False, retries=3
             return status
         except RuntimeError as e:
             print(f"Attempt failed with error: {e}. Retrying...")
-    raise RuntimeError(
-        "All attempts to connect to the network failed. Ensure you are using a 2.4 GHz WiFi network with WPA-2 authentication. See the additional prerequisites section from https://doi.org/10.1016/j.xpro.2023.102329 or the https://github.com/sparks-baird/self-driving-lab-demo/issues/76 for additional troubleshooting help."
-    )
+        raise RuntimeError(
+            "All attempts to connect to the network failed."
+            "Ensure you are using a 2.4 "
+            "GHz WiFi network with WPA-2 authentication."
+            "See the additional prerequisites "
+            "section from https://doi.org/10.1016/j.xpro.2023.102329 or the "
+            "https://github.com/sparks-baird/self-driving-lab-demo/issues/76"
+            "for additional "
+            "troubleshooting help."
+        )
