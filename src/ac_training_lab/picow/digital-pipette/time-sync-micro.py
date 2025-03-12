@@ -127,7 +127,6 @@ async def messages(client):
             print((topic, msg, retained))
 
             if topic == command_topic:
-
                 data = json.loads(msg)
                 time = data["ntp_time"]
                 received_time = "True"

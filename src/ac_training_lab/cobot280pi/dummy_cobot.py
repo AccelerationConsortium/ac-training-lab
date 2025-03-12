@@ -4,7 +4,6 @@ from utils import setup_logger
 
 # A dummy class for easier testing without physically having the cobot
 class DummyCobot:
-
     def __init__(self):
         self.logger = setup_logger()
 
