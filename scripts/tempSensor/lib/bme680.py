@@ -1,4 +1,3 @@
-
 """
 `bme680` - BME680 - Temperature, Humidity, Pressure & Gas Sensor
 ================================================================
@@ -216,7 +215,7 @@ class Adafruit_BME680:
         calc_pres = (calc_pres - (var2 / 4096)) * 3125
         calc_pres = (calc_pres / var1) * 2
         var1 = (
-            self._pressure_calibration[8] * (((calc_pres / 8) * (calc_pres / 8))/8192)
+            self._pressure_calibration[8] * (((calc_pres / 8) * (calc_pres / 8)) / 8192)
         ) / 4096
         var2 = ((calc_pres / 4) * self._pressure_calibration[7]) / 8192
         var3 = (((calc_pres / 256) ** 3) * self._pressure_calibration[9]) / 131072
@@ -333,7 +332,7 @@ class Adafruit_BME680:
         coeff = self._read(_BME680_BME680_COEFF_ADDR1, 25)
         coeff += self._read(_BME680_BME680_COEFF_ADDR2, 16)
 
-        coeff =list(struct.unpack("<hbBHhbBhhbbHhhBBBHbbbBbHhbb", bytes(coeff[1:39])))
+        coeff = list(struct.unpack("<hbBHhbBhhbbHhhBBBHbbbBbHhbb", bytes(coeff[1:39])))
         # print("\n\n",coeff)
         coeff = [float(i) for i in coeff]
         self._temp_calibration = [coeff[x] for x in [23, 0, 1]]

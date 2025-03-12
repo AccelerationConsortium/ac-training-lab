@@ -344,11 +344,12 @@ class MQTT_base:
     # Check internet connectivity by sending DNS lookup to Google's 8.8.8.8
     async def wan_ok(
         self,
-packet = (
-    b"$\x1a\x01\x00\x00\x01\x00\x00\x00"
-    b"\x00\x00\x00\x03www\x06google\x03com\x00"
-    b"\x00\x01\x00\x01"
-)    ):
+        packet=(
+            b"$\x1a\x01\x00\x00\x01\x00\x00\x00"
+            b"\x00\x00\x00\x03www\x06google\x03com\x00"
+            b"\x00\x01\x00\x01"
+        ),
+    ):
         if not self.isconnected():  # WiFi is down
             return False
         length = 32  # DNS query and response packet size
