@@ -1,27 +1,3 @@
-# The MIT License (MIT)
-#
-# Copyright (c) 2017 ladyada for Adafruit Industries
-#
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to deal
-# in the Software without restriction, including without limitation the rights
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
-#
-# The above copyright notice and this permission notice shall be included in
-# all copies or substantial portions of the Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-# THE SOFTWARE.
-
-# We have a lot of attributes for this complex sensor.
-# pylint: disable=too-many-instance-attributes
 
 """
 `bme680` - BME680 - Temperature, Humidity, Pressure & Gas Sensor
@@ -38,7 +14,6 @@ import math
 import time
 
 from micropython import const
-from ubinascii import hexlify as hex
 
 try:
     import struct
@@ -125,11 +100,13 @@ def _read24(arr):
 class Adafruit_BME680:
     """Driver from BME680 air quality sensor
 
-    :param int refresh_rate: Maximum number of readings per second. Faster property reads
+    :param int refresh_rate: Maximum number of readings per second.
+    Faster property reads
       will be from the previous reading."""
 
     def __init__(self, *, refresh_rate=10):
-        """Check the BME680 was found, read the coefficients and enable the sensor for continuous
+        """Check the BME680 was found, read the coefficients and enable the sensor for
+        continuous
         reads."""
         self._write(_BME680_REG_SOFTRESET, [0xB6])
         time.sleep(0.005)
@@ -239,7 +216,7 @@ class Adafruit_BME680:
         calc_pres = (calc_pres - (var2 / 4096)) * 3125
         calc_pres = (calc_pres / var1) * 2
         var1 = (
-            self._pressure_calibration[8] * (((calc_pres / 8) * (calc_pres / 8)) / 8192)
+            self._pressure_calibration[8] * (((calc_pres / 8) * (calc_pres / 8))/8192)
         ) / 4096
         var2 = ((calc_pres / 4) * self._pressure_calibration[7]) / 8192
         var3 = (((calc_pres / 256) ** 3) * self._pressure_calibration[9]) / 131072
@@ -287,8 +264,10 @@ class Adafruit_BME680:
 
     @property
     def altitude(self):
-        """The altitude based on current ``pressure`` vs the sea level pressure
-        (``sea_level_pressure``) - which you must enter ahead of time)"""
+        """The altitude based on current
+        ``pressure`` vs the sea level pressure
+        (``sea_level_pressure``) -
+        which you must enter ahead of time)"""
         pressure = self.pressure  # in Si units for hPascal
         return 44330 * (1.0 - math.pow(pressure / self.sea_level_pressure, 0.1903))
 
@@ -305,7 +284,8 @@ class Adafruit_BME680:
         return int(calc_gas_res)
 
     def _perform_reading(self):
-        """Perform a single-shot reading from the sensor and fill internal data structure for
+        """Perform a single-shot reading from the sensor
+        and fill internal data structure for
         calculations"""
         expired = time.ticks_diff(
             self._last_reading, time.ticks_ms()
@@ -353,7 +333,7 @@ class Adafruit_BME680:
         coeff = self._read(_BME680_BME680_COEFF_ADDR1, 25)
         coeff += self._read(_BME680_BME680_COEFF_ADDR2, 16)
 
-        coeff = list(struct.unpack("<hbBHhbBhhbbHhhBBBHbbbBbHhbb", bytes(coeff[1:39])))
+        coeff =list(struct.unpack("<hbBHhbBhhbbHhhBBBHbbbBbHhbb", bytes(coeff[1:39])))
         # print("\n\n",coeff)
         coeff = [float(i) for i in coeff]
         self._temp_calibration = [coeff[x] for x in [23, 0, 1]]
@@ -389,7 +369,8 @@ class BME680_I2C(Adafruit_BME680):
     :param i2c: I2C device object
     :param int address: I2C device address
     :param bool debug: Print debug statements when True.
-    :param int refresh_rate: Maximum number of readings per second. Faster property reads
+    :param int refresh_rate: Maximum number of
+    readings per second. Faster property reads
       will be from the previous reading."""
 
     def __init__(self, i2c, address=0x77, debug=False, *, refresh_rate=10):
@@ -428,7 +409,8 @@ class BME680_SPI(Adafruit_BME680):
     :param spi: SPI device object, configured
     :param cs: Chip Select Pin object, configured to OUT mode
     :param bool debug: Print debug statements when True.
-    :param int refresh_rate: Maximum number of readings per second. Faster property reads
+    :param int refresh_rate: Maximum number of readings
+    per second. Faster property reads
       will be from the previous reading.
     """
 

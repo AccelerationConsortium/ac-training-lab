@@ -28,7 +28,8 @@ from sys import platform
 
 VERSION = (0, 7, 1)
 
-# Default short delay for good SynCom throughput (avoid sleep(0) with SynCom).
+# Default short delay for good SynCom
+# throughput (avoid sleep(0) with SynCom).
 _DEFAULT_MS = const(20)
 _SOCKET_POLL_DELAY = const(5)  # 100ms added greatly to publish latency
 
@@ -36,7 +37,6 @@ _SOCKET_POLL_DELAY = const(5)  # 100ms added greatly to publish latency
 ESP32 = platform == "esp32"
 RP2 = platform == "rp2"
 if ESP32:
-    # https://forum.micropython.org/viewtopic.php?f=16&t=3608&p=20942#p20942
     BUSY_ERRORS = [EINPROGRESS, ETIMEDOUT, 118, 119]  # Add in weird ESP32 errors
 elif RP2:
     BUSY_ERRORS = [EINPROGRESS, ETIMEDOUT, -110]
@@ -122,8 +122,12 @@ def qos_check(qos):
         raise ValueError("Only qos 0 and 1 are supported.")
 
 
-# MQTT_base class. Handles MQTT protocol on the basis of a good connection.
-# Exceptions from connectivity failures are handled by MQTTClient subclass.
+# MQTT_base class. Handles MQTT protocol on
+# the basis of
+# a good connection.
+# Exceptions from connectivity failures
+# are handled by
+# MQTTClient subclass.
 class MQTT_base:
     REPUB_COUNT = 0  # TEST
     DEBUG = False
@@ -210,9 +214,12 @@ class MQTT_base:
     async def _as_read(self, n, sock=None):  # OSError caught by superclass
         if sock is None:
             sock = self._sock
-        # Declare a byte array of size n. That space is needed anyway, better
-        # to just 'allocate' it in one go instead of appending to an
-        # existing object, this prevents reallocation and fragmentation.
+        # Declare a byte array of size n.
+        # That space is needed anyway, better
+        # to just 'allocate' it in one go
+        # instead of appending to an
+        # existing object, this prevents
+        # reallocation and fragmentation.
         data = bytearray(n)
         buffer = memoryview(data)
         size = 0
@@ -337,8 +344,11 @@ class MQTT_base:
     # Check internet connectivity by sending DNS lookup to Google's 8.8.8.8
     async def wan_ok(
         self,
-        packet=b"$\x1a\x01\x00\x00\x01\x00\x00\x00\x00\x00\x00\x03www\x06google\x03com\x00\x00\x01\x00\x01",
-    ):
+packet = (
+    b"$\x1a\x01\x00\x00\x01\x00\x00\x00"
+    b"\x00\x00\x00\x03www\x06google\x03com\x00"
+    b"\x00\x01\x00\x01"
+)    ):
         if not self.isconnected():  # WiFi is down
             return False
         length = 32  # DNS query and response packet size
@@ -614,7 +624,6 @@ class MQTTClient(MQTT_base):
         else:
             s.active(True)
             if RP2:  # Disable auto-sleep.
-                # https://datasheets.raspberrypi.com/picow/connecting-to-the-internet-with-pico-w.pdf
                 # para 3.6.3
                 s.config(pm=0xA11140)
             s.connect(self._ssid, self._wifi_pw)
@@ -788,7 +797,8 @@ class MQTTClient(MQTT_base):
                     self.dprint("Reconnect OK!")
                 except OSError as e:
                     self.dprint("Error in reconnect. %s", e)
-                    # Can get ECONNABORTED or -1. The latter signifies no or bad CONNACK received.
+                    # Can get ECONNABORTED or -1.
+                    # The latter signifies no or bad CONNACK received.
                     self._close()  # Disconnect and try again.
                     self._in_connect = False
                     self._isconnected = False
