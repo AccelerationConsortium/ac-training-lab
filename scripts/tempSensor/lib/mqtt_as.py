@@ -9,6 +9,7 @@ import gc
 import time
 from sys import platform
 
+import aioespnow
 import network
 import uasyncio as asyncio
 import usocket as socket
@@ -23,13 +24,12 @@ gc.collect()
 
 VERSION = (0, 7, 1)
 
-# Default short delay for good SynCom
-# throughput (avoid sleep(0) with SynCom).
+# Default short delay for good SynCom throughput (avoid sleep(0) with SynCom).
 _DEFAULT_MS = const(20)
 _SOCKET_POLL_DELAY = const(5)  # 100ms added greatly to publish latency
 
-# Legitimate errors while waiting on a socket.
-# See uasyncio __init__.py open_connection().
+# Legitimate errors while waiting on a socket. See uasyncio __init__.py
+# open_connection().
 ESP32 = platform == "esp32"
 RP2 = platform == "rp2"
 
@@ -37,7 +37,7 @@ if ESP32:
     BUSY_ERRORS = [
         EINPROGRESS,
         ETIMEDOUT,
-        118,  # Add in weird ESP32 errors
+        118,  # Weird ESP32 error
         119,
     ]
 elif RP2:
@@ -51,7 +51,7 @@ PYBOARD = platform == "pyboard"
 
 # Default "do little" coroutine for optional user replacement
 async def eliza(*_):
-    """Example: set_wifi_handler(coro) - see test program"""
+    """Example: set_wifi_handler(coro) - see test program."""
     await asyncio.sleep_ms(_DEFAULT_MS)
 
 
@@ -69,7 +69,7 @@ class MsgQueue:
         self._evt.set()
         self._wi = (self._wi + 1) % self._size
         if self._wi == self._ri:  # Would indicate empty
-            self._ri = (self._ri + 1) % self._size  # Discard a message
+            self._ri = (self._ri + 1) % self._size
             self.discards += 1
 
     def __aiter__(self):
@@ -114,6 +114,7 @@ class MQTTException(Exception):
 
 
 def pid_gen():
+    """Generator for packet IDs."""
     pid = 0
     while True:
         pid = pid + 1 if pid < 65535 else 1
@@ -125,9 +126,11 @@ def qos_check(qos):
         raise ValueError("Only qos 0 and 1 are supported.")
 
 
-# MQTT_base class - Handles MQTT protocol
 class MQTT_base:
-    REPUB_COUNT = 0  # TEST
+    """Handles core MQTT protocol, WiFi and broker connectivity is handled by
+    MQTTClient subclass."""
+
+    REPUB_COUNT = 0  # For debug or tests
     DEBUG = False
 
     def __init__(self, config):
@@ -138,6 +141,7 @@ class MQTT_base:
         self._keepalive = config["keepalive"]
         if self._keepalive >= 65536:
             raise ValueError("Invalid keepalive time")
+
         self._response_time = config["response_time"] * 1000
         self._max_repubs = config["max_repubs"]
         self._clean_init = config["clean_init"]
@@ -168,7 +172,6 @@ class MQTT_base:
         # Network settings
         self.port = config["port"] or (8883 if self._ssl else 1883)
         self.server = config["server"]
-
         if self.server is None:
             raise ValueError("No server specified.")
 
@@ -176,8 +179,7 @@ class MQTT_base:
         self._sta_if = network.WLAN(network.STA_IF)
         self._sta_if.active(True)
 
-        if config["gateway"]:  # Called from gateway (hence ESP32)
-            import aioespnow  # Set up ESPNOW
+        if config["gateway"]:  # Called from gateway (hence ESP32).
 
             while not (sta := self._sta_if).active():
                 time.sleep(0.1)
@@ -188,7 +190,7 @@ class MQTT_base:
 
         self.newpid = pid_gen()
         self.rcv_pids = set()  # PUBACK and SUBACK pids awaiting ACK response
-        self.last_rx = ticks_ms()  # Time of last communication from broker
+        self.last_rx = ticks_ms()
         self.lock = asyncio.Lock()
 
     def _set_last_will(self, topic, msg, retain=False, qos=0):
@@ -208,24 +210,26 @@ class MQTT_base:
         return ticks_diff(ticks_ms(), t) > self._response_time
 
     async def _as_read(self, n, sock=None):
+        """Asynchronous read of n bytes from socket."""
         if sock is None:
             sock = self._sock
         data = bytearray(n)
-        buffer = memoryview(data)
+        buff = memoryview(data)
         size = 0
         t = ticks_ms()
+
         while size < n:
             if self._timeout(t) or not self.isconnected():
                 raise OSError(-1, "Timeout on socket read")
             try:
-                msg_size = sock.readinto(buffer[size:], n - size)
-            except OSError as e:  # ESP32 issues weird 119 errors here
+                msg_size = sock.readinto(buff[size:], n - size)
+            except OSError as e:
                 msg_size = None
                 if e.args[0] not in BUSY_ERRORS:
                     raise
-            if msg_size == 0:  # Connection closed by host
+            if msg_size == 0:
                 raise OSError(-1, "Connection closed by host")
-            if msg_size is not None:  # data received
+            if msg_size is not None:
                 size += msg_size
                 t = ticks_ms()
                 self.last_rx = ticks_ms()
@@ -233,20 +237,21 @@ class MQTT_base:
         return data
 
     async def _as_write(self, bytes_wr, length=0, sock=None):
+        """Asynchronous write of up to 'length' bytes to socket."""
         if sock is None:
             sock = self._sock
 
-        # Wrap bytes in memoryview to avoid copying during slicing
         bytes_wr = memoryview(bytes_wr)
         if length:
             bytes_wr = bytes_wr[:length]
+
         t = ticks_ms()
         while bytes_wr:
             if self._timeout(t) or not self.isconnected():
                 raise OSError(-1, "Timeout on socket write")
             try:
                 n = sock.write(bytes_wr)
-            except OSError as e:  # ESP32 issues weird 119 errors here
+            except OSError as e:
                 n = 0
                 if e.args[0] not in BUSY_ERRORS:
                     raise
@@ -260,15 +265,16 @@ class MQTT_base:
         await self._as_write(s)
 
     async def _recv_len(self):
+        """Receive length from MQTT variable-length integer."""
         n = 0
-        sh = 0
-        while 1:
+        shift = 0
+        while True:
             res = await self._as_read(1)
             b = res[0]
-            n |= (b & 0x7F) << sh
+            n |= (b & 0x7F) << shift
             if not b & 0x80:
                 return n
-            sh += 7
+            shift += 7
 
     async def _connect(self, clean):
         self._sock = socket.socket()
@@ -278,27 +284,35 @@ class MQTT_base:
         except OSError as e:
             if e.args[0] not in BUSY_ERRORS:
                 raise
+
         await asyncio.sleep_ms(_DEFAULT_MS)
         self.dprint("Connecting to broker.")
+
         if self._ssl:
             import ssl
 
             self._sock = ssl.wrap_socket(self._sock, **self._ssl_params)
+
         premsg = bytearray(b"\x10\0\0\0\0\0")
         msg = bytearray(b"\x04MQTT\x04\0\0\0")  # Protocol 3.1.1
 
         sz = 10 + 2 + len(self._client_id)
         msg[6] = clean << 1
+
         if self._user:
             sz += 2 + len(self._user) + 2 + len(self._pswd)
             msg[6] |= 0xC0
+
         if self._keepalive:
             msg[7] |= self._keepalive >> 8
             msg[8] |= self._keepalive & 0x00FF
+
         if self._lw_topic:
             sz += 2 + len(self._lw_topic) + 2 + len(self._lw_msg)
-            msg[6] |= 0x4 | (self._lw_qos & 0x1) << 3 | (self._lw_qos & 0x2) << 3
+            msg[6] |= 0x4 | (self._lw_qos & 0x1) << 3
+            msg[6] |= (self._lw_qos & 0x2) << 3
             msg[6] |= self._lw_retain << 5
+
         i = 1
         while sz > 0x7F:
             premsg[i] = (sz & 0x7F) | 0x80
@@ -308,29 +322,25 @@ class MQTT_base:
         await self._as_write(premsg, i + 2)
         await self._as_write(msg)
         await self._send_str(self._client_id)
+
         if self._lw_topic:
             await self._send_str(self._lw_topic)
             await self._send_str(self._lw_msg)
         if self._user:
             await self._send_str(self._user)
             await self._send_str(self._pswd)
-        # Await CONNACK
-        # read causes ECONNABORTED if broker is out; triggers a reconnect.
+
         resp = await self._as_read(4)
         self.dprint("Connected to broker.")  # Got CONNACK
-        if (
-            resp[3] != 0 or resp[0] != 0x20 or resp[1] != 0x02
-        ):  # Bad CONNACK e.g. authentication fail.
-            raise OSError(
-                -1,
-                f"Connect fail: 0x{(resp[0] << 8) + resp[1]:04x} {resp[3]} (README 7)",
-            )
+        # Bad CONNACK e.g. authentication fail
+        if resp[3] != 0 or resp[0] != 0x20 or resp[1] != 0x02:
+            code = f"0x{(resp[0] << 8) + resp[1]:04x} {resp[3]}"
+            raise OSError(-1, f"Connect fail: {code} (README 7)")
 
     async def _ping(self):
         async with self.lock:
             await self._as_write(b"\xc0\0")
 
-    # Check internet connectivity by sending DNS lookup to Google's 8.8.8.8
     async def wan_ok(
         self,
         packet=(
@@ -339,9 +349,10 @@ class MQTT_base:
             b"\x00\x01\x00\x01"
         ),
     ):
-        if not self.isconnected():  # WiFi is down
+        """Check internet connectivity by sending DNS lookup to 8.8.8.8."""
+        if not self.isconnected():  # WiFi down
             return False
-        length = 32  # DNS query and response packet size
+        length = 32
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         s.setblocking(False)
         s.connect(("8.8.8.8", 53))
@@ -351,14 +362,15 @@ class MQTT_base:
             await asyncio.sleep(2)
             res = await self._as_read(length, s)
             if len(res) == length:
-                return True  # DNS response size OK
-        except OSError:  # Timeout on read: no connectivity.
+                return True
+        except OSError:
             return False
         finally:
             s.close()
         return False
 
-    async def broker_up(self):  # Test broker connectivity
+    async def broker_up(self):
+        """Test if broker is responding."""
         if not self.isconnected():
             return False
         tlast = self.last_rx
@@ -371,16 +383,17 @@ class MQTT_base:
         t = ticks_ms()
         while not self._timeout(t):
             await asyncio.sleep_ms(100)
-            if ticks_diff(self.last_rx, tlast) > 0:  # Response received
+            if ticks_diff(self.last_rx, tlast) > 0:
                 return True
         return False
 
     async def disconnect(self):
+        """Disconnect from broker, keep socket open for 100ms."""
         if self._sock is not None:
-            await self._kill_tasks(False)  # Keep socket open
+            await self._kill_tasks(False)
             try:
                 async with self.lock:
-                    self._sock.write(b"\xe0\0")  # Close broker connection
+                    self._sock.write(b"\xe0\0")
                     await asyncio.sleep_ms(100)
             except OSError:
                 pass
@@ -391,29 +404,29 @@ class MQTT_base:
         if self._sock is not None:
             self._sock.close()
 
-    def close(
-        self,
-    ):  # API. See https://github.com/peterhinch/micropython-mqtt/issues/60
+    def close(self):
+        """API close. See:
+        https://github.com/peterhinch/micropython-mqtt/issues/60"""
         self._close()
         try:
-            self._sta_if.disconnect()  # Disconnect Wi-Fi to avoid errors
+            self._sta_if.disconnect()
         except OSError:
             self.dprint("Wi-Fi not started, unable to disconnect interface")
         self._sta_if.active(False)
 
     async def _await_pid(self, pid):
+        """Wait for PID to appear in self.rcv_pids, or time out."""
         t = ticks_ms()
-        while pid in self.rcv_pids:  # local copy
+        while pid in self.rcv_pids:
             if self._timeout(t) or not self.isconnected():
-                break  # Must repub or bail out
+                break
             await asyncio.sleep_ms(100)
         else:
-            return True  # PID received. All done.
+            return True
         return False
 
-    # qos == 1: coro blocks until wait_msg gets correct PID.
-    # If WiFi fails completely subclass re-publishes with new PID.
     async def publish(self, topic, msg, retain, qos):
+        """Publish message with optional QoS 1. Retry if no PUBACK."""
         pid = next(self.newpid)
         if qos:
             self.rcv_pids.add(pid)
@@ -423,18 +436,18 @@ class MQTT_base:
             return
 
         count = 0
-        while 1:  # Await PUBACK, republish on timeout
+        while True:
             if await self._await_pid(pid):
                 return
-            # No match
             if count >= self._max_repubs or not self.isconnected():
-                raise OSError(-1)  # Subclass to re-publish with new PID
+                raise OSError(-1)
             async with self.lock:
-                await self._publish(topic, msg, retain, qos, dup=1, pid=pid)  # Add pid
+                await self._publish(topic, msg, retain, qos, 1, pid)
             count += 1
             self.REPUB_COUNT += 1
 
     async def _publish(self, topic, msg, retain, qos, dup, pid):
+        """Core publish method. Called by publish() with or without DUP."""
         pkt = bytearray(b"\x30\0\0\0")
         pkt[0] |= qos << 1 | retain | dup << 3
         sz = 2 + len(topic) + len(msg)
@@ -455,8 +468,8 @@ class MQTT_base:
             await self._as_write(pkt, 2)
         await self._as_write(msg)
 
-    # Can raise OSError if WiFi fails. Subclass traps.
     async def subscribe(self, topic, qos):
+        """Subscribe with optional QoS."""
         pkt = bytearray(b"\x82\0\0\0")
         pid = next(self.newpid)
         self.rcv_pids.add(pid)
@@ -465,12 +478,11 @@ class MQTT_base:
             await self._as_write(pkt)
             await self._send_str(topic)
             await self._as_write(qos.to_bytes(1, "little"))
-
         if not await self._await_pid(pid):
             raise OSError(-1)
 
-    # Can raise OSError if WiFi fails. Subclass traps.
     async def unsubscribe(self, topic):
+        """Unsubscribe from topic."""
         pkt = bytearray(b"\xa2\0\0\0")
         pid = next(self.newpid)
         self.rcv_pids.add(pid)
@@ -478,20 +490,15 @@ class MQTT_base:
         async with self.lock:
             await self._as_write(pkt)
             await self._send_str(topic)
-
         if not await self._await_pid(pid):
             raise OSError(-1)
 
-    # Wait for a single incoming MQTT message and process it.
-    # Subscribed messages are delivered to a callback previously
-    # set by .setup() method. Other (internal) MQTT
-    # messages processed internally.
-    # Immediate return if no data available. Called from ._handle_msg().
     async def wait_msg(self):
+        """Wait for one incoming MQTT message."""
         try:
             res = self._sock.read(1)  # Throws OSError on WiFi fail
         except OSError as e:
-            if e.args[0] in BUSY_ERRORS:  # Needed by RP2
+            if e.args[0] in BUSY_ERRORS:
                 await asyncio.sleep_ms(0)
                 return
             raise
@@ -501,11 +508,11 @@ class MQTT_base:
             raise OSError(-1, "Empty response")
 
         if res == b"\xd0":  # PINGRESP
-            await self._as_read(1)  # Update .last_rx time
+            await self._as_read(1)
             return
         op = res[0]
 
-        if op == 0x40:  # PUBACK: save pid
+        if op == 0x40:  # PUBACK
             sz = await self._as_read(1)
             if sz != b"\x02":
                 raise OSError(-1, "Invalid PUBACK packet")
@@ -534,183 +541,168 @@ class MQTT_base:
             else:
                 raise OSError(-1)
 
+        # If not Publish, bail out
         if op & 0xF0 != 0x30:
             return
+
         sz = await self._recv_len()
         topic_len = await self._as_read(2)
-        topic_len = (topic_len[0] << 8) | topic_len[1]
-        topic = await self._as_read(topic_len)
-        sz -= topic_len + 2
-        if op & 6:
-            pid = await self._as_read(2)
-            pid = pid[0] << 8 | pid[1]
+        t_len = (topic_len[0] << 8) | topic_len[1]
+        topic = await self._as_read(t_len)
+        sz -= t_len + 2
+        pid = None
+        if op & 6:  # QoS
+            pid_bytes = await self._as_read(2)
+            pid = pid_bytes[0] << 8 | pid_bytes[1]
             sz -= 2
         msg = await self._as_read(sz)
-        retained = op & 0x01
+        retained = bool(op & 0x01)
+
         if self._events:
-            self.queue.put(topic, msg, bool(retained))
+            self.queue.put(topic, msg, retained)
         else:
-            self._cb(topic, msg, bool(retained))
-        if op & 6 == 2:  # qos 1
-            pkt = bytearray(b"\x40\x02\0\0")  # Send PUBACK
+            self._cb(topic, msg, retained)
+
+        # QoS 1
+        if op & 6 == 2:
+            pkt = bytearray(b"\x40\x02\0\0")
             struct.pack_into("!H", pkt, 2, pid)
             await self._as_write(pkt)
         elif op & 6 == 4:  # qos 2 not supported
             raise OSError(-1, "QoS 2 not supported")
 
 
-# MQTTClient class. Handles issues relating to connectivity.
-
-
 class MQTTClient(MQTT_base):
+    """Handles issues relating to WiFi connectivity & broker re-connects."""
+
     def __init__(self, config):
         super().__init__(config)
-        self._isconnected = False  # Current connection state
-        keepalive = 1000 * self._keepalive  # ms
-        self._ping_interval = keepalive // 4 if keepalive else 20000
-        p_i = (
-            config["ping_interval"] * 1000
-        )  # Can specify shorter e.g. for subscribe-only
+        self._isconnected = False
+        keepalive_ms = 1000 * self._keepalive
+        self._ping_interval = keepalive_ms // 4 if keepalive_ms else 20000
+        p_i = config["ping_interval"] * 1000
         if p_i and p_i < self._ping_interval:
             self._ping_interval = p_i
         self._in_connect = False
-        self._has_connected = False  # Define 'Clean Session' value to use.
+        self._has_connected = False
         self._tasks = []
+
         if ESP8266:
             import esp
 
-            esp.sleep_type(
-                0
-            )  # Improve connection integrity at cost of power consumption.
+            esp.sleep_type(0)  # Improve connection integrity at cost of power
 
     async def wifi_connect(self, quick=False):
+        """Connect to WiFi, optionally skipping reliability checks."""
         s = self._sta_if
         if ESP8266:
-            if s.isconnected():  # 1st attempt, already connected.
+            if s.isconnected():
                 return
             s.active(True)
-            s.connect()  # ESP8266 remembers connection.
+            s.connect()
             for _ in range(60):
-                if (
-                    s.status() != network.STAT_CONNECTING
-                ):  # Break out on fail or success. Check once per sec.
+                if s.status() != network.STAT_CONNECTING:
                     break
                 await asyncio.sleep(1)
-            if (
-                s.status() == network.STAT_CONNECTING
-            ):  # might hang forever awaiting dhcp lease renewal or something else
+            if s.status() == network.STAT_CONNECTING:
                 s.disconnect()
                 await asyncio.sleep(1)
-            if (
-                not s.isconnected()
-                and self._ssid is not None
-                and self._wifi_pw is not None
-            ):
+            if not s.isconnected() and self._ssid and self._wifi_pw:
                 s.connect(self._ssid, self._wifi_pw)
-                while (
-                    s.status() == network.STAT_CONNECTING
-                ):  # Break out on fail or success. Check once per sec.
+                while s.status() == network.STAT_CONNECTING:
                     await asyncio.sleep(1)
         else:
             s.active(True)
-            if RP2:  # Disable auto-sleep.
-                # para 3.6.3
+            if RP2:  # Disable auto-sleep
                 s.config(pm=0xA11140)
             s.connect(self._ssid, self._wifi_pw)
-            for _ in range(60):  # Break out on fail or success. Check once per sec.
+            for _ in range(60):
                 await asyncio.sleep(1)
-                # Loop while connecting or no IP
                 if s.isconnected():
                     break
                 if ESP32:
-                    if s.status() != network.STAT_CONNECTING:  # 1001
+                    if s.status() != network.STAT_CONNECTING:
                         break
-                elif PYBOARD:  # No symbolic constants in network
+                elif PYBOARD:
                     if not 1 <= s.status() <= 2:
                         break
-                elif RP2:  # 1 is STAT_CONNECTING. 2 reported by user (No IP?)
+                elif RP2:
                     if not 1 <= s.status() <= 2:
                         break
-            else:  # Timeout: still in connecting state
+            else:
                 s.disconnect()
                 await asyncio.sleep(1)
 
-        if not s.isconnected():  # Timed out
+        if not s.isconnected():
             raise OSError("Wi-Fi connect timed out")
-        if not quick:  # Skip on first connection only if power saving
-            # Ensure connection stays up for a few secs.
+
+        if not quick:
             self.dprint("Checking WiFi integrity.")
             for _ in range(5):
                 if not s.isconnected():
-                    raise OSError("Connection Unstable")  # in 1st 5 secs
+                    raise OSError("Connection Unstable")
                 await asyncio.sleep(1)
             self.dprint("Got reliable connection")
 
-    async def connect(
-        self, *, quick=False
-    ):  # Quick initial connect option for battery apps
+    async def connect(self, *, quick=False):
+        """Connect to MQTT broker, optionally skipping reliability checks."""
         if not self._has_connected:
-            await self.wifi_connect(quick)  # On 1st call, caller handles error
-            # Note this blocks if DNS lookup occurs. Do it once to prevent
-            # blocking during later internet outage:
+            await self.wifi_connect(quick)
             self._addr = socket.getaddrinfo(self.server, self.port)[0][-1]
-        self._in_connect = True  # Disable low level ._isconnected check
+
+        self._in_connect = True
         try:
             if not self._has_connected and self._clean_init and not self._clean:
-                # Power up. Clear previous session data but subsequently save it.
-                # Issue #40
-                await self._connect(True)  # Connect with clean session
+                await self._connect(True)
                 try:
                     async with self.lock:
-                        self._sock.write(
-                            b"\xe0\0"
-                        )  # Force disconnect but keep socket open
+                        self._sock.write(b"\xe0\0")
                 except OSError:
                     pass
                 self.dprint("Waiting for disconnect")
-                await asyncio.sleep(2)  # Wait for broker to disconnect
+                await asyncio.sleep(2)
                 self.dprint("About to reconnect with unclean session.")
+
             await self._connect(self._clean)
+
         except Exception:
             self._close()
-            self._in_connect = False  # Caller may run .isconnected()
+            self._in_connect = False
             raise
-        self.rcv_pids.clear()
-        # If we get here without error broker/LAN must be up.
-        self._isconnected = True
-        self._in_connect = False  # Low level code can now check connectivity.
-        if not self._events:
-            asyncio.create_task(self._wifi_handler(True))  # User handler.
-        if not self._has_connected:
-            self._has_connected = True  # Use normal clean flag on reconnect.
-            asyncio.create_task(self._keep_connected())
-            # Runs forever unless user issues .disconnect()
 
-        asyncio.create_task(self._handle_msg())  # Task quits on connection fail.
+        self.rcv_pids.clear()
+        self._isconnected = True
+        self._in_connect = False
+
+        if not self._events:
+            asyncio.create_task(self._wifi_handler(True))
+        if not self._has_connected:
+            self._has_connected = True
+            asyncio.create_task(self._keep_connected())
+
+        asyncio.create_task(self._handle_msg())
         self._tasks.append(asyncio.create_task(self._keep_alive()))
         if self.DEBUG:
             self._tasks.append(asyncio.create_task(self._memory()))
-        if self._events:
-            self.up.set()  # Connectivity is up
-        else:
-            asyncio.create_task(self._connect_handler(self))  # User handler.
 
-    # Launched by .connect(). Runs until connectivity fails. Checks for and
-    # handles incoming messages.
+        if self._events:
+            self.up.set()
+        else:
+            asyncio.create_task(self._connect_handler(self))
+
     async def _handle_msg(self):
+        """Continuously read incoming messages until connectivity fails."""
         try:
             while self.isconnected():
                 async with self.lock:
-                    await self.wait_msg()  # Immediate return if no message
-                await asyncio.sleep_ms(_DEFAULT_MS)  # Let other tasks get lock
-
+                    await self.wait_msg()
+                await asyncio.sleep_ms(_DEFAULT_MS)
         except OSError:
             pass
-        self._reconnect()  # Broker or WiFi fail.
+        self._reconnect()
 
-    # Keep broker alive MQTT spec 3.1.2.10 Keep Alive.
-    # Runs until ping failure or no response in keepalive period.
     async def _keep_alive(self):
+        """Send periodic PINGREQs to keep broker connection alive."""
         while self.isconnected():
             pings_due = ticks_diff(ticks_ms(), self.last_rx) // self._ping_interval
             if pings_due >= 4:
@@ -721,52 +713,54 @@ class MQTTClient(MQTT_base):
                 await self._ping()
             except OSError:
                 break
-        self._reconnect()  # Broker or WiFi fail.
+        self._reconnect()
 
-    async def _kill_tasks(self, kill_skt):  # Cancel running tasks
+    async def _kill_tasks(self, kill_skt):
+        """Cancel running tasks and optionally close the socket."""
         for task in self._tasks:
             task.cancel()
         self._tasks.clear()
-        await asyncio.sleep_ms(0)  # Ensure cancellation complete
-        if kill_skt:  # Close socket
+        await asyncio.sleep_ms(0)
+        if kill_skt:
             self._close()
 
-    # DEBUG: show RAM messages.
     async def _memory(self):
+        """Debug task to show RAM usage periodically."""
         while True:
             await asyncio.sleep(20)
             gc.collect()
             self.dprint("RAM free %d alloc %d", gc.mem_free(), gc.mem_alloc())
 
     def isconnected(self):
-        if self._in_connect:  # Disable low-level check during .connect()
+        """Check if WiFi and broker connection is alive."""
+        if self._in_connect:
             return True
-        if self._isconnected and not self._sta_if.isconnected():  # It's going down.
+        if self._isconnected and not self._sta_if.isconnected():
             self._reconnect()
         return self._isconnected
 
-    def _reconnect(self):  # Schedule a reconnection if not underway.
+    def _reconnect(self):
+        """Schedule reconnection if not already in progress."""
         if self._isconnected:
             self._isconnected = False
-            asyncio.create_task(self._kill_tasks(True))  # Shut down tasks and socket
-            if self._events:  # Signal an outage
+            asyncio.create_task(self._kill_tasks(True))
+            if self._events:
                 self.down.set()
             else:
-                asyncio.create_task(self._wifi_handler(False))  # User handler.
+                asyncio.create_task(self._wifi_handler(False))
 
-    # Await broker connection.
     async def _connection(self):
+        """Await broker connection."""
         while not self._isconnected:
             await asyncio.sleep(1)
 
-    # Scheduled on 1st successful connection. Runs forever maintaining wifi and
-    # broker connection. Must handle conditions at edge of WiFi range.
     async def _keep_connected(self):
+        """Maintains WiFi & broker connectivity, reconnect if link goes down."""
         while self._has_connected:
-            if self.isconnected():  # Pause for 1 second
+            if self.isconnected():
                 await asyncio.sleep(1)
                 gc.collect()
-            else:  # Link is down, socket is closed, tasks are killed
+            else:
                 try:
                     self._sta_if.disconnect()
                 except OSError:
@@ -776,49 +770,47 @@ class MQTTClient(MQTT_base):
                     await self.wifi_connect()
                 except OSError:
                     continue
-                if (
-                    not self._has_connected
-                ):  # User has issued the terminal .disconnect()
+                if not self._has_connected:
                     self.dprint("Disconnected, exiting _keep_connected")
                     break
                 try:
                     await self.connect()
-                    # Now has set ._isconnected and scheduled _connect_handler().
                     self.dprint("Reconnect OK!")
                 except OSError as e:
                     self.dprint("Error in reconnect. %s", e)
-                    # Can get ECONNABORTED or -1.
-                    # The latter signifies no or bad CONNACK received.
-                    self._close()  # Disconnect and try again.
+                    self._close()
                     self._in_connect = False
                     self._isconnected = False
         self.dprint("Disconnected, exited _keep_connected")
 
     async def subscribe(self, topic, qos=0):
+        """Subscribe with QoS 0 or 1."""
         qos_check(qos)
-        while 1:
+        while True:
             await self._connection()
             try:
                 return await super().subscribe(topic, qos)
             except OSError:
                 pass
-            self._reconnect()  # Broker or WiFi fail.
+            self._reconnect()
 
     async def unsubscribe(self, topic):
-        while 1:
+        """Unsubscribe from topic."""
+        while True:
             await self._connection()
             try:
                 return await super().unsubscribe(topic)
             except OSError:
                 pass
-            self._reconnect()  # Broker or WiFi fail.
+            self._reconnect()
 
     async def publish(self, topic, msg, retain=False, qos=0):
+        """Publish with optional retain/QoS."""
         qos_check(qos)
-        while 1:
+        while True:
             await self._connection()
             try:
                 return await super().publish(topic, msg, retain, qos)
             except OSError:
                 pass
-            self._reconnect()  # Broker or WiFi fail.
+            self._reconnect()
