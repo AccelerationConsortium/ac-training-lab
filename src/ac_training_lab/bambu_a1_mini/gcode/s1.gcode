@@ -728,57 +728,8 @@ M620.3 W1; === turn on filament tangle detection===
 M400 S2
 
 M1002 set_filament_type:PLA
-;M1002 set_flag extrude_cali_flag=1
-M1002 judge_flag extrude_cali_flag
-M622 J1
-    M1002 gcode_claim_action : 8
-    
-    M400
-    M900 K0.0 L1000.0 M1.0
-    G90
-    M83
-    G0 X68 Y-4 F30000
-    G0 Z0.3 F18000 ;Move to start position
-    M400
-    G0 X88 E10  F904.991
-    G0 X93 E.3742  F1508.32
-    G0 X98 E.3742  F6033.27
-    G0 X103 E.3742  F1508.32
-    G0 X108 E.3742  F6033.27
-    G0 X113 E.3742  F1508.32
-    G0 Y0 Z0 F20000
-    M400
-    
-    G1 X-13.5 Y0 Z10 F10000
-    M400
-    
-M73 P79 R1
-    G1 E10 F377.08
-    M983 F6.28466 A0.3 H0.4; cali dynamic extrusion compensation
-    M106 P1 S178
-    M400 S7
-    G1 X0 F18000
-    G1 X-13.5 F3000
-    G1 X0 F18000 ;wipe and shake
-    G1 X-13.5 F3000
-    G1 X0 F12000 ;wipe and shake
-    G1 X-13.5 F3000
-    M400
-    M106 P1 S0
+M1002 set_flag extrude_cali_flag=0
 
-    M1002 judge_last_extrude_cali_success
-    M622 J0
-        M983 F6.28466 A0.3 H0.4; cali dynamic extrusion compensation
-        M106 P1 S178
-        M400 S7
-        G1 X0 F18000
-        G1 X-13.5 F3000
-        G1 X0 F18000 ;wipe and shake
-        G1 X-13.5 F3000
-        G1 X0 F12000 ;wipe and shake
-        M400
-        M106 P1 S0
-    M623
     
 M73 P81 R1
     G1 X-13.5 F3000
@@ -802,16 +753,7 @@ M623 ; end of "draw extrinsic para cali paint"
 M104 S220
 G90
 M83
-G0 X68 Y-2.5 F30000
-G0 Z0.3 F18000 ;Move to start position
-G0 X88 E10  F904.991
-G0 X93 E.3742  F1508.32
-G0 X98 E.3742  F6033.27
-G0 X103 E.3742  F1508.32
-G0 X108 E.3742  F6033.27
-G0 X113 E.3742  F1508.32
-G0 X115 Z0 F20000
-G0 Z5
+
 M400
 
 ;========turn off light and wait extrude temperature =============
