@@ -1,7 +1,7 @@
 import paho.mqtt.client as mqtt
 import wget
 from my_secrets import (
-    CAMERA_READ_ENDPOINT,
+    CAMERA_READ_TOPIC,
     CLIENT_READ_ENDPOINT,
     HIVEMQ_HOST,
     HIVEMQ_PASSWORD,
@@ -12,7 +12,7 @@ from my_secrets import (
 
 # Publish a command
 def send_command(command):
-    client.publish(CAMERA_READ_ENDPOINT, command)
+    client.publish(CAMERA_READ_TOPIC, command)
     print(f"Sent command: {command}")
 
 
