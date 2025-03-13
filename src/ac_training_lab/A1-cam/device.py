@@ -7,8 +7,8 @@ import boto3
 import paho.mqtt.client as mqtt
 from libcamera import Transform  # , controls
 from my_secrets import (
-    CAMERA_READ_ENDPOINT,
-    CAMERA_WRITE_ENDPOINT,
+    CAMERA_READ_TOPIC,
+    CAMERA_WRITE_TOPIC,
     MQTT_HOST,
     MQTT_PASSWORD,
     MQTT_PORT,
@@ -39,18 +39,23 @@ def on_message(client, userdata, message):
             picam2.autofocus_cycle()
             logging.info("Successfully finished autofocus")
         except Exception as e:
-            logging.error(f"Error autofocusing: {e}")
+            error_msg = f"Error autofocusing: {e}"
+            logging.error(error_msg)
+            client.publish(CAMERA_WRITE_TOPIC, json.dumps({"error": error_msg}))
             return
 
         logging.info("Start image capture")
         try:
             picam2.capture_file(file_path)
-            logging.info("Successfully capture image")
+            logging.info("Successfully captured image")
         except Exception as e:
-            logging.error(f"Error capturing image: {e}")
+            error_msg = f"Error capturing image: {e}"
+            logging.error(error_msg)
+            client.publish(CAMERA_WRITE_TOPIC, json.dumps({"error": error_msg}))
+            return
 
         # make sure to setup S3 bucket with ACL and public access
-        # so that the link works publically
+        # so that the link works publicly
         # using the current timestamp as the unique object ID
         object_name = datetime.utcnow().strftime("%Y-%m-%d-%H:%M:%S") + ".jpeg"
         logging.info("Begin upload to S3")
@@ -60,17 +65,20 @@ def on_message(client, userdata, message):
             )
             logging.info("Successfully uploaded to S3")
         except Exception as e:
-            logging.error(f"Error uploading to S3: {e}")
+            error_msg = f"Error uploading to S3: {e}"
+            logging.error(error_msg)
+            client.publish(CAMERA_WRITE_TOPIC, json.dumps({"error": error_msg}))
+            return
 
         file_uri = f"https://{BUCKET_NAME}.s3.{AWS_REGION}.amazonaws.com/{object_name}"
 
         try:
-            client.publish(CAMERA_WRITE_ENDPOINT, json.dumps({"image_url": file_uri}))
-            logging.info(f"Published {file_uri} to {CAMERA_WRITE_ENDPOINT}")
+            client.publish(CAMERA_WRITE_TOPIC, json.dumps({"image_url": file_uri}))
+            logging.info(f"Published {file_uri} to {CAMERA_WRITE_TOPIC}")
         except Exception as e:
-            logging.error(
-                f"Error publishing {file_uri} to {CAMERA_WRITE_ENDPOINT}: {e}"
-            )
+            error_msg = f"Error publishing {file_uri} to {CAMERA_WRITE_TOPIC}: {e}"
+            logging.error(error_msg)
+            client.publish(CAMERA_WRITE_TOPIC, json.dumps({"error": error_msg}))
 
 
 if __name__ == "__main__":
@@ -86,7 +94,8 @@ if __name__ == "__main__":
         picam2.start()
         logging.info("Successfully configured camera")
     except Exception as e:
-        logging.error(f"Error configuring camera: {e}")
+        error_msg = f"Error configuring camera: {e}"
+        logging.error(error_msg)
         exit(1)
 
     # AWS S3
@@ -97,7 +106,8 @@ if __name__ == "__main__":
         s3 = boto3.client("s3", region_name=AWS_REGION)
         logging.info("Successfully configured AWS S3")
     except Exception as e:
-        logging.error(f"Error configuring S3: {e}")
+        error_msg = f"Error configuring S3: {e}"
+        logging.error(error_msg)
         exit(1)
 
     # MQTT
@@ -108,9 +118,10 @@ if __name__ == "__main__":
         client.tls_set(tls_version=mqtt.ssl.PROTOCOL_TLS)
         client.on_message = on_message
         client.connect(MQTT_HOST, MQTT_PORT)
-        client.subscribe(CAMERA_READ_ENDPOINT, qos=2)
+        client.subscribe(CAMERA_READ_TOPIC, qos=2)
         logging.info("Successfully configured MQTT")
         client.loop_forever()
     except Exception as e:
-        logging.error(f"Error configuring MQTT: {e}")
+        error_msg = f"Error configuring MQTT: {e}"
+        logging.error(error_msg)
         exit(1)
