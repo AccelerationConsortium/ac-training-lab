@@ -16,10 +16,6 @@ from my_secrets import (
     RESPONSE_TOPIC,
 )
 
-# import threading
-# from io import BytesIO
-# import zipfile
-
 command_queue = Queue()
 client = mqtt.Client()
 client.tls_set(tls_version=mqtt.ssl.PROTOCOL_TLS)
@@ -69,8 +65,18 @@ def modify_gcode_template(gcode, nozzle_temp, bed_temp, print_speed, fan_speed):
         "; nozzle_temperature = 220", f"; nozzle_temperature = {nozzle_temp}"
     )
     gcode = gcode.replace(
+        "; nozzle_temperature_initial_layer = 220",
+        f"; nozzle_temperature_initial_layer = {nozzle_temp}",
+    )
+    gcode = gcode.replace(
         "; textured_plate_temp = 65", f"; textured_plate_temp = {bed_temp}"
     )
+    gcode = gcode.replace(
+        "; textured_plate_temp_initial_layer = 65",
+        f"; textured_plate_temp_initial_layer = {bed_temp}",
+    )
+    gcode = gcode.replace("M140 S65", f"M140 S{bed_temp}")
+    gcode = gcode.replace("M109 S200", f"M109 S{nozzle_temp}")
     return gcode
 
 
@@ -147,4 +153,4 @@ except Exception as e:
     except Exception as mqtt_error:
         print(f"Failed to publish error details to MQTT: {mqtt_error}")
 
-    raise
+    raise e
