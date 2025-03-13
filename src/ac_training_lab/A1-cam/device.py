@@ -1,11 +1,11 @@
 import json
-import logging
 import sys
+import traceback
 from datetime import datetime
 
 import boto3
 import paho.mqtt.client as mqtt
-from libcamera import Transform  # , controls
+from libcamera import Transform
 from my_secrets import (
     CAMERA_READ_TOPIC,
     CAMERA_WRITE_TOPIC,
@@ -13,115 +13,73 @@ from my_secrets import (
     MQTT_PASSWORD,
     MQTT_PORT,
     MQTT_USERNAME,
+    BUCKET_NAME,
+    AWS_REGION,
 )
 from picamera2 import Picamera2
 
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-    handlers=[logging.StreamHandler(sys.stdout), logging.FileHandler("device.log")],
-)
-logger = logging.getLogger("device")
+try:
 
+    print("Starting camera setup...")
+    picam2 = Picamera2()
+    picam2.set_controls({"AfMode": "auto"})
+    picam2.options["quality"] = 90
+    config = picam2.create_still_configuration(transform=Transform(vflip=1))
+    picam2.configure(config)
+    picam2.start()
+    print("Camera configured successfully.")
 
-def on_message(client, userdata, message):
-    data = json.loads(message.payload)
-    command = data["command"]
+    print("Setting up AWS S3...")
+    s3 = boto3.client("s3", region_name=AWS_REGION)
+    print("AWS S3 configured successfully.")
 
-    if command == "capture_image":
-        logging.info(f"Received command: {command}")
+    print("Connecting to MQTT...")
+    client = mqtt.Client()
+    client.username_pw_set(MQTT_USERNAME, MQTT_PASSWORD)
+    client.tls_set(tls_version=mqtt.ssl.PROTOCOL_TLS)
 
-        # only keeping one local copy at any given time called image.jpg
-        file_path = "image.jpeg"
+    def on_message(client, userdata, message):
+        data = json.loads(message.payload)
+        command = data.get("command")
 
-        logging.info("Begin autofocus")
-        try:
+        if command == "capture_image":
+            file_path = "image.jpeg"
+
             picam2.autofocus_cycle()
-            logging.info("Successfully finished autofocus")
-        except Exception as e:
-            error_msg = f"Error autofocusing: {e}"
-            logging.error(error_msg)
-            client.publish(CAMERA_WRITE_TOPIC, json.dumps({"error": error_msg}))
-            return
-
-        logging.info("Start image capture")
-        try:
             picam2.capture_file(file_path)
-            logging.info("Successfully captured image")
-        except Exception as e:
-            error_msg = f"Error capturing image: {e}"
-            logging.error(error_msg)
-            client.publish(CAMERA_WRITE_TOPIC, json.dumps({"error": error_msg}))
-            return
 
-        # make sure to setup S3 bucket with ACL and public access
-        # so that the link works publicly
-        # using the current timestamp as the unique object ID
-        object_name = datetime.utcnow().strftime("%Y-%m-%d-%H:%M:%S") + ".jpeg"
-        logging.info("Begin upload to S3")
-        try:
+            object_name = datetime.utcnow().strftime("%Y-%m-%d-%H:%M:%S") + ".jpeg"
+
             s3.upload_file(
                 file_path, BUCKET_NAME, object_name, ExtraArgs={"ACL": "public-read"}
             )
-            logging.info("Successfully uploaded to S3")
-        except Exception as e:
-            error_msg = f"Error uploading to S3: {e}"
-            logging.error(error_msg)
-            client.publish(CAMERA_WRITE_TOPIC, json.dumps({"error": error_msg}))
-            return
 
-        file_uri = f"https://{BUCKET_NAME}.s3.{AWS_REGION}.amazonaws.com/{object_name}"
+            file_uri = (
+                f"https://{BUCKET_NAME}.s3.{AWS_REGION}.amazonaws.com/{object_name}"
+            )
 
-        try:
             client.publish(CAMERA_WRITE_TOPIC, json.dumps({"image_url": file_uri}))
-            logging.info(f"Published {file_uri} to {CAMERA_WRITE_TOPIC}")
-        except Exception as e:
-            error_msg = f"Error publishing {file_uri} to {CAMERA_WRITE_TOPIC}: {e}"
-            logging.error(error_msg)
-            client.publish(CAMERA_WRITE_TOPIC, json.dumps({"error": error_msg}))
+            print(f"Published image URL: {file_uri}")
 
+    client.on_message = on_message
+    client.connect(MQTT_HOST, MQTT_PORT)
+    client.subscribe(CAMERA_READ_TOPIC, qos=2)
+    print("MQTT connection successful. Entering main loop.")
 
-if __name__ == "__main__":
-    # RPI Camera
-    logging.info("Configuring camera")
-    try:
-        picam2 = Picamera2()
-        picam2.set_controls({"AfMode": "auto"})
-        # JPEG quality level (0 is worst, 95 is best)
-        picam2.options["quality"] = 90
-        config = picam2.create_still_configuration(transform=Transform(vflip=1))
-        picam2.configure(config)
-        picam2.start()
-        logging.info("Successfully configured camera")
-    except Exception as e:
-        error_msg = f"Error configuring camera: {e}"
-        logging.error(error_msg)
-        exit(1)
+    client.loop_forever()
 
-    # AWS S3
-    logging.info("Configuring AWS S3")
-    try:
-        BUCKET_NAME = ""
-        AWS_REGION = ""
-        s3 = boto3.client("s3", region_name=AWS_REGION)
-        logging.info("Successfully configured AWS S3")
-    except Exception as e:
-        error_msg = f"Error configuring S3: {e}"
-        logging.error(error_msg)
-        exit(1)
+except Exception as e:
+    error_trace = traceback.format_exception(*sys.exc_info())
 
-    # MQTT
-    logging.info("Configuring MQTT")
-    try:
-        client = mqtt.Client()
-        client.username_pw_set(MQTT_USERNAME, MQTT_PASSWORD)
-        client.tls_set(tls_version=mqtt.ssl.PROTOCOL_TLS)
-        client.on_message = on_message
-        client.connect(MQTT_HOST, MQTT_PORT)
-        client.subscribe(CAMERA_READ_TOPIC, qos=2)
-        logging.info("Successfully configured MQTT")
-        client.loop_forever()
-    except Exception as e:
-        error_msg = f"Error configuring MQTT: {e}"
-        logging.error(error_msg)
-        exit(1)
+    error_client = mqtt.Client()
+    error_client.username_pw_set(MQTT_USERNAME, MQTT_PASSWORD)
+    error_client.tls_set(tls_version=mqtt.ssl.PROTOCOL_TLS)
+    error_client.connect(MQTT_HOST, MQTT_PORT)
+
+    error_payload = json.dumps({"error": str(e), "traceback": error_trace})
+    error_client.publish(CAMERA_WRITE_TOPIC, error_payload)
+    print("Error details published to MQTT.")
+
+    raise Exception(
+        "An error occurred. Please check the MQTT topic for details."
+    ) from e
