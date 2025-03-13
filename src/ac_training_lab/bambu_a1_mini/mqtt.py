@@ -21,7 +21,7 @@ client = mqtt.Client()
 client.tls_set(tls_version=mqtt.ssl.PROTOCOL_TLS)
 client.username_pw_set(MQTT_USERNAME, MQTT_PASSWORD)
 
-TEMPLATE_DIR = "/home/ac/bambu-printer-control/template"
+TEMPLATE_DIR = "/home/ac/Documents/GitHub/AccelerationConsortium/ac-training-lab/src/ac_training_lab/bambu_a1_mini/gcode"
 CURRENT_TEMPLATE_INDEX = 1
 MAX_TEMPLATE_INDEX = 27
 
