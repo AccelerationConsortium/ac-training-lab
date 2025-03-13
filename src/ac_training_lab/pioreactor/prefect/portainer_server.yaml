@@ -1,0 +1,44 @@
+# This is a docker-compose file for running the Prefect server.
+# When running ensure to change the volumes to your desired
+# location as well as the network to your desired network.
+# This was run on portainer on truenas scale.
+# Author: Enrui (Edison) Lin
+
+version: "3.9"
+
+services:
+  prefect-postgres:
+    image: postgres:15
+    container_name: prefect-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: prefect
+      POSTGRES_PASSWORD: prefectpassword
+      POSTGRES_DB: prefect
+    volumes:
+      - /mnt/HDDs/tank/prefect-postgres:/var/lib/postgresql/data
+    networks:
+      - prefect-network
+
+  prefect-server:
+    image: prefecthq/prefect:3-latest
+    container_name: prefect-server
+    restart: unless-stopped
+    depends_on:
+      - prefect-postgres
+    environment:
+      PREFECT_API_DATABASE_CONNECTION_URL: "postgresql+asyncpg://prefect:prefectpassword@prefect-postgres:5432/prefect"
+      PREFECT_SERVER_HOST: "0.0.0.0"
+      PREFECT_API_URL: "http://192.168.2.144:4200/api"
+      PREFECT_LOGGING_LEVEL: INFO
+    command: ["prefect", "server", "start", "--host=0.0.0.0", "--port=4200"]
+    ports:
+      - "4200:4200"
+    volumes:
+      - /mnt/HDDs/tank/prefect-data:/root/.prefect
+    networks:
+      - prefect-network
+
+networks:
+  prefect-network:
+    driver: bridge
