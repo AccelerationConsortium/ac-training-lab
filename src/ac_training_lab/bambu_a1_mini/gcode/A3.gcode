@@ -1,11 +1,10 @@
 ; HEADER_BLOCK_START
 ; BambuStudio 01.10.01.50
-; model printing time: 42s; total estimated time: 6m 10s
+; model printing time: 25s; total estimated time: 6m 9s
 ; total layer number: 1
-; total filament length [mm] : 48.50
-; total filament volume [cm^3] : 116.65
-; total filament weight [g] : 0.15
-; model label id: 1595,1615,1735
+; total filament length [mm] : 20.12
+; total filament volume [cm^3] : 48.40
+; total filament weight [g] : 0.06
 ; filament_density: 1.26
 ; filament_diameter: 1.75
 ; max_z_height: 0.20
@@ -17,7 +16,7 @@
 ; activate_air_filtration = 0
 ; additional_cooling_fan_speed = 70
 ; auxiliary_fan = 0
-; bed_custom_model = 
+; bed_custom_model = /Applications/BambuStudio.app/Contents/Resources/profiles/BBL/bbl-3dp-A1M.stl
 ; bed_custom_texture = 
 ; bed_exclude_area = 
 ; before_layer_change_gcode = 
@@ -48,6 +47,7 @@
 ; detect_narrow_internal_solid_infill = 1
 ; detect_overhang_wall = 1
 ; detect_thin_wall = 0
+; different_settings_to_system = ;;bed_custom_model;machine_start_gcode
 ; draft_shield = disabled
 ; during_print_exhaust_fan_speed = 70
 ; elefant_foot_compensation = 0
@@ -122,6 +122,7 @@
 ; infill_direction = 45
 ; infill_jerk = 9
 ; infill_wall_overlap = 15%
+; inherits_group = ;;"Bambu Lab A1 mini 0.4 nozzle"
 ; initial_layer_acceleration = 500
 ; initial_layer_flow_ratio = 1
 ; initial_layer_infill_speed = 105
@@ -170,7 +171,7 @@
 ; machine_min_extruding_rate = 0,0
 ; machine_min_travel_rate = 0,0
 ; machine_pause_gcode = M400 U1
-; machine_start_gcode = ;===== machine: A1 mini =========================\n;===== date: 20240620 =====================\n\n;===== start to heat heatbead&hotend==========\nM1002 gcode_claim_action : 2\nM1002 set_filament_type:{filament_type[initial_no_support_extruder]}\nM104 S170\nM140 S[bed_temperature_initial_layer_single]\nG392 S0 ;turn off clog detect\nM9833.2\n;=====start printer sound ===================\nM17\nM400 S1\nM1006 S1\nM1006 A0 B0 L100 C37 D10 M100 E37 F10 N100\nM1006 A0 B0 L100 C41 D10 M100 E41 F10 N100\nM1006 A0 B0 L100 C44 D10 M100 E44 F10 N100\nM1006 A0 B10 L100 C0 D10 M100 E0 F10 N100\nM1006 A43 B10 L100 C39 D10 M100 E46 F10 N100\nM1006 A0 B0 L100 C0 D10 M100 E0 F10 N100\nM1006 A0 B0 L100 C39 D10 M100 E43 F10 N100\nM1006 A0 B0 L100 C0 D10 M100 E0 F10 N100\nM1006 A0 B0 L100 C41 D10 M100 E41 F10 N100\nM1006 A0 B0 L100 C44 D10 M100 E44 F10 N100\nM1006 A0 B0 L100 C49 D10 M100 E49 F10 N100\nM1006 A0 B0 L100 C0 D10 M100 E0 F10 N100\nM1006 A44 B10 L100 C39 D10 M100 E48 F10 N100\nM1006 A0 B0 L100 C0 D10 M100 E0 F10 N100\nM1006 A0 B0 L100 C39 D10 M100 E44 F10 N100\nM1006 A0 B0 L100 C0 D10 M100 E0 F10 N100\nM1006 A43 B10 L100 C39 D10 M100 E46 F10 N100\nM1006 W\nM18\n;=====avoid end stop =================\nG91\nG380 S2 Z30 F1200\nG380 S3 Z-20 F1200\nG1 Z5 F1200\nG90\n\n;===== reset machine status =================\nM204 S6000\n\nM630 S0 P0\nG91\nM17 Z0.3 ; lower the z-motor current\n\nG90\nM17 X0.7 Y0.9 Z0.5 ; reset motor current to default\nM960 S5 P1 ; turn on logo lamp\nG90\nM83\nM220 S100 ;Reset Feedrate\nM221 S100 ;Reset Flowrate\nM73.2   R1.0 ;Reset left time magnitude\n;====== cog noise reduction=================\nM982.2 S1 ; turn on cog noise reduction\n\n;===== prepare print temperature and material ==========\nM400\nM18\nM109 S100 H170\nM104 S170\nM400\nM17\nM400\nG28 X\n\nM211 X0 Y0 Z0 ;turn off soft endstop ; turn off soft endstop to prevent protential logic problem\n\nM975 S1 ; turn on\n\nG1 X0.0 F30000\nG1 X-13.5 F3000\n\nM620 M ;enable remap\nM620 S[initial_no_support_extruder]A   ; switch material if AMS exist\n    G392 S0 ;turn on clog detect\n    M1002 gcode_claim_action : 4\n    M400\n    M1002 set_filament_type:UNKNOWN\n    M109 S[nozzle_temperature_initial_layer]\n    M104 S250\n    M400\n    T[initial_no_support_extruder]\n    G1 X-13.5 F3000\n    M400\n    M620.1 E F{filament_max_volumetric_speed[initial_no_support_extruder]/2.4053*60} T{nozzle_temperature_range_high[initial_no_support_extruder]}\n    M109 S250 ;set nozzle to common flush temp\n    M106 P1 S0\n    G92 E0\n    G1 E50 F200\n    M400\n    M1002 set_filament_type:{filament_type[initial_no_support_extruder]}\n    M104 S{nozzle_temperature_range_high[initial_no_support_extruder]}\n    G92 E0\n    G1 E50 F{filament_max_volumetric_speed[initial_no_support_extruder]/2.4053*60}\n    M400\n    M106 P1 S178\n    G92 E0\n    G1 E5 F{filament_max_volumetric_speed[initial_no_support_extruder]/2.4053*60}\n    M109 S{nozzle_temperature_initial_layer[initial_no_support_extruder]-20} ; drop nozzle temp, make filament shink a bit\n    M104 S{nozzle_temperature_initial_layer[initial_no_support_extruder]-40}\n    G92 E0\n    G1 E-0.5 F300\n\n    G1 X0 F30000\n    G1 X-13.5 F3000\n    G1 X0 F30000 ;wipe and shake\n    G1 X-13.5 F3000\n    G1 X0 F12000 ;wipe and shake\n    G1 X0 F30000\n    G1 X-13.5 F3000\n    M109 S{nozzle_temperature_initial_layer[initial_no_support_extruder]-40}\n    G392 S0 ;turn off clog detect\nM621 S[initial_no_support_extruder]A\n\nM400\nM106 P1 S0\n;===== prepare print temperature and material end =====\n\n\n;===== mech mode fast check============================\nM1002 gcode_claim_action : 3\nG0 X25 Y175 F20000 ; find a soft place to home\n;M104 S0\nG28 Z P0 T300; home z with low precision,permit 300deg temperature\nG29.2 S0 ; turn off ABL\nM104 S170\n\n; build plate detect\nM1002 judge_flag build_plate_detect_flag\nM622 S1\n  G39.4\n  M400\nM623\n\nG1 Z5 F3000\nG1 X90 Y-1 F30000\nM400 P200\nM970.3 Q1 A7 K0 O2\nM974 Q1 S2 P0\n\nG1 X90 Y0 Z5 F30000\nM400 P200\nM970 Q0 A10 B50 C90 H15 K0 M20 O3\nM974 Q0 S2 P0\n\nM975 S1\nG1 F30000\nG1 X-1 Y10\nG28 X ; re-home XY\n\n;===== wipe nozzle ===============================\nM1002 gcode_claim_action : 14\nM975 S1\n\nM104 S170 ; set temp down to heatbed acceptable\nM106 S255 ; turn on fan (G28 has turn off fan)\nM211 S; push soft endstop status\nM211 X0 Y0 Z0 ;turn off Z axis endstop\n\nM83\nG1 E-1 F500\nG90\nM83\n\nM109 S170\nM104 S140\nG0 X90 Y-4 F30000\nG380 S3 Z-5 F1200\nG1 Z2 F1200\nG1 X91 F10000\nG380 S3 Z-5 F1200\nG1 Z2 F1200\nG1 X92 F10000\nG380 S3 Z-5 F1200\nG1 Z2 F1200\nG1 X93 F10000\nG380 S3 Z-5 F1200\nG1 Z2 F1200\nG1 X94 F10000\nG380 S3 Z-5 F1200\nG1 Z2 F1200\nG1 X95 F10000\nG380 S3 Z-5 F1200\nG1 Z2 F1200\nG1 X96 F10000\nG380 S3 Z-5 F1200\nG1 Z2 F1200\nG1 X97 F10000\nG380 S3 Z-5 F1200\nG1 Z2 F1200\nG1 X98 F10000\nG380 S3 Z-5 F1200\nG1 Z2 F1200\nG1 X99 F10000\nG380 S3 Z-5 F1200\nG1 Z2 F1200\nG1 X99 F10000\nG380 S3 Z-5 F1200\nG1 Z2 F1200\nG1 X99 F10000\nG380 S3 Z-5 F1200\nG1 Z2 F1200\nG1 X99 F10000\nG380 S3 Z-5 F1200\nG1 Z2 F1200\nG1 X99 F10000\nG380 S3 Z-5 F1200\n\nG1 Z5 F30000\n;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;\nG1 X25 Y175 F30000.1 ;Brush material\nG1 Z0.2 F30000.1\nG1 Y185\nG91\nG1 X-30 F30000\nG1 Y-2\nG1 X27\nG1 Y1.5\nG1 X-28\nG1 Y-2\nG1 X30\nG1 Y1.5\nG1 X-30\nG90\nM83\n\nG1 Z5 F3000\nG0 X50 Y175 F20000 ; find a soft place to home\nG28 Z P0 T300; home z with low precision, permit 300deg temperature\nG29.2 S0 ; turn off ABL\n\nG0 X85 Y185 F10000 ;move to exposed steel surface and stop the nozzle\nG0 Z-1.01 F10000\nG91\n\nG2 I1 J0 X2 Y0 F2000.1\nG2 I-0.75 J0 X-1.5\nG2 I1 J0 X2\nG2 I-0.75 J0 X-1.5\nG2 I1 J0 X2\nG2 I-0.75 J0 X-1.5\nG2 I1 J0 X2\nG2 I-0.75 J0 X-1.5\nG2 I1 J0 X2\nG2 I-0.75 J0 X-1.5\nG2 I1 J0 X2\nG2 I-0.75 J0 X-1.5\nG2 I1 J0 X2\nG2 I-0.75 J0 X-1.5\nG2 I1 J0 X2\nG2 I-0.75 J0 X-1.5\nG2 I1 J0 X2\nG2 I-0.75 J0 X-1.5\nG2 I1 J0 X2\nG2 I-0.75 J0 X-1.5\n\nG90\nG1 Z5 F30000\nG1 X25 Y175 F30000.1 ;Brush material\nG1 Z0.2 F30000.1\nG1 Y185\nG91\nG1 X-30 F30000\nG1 Y-2\nG1 X27\nG1 Y1.5\nG1 X-28\nG1 Y-2\nG1 X30\nG1 Y1.5\nG1 X-30\nG90\nM83\n\nG1 Z5\nG0 X55 Y175 F20000 ; find a soft place to home\nG28 Z P0 T300; home z with low precision, permit 300deg temperature\nG29.2 S0 ; turn off ABL\n\nG1 Z10\nG1 X85 Y185\nG1 Z-1.01\nG1 X95\nG1 X90\n\nM211 R; pop softend status\n\nM106 S0 ; turn off fan , too noisy\n;===== wipe nozzle end ================================\n\n\n;===== wait heatbed  ====================\nM1002 gcode_claim_action : 2\nM104 S0\nM190 S[bed_temperature_initial_layer_single];set bed temp\nM109 S140\n\nG1 Z5 F3000\nG29.2 S1\nG1 X10 Y10 F20000\n\n;===== bed leveling ==================================\n;M1002 set_flag g29_before_print_flag=1\nM1002 judge_flag g29_before_print_flag\nM622 J1\n    M1002 gcode_claim_action : 1\n    G29 A1 X{first_layer_print_min[0]} Y{first_layer_print_min[1]} I{first_layer_print_size[0]} J{first_layer_print_size[1]}\n    M400\n    M500 ; save cali data\nM623\n;===== bed leveling end ================================\n\n;===== home after wipe mouth============================\nM1002 judge_flag g29_before_print_flag\nM622 J0\n\n    M1002 gcode_claim_action : 13\n    G28 T145\n\nM623\n\n;===== home after wipe mouth end =======================\n\nM975 S1 ; turn on vibration supression\n;===== nozzle load line ===============================\nM975 S1\nG90\nM83\nT1000\n\nG1 X-13.5 Y0 Z10 F10000\nG1 E1.2 F500\nM400\nM1002 set_filament_type:UNKNOWN\nM109 S{nozzle_temperature[initial_extruder]}\nM400\n\nM412 S1 ;    ===turn on  filament runout detection===\nM400 P10\n\nG392 S0 ;turn on clog detect\n\nM620.3 W1; === turn on filament tangle detection===\nM400 S2\n\nM1002 set_filament_type:{filament_type[initial_no_support_extruder]}\n;M1002 set_flag extrude_cali_flag=1\nM1002 judge_flag extrude_cali_flag\nM622 J1\n    M1002 gcode_claim_action : 8\n    \n    M400\n    M900 K0.0 L1000.0 M1.0\n    G90\n    M83\n    G0 X68 Y-4 F30000\n    G0 Z0.3 F18000 ;Move to start position\n    M400\n    G0 X88 E10  F{outer_wall_volumetric_speed/(24/20)    * 60}\n    G0 X93 E.3742  F{outer_wall_volumetric_speed/(0.3*0.5)/4     * 60}\n    G0 X98 E.3742  F{outer_wall_volumetric_speed/(0.3*0.5)     * 60}\n    G0 X103 E.3742  F{outer_wall_volumetric_speed/(0.3*0.5)/4     * 60}\n    G0 X108 E.3742  F{outer_wall_volumetric_speed/(0.3*0.5)     * 60}\n    G0 X113 E.3742  F{outer_wall_volumetric_speed/(0.3*0.5)/4     * 60}\n    G0 Y0 Z0 F20000\n    M400\n    \n    G1 X-13.5 Y0 Z10 F10000\n    M400\n    \n    G1 E10 F{outer_wall_volumetric_speed/2.4*60}\n    M983 F{outer_wall_volumetric_speed/2.4} A0.3 H[nozzle_diameter]; cali dynamic extrusion compensation\n    M106 P1 S178\n    M400 S7\n    G1 X0 F18000\n    G1 X-13.5 F3000\n    G1 X0 F18000 ;wipe and shake\n    G1 X-13.5 F3000\n    G1 X0 F12000 ;wipe and shake\n    G1 X-13.5 F3000\n    M400\n    M106 P1 S0\n\n    M1002 judge_last_extrude_cali_success\n    M622 J0\n        M983 F{outer_wall_volumetric_speed/2.4} A0.3 H[nozzle_diameter]; cali dynamic extrusion compensation\n        M106 P1 S178\n        M400 S7\n        G1 X0 F18000\n        G1 X-13.5 F3000\n        G1 X0 F18000 ;wipe and shake\n        G1 X-13.5 F3000\n        G1 X0 F12000 ;wipe and shake\n        M400\n        M106 P1 S0\n    M623\n    \n    G1 X-13.5 F3000\n    M400\n    M984 A0.1 E1 S1 F{outer_wall_volumetric_speed/2.4} H[nozzle_diameter]\n    M106 P1 S178\n    M400 S7\n    G1 X0 F18000\n    G1 X-13.5 F3000\n    G1 X0 F18000 ;wipe and shake\n    G1 X-13.5 F3000\n    G1 X0 F12000 ;wipe and shake\n    G1 X-13.5 F3000\n    M400\n    M106 P1 S0\n\nM623 ; end of "draw extrinsic para cali paint"\n\n;===== extrude cali test ===============================\nM104 S{nozzle_temperature_initial_layer[initial_extruder]}\nG90\nM83\nG0 X68 Y-2.5 F30000\nG0 Z0.3 F18000 ;Move to start position\nG0 X88 E10  F{outer_wall_volumetric_speed/(24/20)    * 60}\nG0 X93 E.3742  F{outer_wall_volumetric_speed/(0.3*0.5)/4     * 60}\nG0 X98 E.3742  F{outer_wall_volumetric_speed/(0.3*0.5)     * 60}\nG0 X103 E.3742  F{outer_wall_volumetric_speed/(0.3*0.5)/4     * 60}\nG0 X108 E.3742  F{outer_wall_volumetric_speed/(0.3*0.5)     * 60}\nG0 X113 E.3742  F{outer_wall_volumetric_speed/(0.3*0.5)/4     * 60}\nG0 X115 Z0 F20000\nG0 Z5\nM400\n\n;========turn off light and wait extrude temperature =============\nM1002 gcode_claim_action : 0\n\nM400 ; wait all motion done before implement the emprical L parameters\n\n;===== for Textured PEI Plate , lower the nozzle as the nozzle was touching topmost of the texture when homing ==\n;curr_bed_type={curr_bed_type}\n{if curr_bed_type=="Textured PEI Plate"}\nG29.1 Z{-0.02} ; for Textured PEI Plate\n{endif}\n\nM960 S1 P0 ; turn off laser\nM960 S2 P0 ; turn off laser\nM106 S0 ; turn off fan\nM106 P2 S0 ; turn off big fan\nM106 P3 S0 ; turn off chamber fan\n\nM975 S1 ; turn on mech mode supression\nG90\nM83\nT1000\n\nM211 X0 Y0 Z0 ;turn off soft endstop\nM1007 S1\n\n\n\n
+; machine_start_gcode = ;===== machine: A1 mini =========================\n;===== date: 20240620 =====================\n;===== modified by KK v1.31 =====================\n\n;===== start to heat heatbead&hotend==========\nM1002 gcode_claim_action : 2\nM1002 set_filament_type:{filament_type[initial_no_support_extruder]}\nM104 S140 ; nozzle heat to bed safe temperature\nM140 S{bed_temperature_initial_layer_single-4} ; bed heat to -4 degree\nG392 S0 ;turn off clog detect\nM9833.2\n\n\n\n\n;=====start printer sound ===================\nM17\nM400 S1\nM1006 S1\nM1006 A0 B0 L100 C37 D10 M100 E37 F10 N100\nM1006 A0 B0 L100 C41 D10 M100 E41 F10 N100\nM1006 A0 B0 L100 C44 D10 M100 E44 F10 N100\nM1006 A0 B10 L100 C0 D10 M100 E0 F10 N100\nM1006 A43 B10 L100 C39 D10 M100 E46 F10 N100\nM1006 A0 B0 L100 C0 D10 M100 E0 F10 N100\nM1006 A0 B0 L100 C39 D10 M100 E43 F10 N100\nM1006 A0 B0 L100 C0 D10 M100 E0 F10 N100\nM1006 A0 B0 L100 C41 D10 M100 E41 F10 N100\nM1006 A0 B0 L100 C44 D10 M100 E44 F10 N100\nM1006 A0 B0 L100 C49 D10 M100 E49 F10 N100\nM1006 A0 B0 L100 C0 D10 M100 E0 F10 N100\nM1006 A44 B10 L100 C39 D10 M100 E48 F10 N100\nM1006 A0 B0 L100 C0 D10 M100 E0 F10 N100\nM1006 A0 B0 L100 C39 D10 M100 E44 F10 N100\nM1006 A0 B0 L100 C0 D10 M100 E0 F10 N100\nM1006 A43 B10 L100 C39 D10 M100 E46 F10 N100\nM1006 W\nM18\n\n\n\n\n;=====avoid end stop =================\nG91 ; Set to relative positioning\nG380 S2 Z10 F1200 ;carefully move up and down\nG380 S3 Z-5 F1200\nG1 Z5 F1200\nG90 ; set to absolute positioning\n\n;G0 Z50 F30000 ;fast moving down\n\n\n\n\n;===== reset machine status =================\nM204 S6000\n\nM630 S0 P0\nG91\nM17 Z0.3 ; lower the z-motor current\n\nG90\nM17 X0.7 Y0.9 Z0.5 ; reset motor current to default\nM960 S5 P1 ; turn on logo lamp\nG90\nM83\nM220 S100 ;Reset Feedrate\nM221 S100 ;Reset Flowrate\nM73.2   R1.0 ;Reset left time magnitude\n\n\n\n;====== cog noise reduction=================\nM982.2 S1 ; turn on cog noise reduction\n\n\n\n\n\n;===== prepare print temperature and material ==========\nM400 ; Wait for all moves to complete\nM18 ; Disable motors\n;M109 S80 H170 ; Heat hotend to 80°C with a specific heatbreak temperature\nM104 S140\nM400\nM17 ; Enable motors\nM400\nG28 X ; =====actually Home X and Y?, not sure why, home later?..nahh the printer exploded without it\n\nM211 X0 Y0 Z0 ;turn off soft endstop ; turn off soft endstop to prevent protential logic problem\n\nM975 S1 ; Turn on vibration suppression\n\nG1 X0.0 F3000\nG1 X-13.5 F3000 ;quick clean\n\nM620 M ;enable remap\nM620 S[initial_no_support_extruder]A   ; switch material if AMS exist\n    G392 S0 ;turn on clog detect\n    M1002 gcode_claim_action : 4\n    M400\n    M1002 set_filament_type:UNKNOWN\n    M109 S[nozzle_temperature_initial_layer]\n    M104 S250\n    M400\n    T[initial_no_support_extruder]\n    G1 X-13.5 F3000\n    M400\n    M620.1 E F{filament_max_volumetric_speed[initial_no_support_extruder]/2.4053*60} T{nozzle_temperature_range_high[initial_no_support_extruder]}\n    M109 S250 ;set nozzle to common flush temp\n    M106 P1 S0\n    G92 E0\n    G1 E50 F200\n    M400\n    M1002 set_filament_type:{filament_type[initial_no_support_extruder]}\n    M104 S{nozzle_temperature_range_high[initial_no_support_extruder]}\n    G92 E0\n    G1 E50 F{filament_max_volumetric_speed[initial_no_support_extruder]/2.4053*60}\n    M400\n    M106 P1 S178\n    G92 E0\n    G1 E5 F{filament_max_volumetric_speed[initial_no_support_extruder]/2.4053*60}\n    M109 S{nozzle_temperature_initial_layer[initial_no_support_extruder]-20} ; drop nozzle temp, make filament shink a bit\n    M104 S{nozzle_temperature_initial_layer[initial_no_support_extruder]-40}\n    G92 E0\n    G1 E-0.5 F300\n    G1 X0 F30000\n    G1 X-13.5 F3000\n    G1 X0 F30000 ;wipe and shake\n    G1 X-13.5 F3000\n    G1 X0 F12000 ;wipe and shake\n    G1 X0 F30000\n    G1 X-13.5 F3000\n    M109 S{nozzle_temperature_initial_layer[initial_no_support_extruder]-40}\n    G392 S0 ;turn off clog detect\nM621 S[initial_no_support_extruder]A\n\nM400\nM106 P1 S0\n;===== prepare print temperature and material end =====\n\n\n;=====home the Z=====================\nG0 X55 Y175 F10000 ; find a soft place to home Z\nG28 Z P0 T300; home z with low precision,permit 300deg temperature\nG29.2 S0 ; turn off ABL ; bed leveling related...\nM104 S140\n\n\n\n\n;===do a quick plate detection===============\nG1 Z5\nG1 F10000\nM1002 judge_flag build_plate_detect_flag\nM622 S1\n  G39.4\n  M400\nM623\nG1 Z5\n\n\n\n\n;===== mech mode fast check============================\nM1002 gcode_claim_action : 3\n\n;G1 Z5 F3000\n;G1 X90 Y-1 F30000\n;M400 P200\n;shaking removed M970.3 Q1 A7 K0 O2\n;shaking removed M974 Q1 S2 P0\n\n;G1 X90 Y0 Z5 F30000\n;M400 P200\n;shaking removed M970 Q0 A10 B50 C90 H15 K0 M20 O3\n;shaking removed M974 Q0 S2 P0\n\nM975 S1 ; turn on vibration suppression\nG1 F30000\n;G1 X-1 Y10\n;G28 X ; re-home XY\n\n\n\n\n;===== wipe nozzle ===============================\nM1002 gcode_claim_action : 14\nM975 S1 ; turn on vibration suppression\n\nM104 S140 ; set temp down to heatbed acceptable\nM106 S150 ; turn on fan (G28 has turn off fan)\nM211 S; push soft endstop status\nM211 X0 Y0 Z0 ;turn off Z axis endstop\n\nM83\nG1 E-1 F500\nG90\nM83\n\nM104 S140  ;keep safe heat\n\n;knocks quickly;;;;;\nG1 X55 Y185 F30000\nG380 S3 Z-5 F1200\nG1 Z2 F1200\nG1 X54 F10000\nG380 S3 Z-5 F1200\nG1 Z2 F1200\n\n\n;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;Brush material on rubber\nG1 X25 Y175 F30000\nG1 Z0.2 F30000\nG1 Y185\nG91\nG1 X-30 F30000\nG1 Y-2\nG1 X27\nG1 Y1.5\nG1 X-28\nG1 Y-2\nG1 X30\nG1 Y1.5\nG1 X-30\nG90\nM83\nG1 Z2 F30000\n\n;G0 X50 Y175 F20000 ; find a soft place to home\n;G28 Z P0 T300; home z with low precision, permit 300deg temperature\n;G29.2 S0 ; turn off ABL\n\n\n;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;Brush material on steal\nG0 X86 Y184 F30000 ;move to exposed steel surface and stop the nozzle\nG0 Z-1.01 F10000\nG91\nG2 I1 J0 X2 Y0 F2000\nG2 I-0.7 J0 X-1.4\nG2 I1 J0 X2\nG2 I-0.7 J0 X-1.4\nG2 I1 J0 X2\nG2 I-0.7 J0 X-1.4\nG2 I1 J0 X2\nG2 I-0.7 J0 X-1.4\nG2 I1 J0 X2\nG2 I-0.7 J0 X-1.4\nG3 I1 J0 X2\nG3 I-0.7 J0 X-1.4\nG3 I1 J0 X2\nG3 I-0.7 J0 X-1.4\nG3 I1 J0 X2\nG3 I-0.7 J0 X-1.4\nG3 I1 J0 X2\nG3 I-0.7 J0 X-1.4\nG3 I1 J0 X2\nG3 I-0.7 J0 X-1.4\nG90\nG1 Z2 F30000\n\n\n;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;Brush material on rubber\nG1 X25 Y175 F30000\nG1 Z0.2 F30000\nG1 Y185\nG91\nG1 X-30 F30000\nG1 Y-2\nG1 X27\nG1 Y1.5\nG1 X-28\nG1 Y-2\nG1 X30\nG1 Y1.5\nG1 X-30\nG90\nM83\nG1 Z2 F30000\n\n\n\n\n;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;Wipe material on steal\nG1 Z10\nG1 X85 Y184\nG1 Z-1.01\nG1 X95\nG1 X90\nG1 Z5 F30000\nG1 Y175\n\n;;;;;;;;;;;;;;;;;;;;;;re-check nozzle height and re-home Z\nG0 X55 Y175 F20000 ; find a soft place to home\nG28 Z P0 T300; home z with low precision, permit 300deg temperature\nG29.2 S0 ; turn off ABL\n\n\nM211 R; pop softend status\n\nM106 S0 ; turn off fan , too noisy\n;===== wipe nozzle end ================================\n\n\n\n\n\n;===== wait heatbed  ====================\nM1002 gcode_claim_action : 2\nM104 S140\n;M140 S[bed_temperature_initial_layer_single];set bed temp\n\n\nG1 Z5 F3000\nG29.2 S1\n;G1 X10 Y10 F20000\n\n\n\n\n;===== bed leveling ==================================\n;M1002 set_flag g29_before_print_flag=1\nM1002 judge_flag g29_before_print_flag ;check if leveling is on J1 off J0\nM622 J1\n    M1002 gcode_claim_action : 1\n	;G28 T180\n    G29 A1 X{first_layer_print_min[0]} Y{first_layer_print_min[1]} I{first_layer_print_size[0]} J{first_layer_print_size[1]}\n    M400\n    M500 ; save cali data\nM623\n\nM1002 judge_flag g29_before_print_flag ;check if leveling is on J1 off J0\nM622 J1\n    M400\n    G1 X0 Z10 F30000\n    G1 X-13.5 F3000\n    M400\n    M190 S{bed_temperature_initial_layer_single-4} ; wait till bed -4 degree\n    M400    \nM623\n\nM1002 judge_flag g29_before_print_flag ;check if leveling is on J1 off J0\nM622 J0\n    M104 S{nozzle_temperature[initial_extruder]-40} ;nozzle keeps start heat a little more, saves 5 seconds\n    M1002 gcode_claim_action : 13  ;this is the quick 1 touch bed leveling\n    G28 T180\nM623\n\nM975 S1 ; turn on vibration supression\n\n\n\n\n\n;===== nozzle load filament ===============================\n\nM975 S1\nG90\nM83\nT1000\n\nG1 X0 Y0 Z10 F30000\nG1 X-13.5 Y0 Z10 F3000\nG1 E1.2 F500\nM400\nM1002 set_filament_type:UNKNOWN\n\n\n\n\n\n;===============================nozzle heat up====================\n\nM140 S[bed_temperature_initial_layer_single] ;bed keeps heating more\nM104 S{nozzle_temperature[initial_extruder]} ;nozzle keeps heating more\n\nM109 S{nozzle_temperature[initial_extruder]} ;wait nozzle to fully heat up\nM400\n\n\n\n\n\n\n\nM412 S1 ;    ===turn on  filament runout detection===\nM400 P10\n\nG392 S0 ;turn on clog detect\n\nM620.3 W1; === turn on filament tangle detection===\nM400 S2\n\nM1002 set_filament_type:{filament_type[initial_no_support_extruder]}\nM1002 set_flag extrude_cali_flag=0\nM1002 judge_flag extrude_cali_flag\nM622 J1\n    M1002 gcode_claim_action : 8\n    \n    M400\n    M900 K0.0 L1000.0 M1.0\n    G90\n    M83\n	\n	;force bed temperature, no more needed\n	;M190 S[bed_temperature_initial_layer_single]\n	;M400\n	\n    G0 X68 Y-4 F30000\n    G0 Z0.3 F18000 ;Move to start position\n    M400\n    G0 X88 E10  F{outer_wall_volumetric_speed/(24/20)    * 60}\n    G0 X93 E.3742  F{outer_wall_volumetric_speed/(0.3*0.5)/4     * 60}\n    G0 X98 E.3742  F{outer_wall_volumetric_speed/(0.3*0.5)     * 60}\n    G0 X103 E.3742  F{outer_wall_volumetric_speed/(0.3*0.5)/4     * 60}\n    G0 X108 E.3742  F{outer_wall_volumetric_speed/(0.3*0.5)     * 60}\n    G0 X113 E.3742  F{outer_wall_volumetric_speed/(0.3*0.5)/4     * 60}\n    G0 Y0 Z0 F20000\n    M400\n    \n    G1 X-13.5 Y0 Z10 F10000\n    M400\n    \n    G1 E10 F{outer_wall_volumetric_speed/2.4*60}\n    M983 F{outer_wall_volumetric_speed/2.4} A0.3 H[nozzle_diameter]; cali dynamic extrusion compensation\n    M106 P1 S178\n    M400 S7\n    G1 X0 F18000\n    G1 X-13.5 F3000\n    G1 X0 F18000 ;wipe and shake\n    G1 X-13.5 F3000\n    G1 X0 F12000 ;wipe and shake\n    G1 X-13.5 F3000\n    M400\n    M106 P1 S0\n\n    M1002 judge_last_extrude_cali_success\n    M622 J0\n        M983 F{outer_wall_volumetric_speed/2.4} A0.3 H[nozzle_diameter]; cali dynamic extrusion compensation\n        M106 P1 S178\n        M400 S7\n        G1 X0 F18000\n        G1 X-13.5 F3000\n        G1 X0 F18000 ;wipe and shake\n        G1 X-13.5 F3000\n        G1 X0 F12000 ;wipe and shake\n        M400\n        M106 P1 S0\n    M623\n    \n    G1 X-13.5 F3000\n    M400\n    M984 A0.1 E1 S1 F{outer_wall_volumetric_speed/2.4} H[nozzle_diameter]\n    M106 P1 S178\n    M400 S7\n    G1 X0 F18000\n    G1 X-13.5 F3000\n    G1 X0 F18000 ;wipe and shake\n    G1 X-13.5 F3000\n    G1 X0 F12000 ;wipe and shake\n    G1 X-13.5 F3000\n    M400\n    M106 P1 S0\n\nM623 ; end of "draw extrinsic para cali paint"\n\n\n;===== adding oozing clearing ===============================\nG1 E20 F100\nM400\nM106 P1 S200\nG1 E-0.5 F300 \nM400 S2\nG1 E-0.5 F300 \nM400 S2\nG1 X0 F30000\nG1 X-13.5 F3000\nG1 X0 F30000 ;wipe and shake\nG1 X-13.5 F3000\nG1 X0 F30000 ;wipe and shake\nG1 X-13.5 F3000\nG1 X0 F30000 ;wipe and shake\nG1 X-13.5 F3000\n\n\n\n\n;===== extrude cali test 1 bar ===============================\nM104 S{nozzle_temperature_initial_layer[initial_extruder]}\nG90 ; Absolute positioning\nM83 ; Relative extrusion mode\n\n;M190 S[bed_temperature_initial_layer_single]\n;M400\n\nM400\n\n;========turn off light and wait extrude temperature =============\nM1002 gcode_claim_action : 0\n\nM400 ; wait all motion done before implement the emprical L parameters\n\n;===== for Textured PEI Plate , lower the nozzle as the nozzle was touching topmost of the texture when homing ==\n;curr_bed_type={curr_bed_type}\n{if curr_bed_type=="Textured PEI Plate"}\nG29.1 Z{-0.02} ; for Textured PEI Plate\n{endif}\n\nM960 S1 P0 ; turn off laser\nM960 S2 P0 ; turn off laser\nM106 S0 ; turn off fan\nM106 P2 S0 ; turn off big fan\nM106 P3 S0 ; turn off chamber fan\n\nM975 S1 ; turn on mech mode supression\nG90\nM83\nT1000\n\nM211 X0 Y0 Z0 ;turn off soft endstop\nM1007 S1\n\n;==========time to fly===========\nG0 Z1 F30000\nG0 X150 Z2 F30000
 ; machine_unload_filament_time = 34
 ; max_bridge_length = 0
 ; max_layer_height = 0.28
@@ -183,8 +184,8 @@
 ; mmu_segmented_region_max_width = 0
 ; nozzle_diameter = 0.4
 ; nozzle_height = 4.76
-; nozzle_temperature = 210
-; nozzle_temperature_initial_layer = 210
+; nozzle_temperature = 220
+; nozzle_temperature_initial_layer = 220
 ; nozzle_temperature_range_high = 240
 ; nozzle_temperature_range_low = 190
 ; nozzle_type = stainless_steel
@@ -219,7 +220,7 @@
 ; printable_height = 180
 ; printer_model = Bambu Lab A1 mini
 ; printer_notes = 
-; printer_settings_id = Bambu Lab A1 mini 0.4 nozzle
+; printer_settings_id = Bambu Lab A1 mini 0.4 nozzle - superfast
 ; printer_structure = i3
 ; printer_technology = FFF
 ; printer_variant = 0.4
@@ -317,11 +318,11 @@
 ; support_type = normal(auto)
 ; temperature_vitrification = 45
 ; template_custom_gcode = 
-; textured_plate_temp = 60
-; textured_plate_temp_initial_layer = 60
+; textured_plate_temp = 65
+; textured_plate_temp_initial_layer = 65
 ; thick_bridges = 0
 ; thumbnail_size = 50x50
-; time_lapse_gcode = ;===================== date: 20240606 =====================\n{if !spiral_mode && print_sequence != "by object"}\n; don't support timelapse gcode in spiral_mode and by object sequence for I3 structure printer\nM622.1 S1 ; for prev firware, default turned on\nM1002 judge_flag timelapse_record_flag\nM622 J1\nG92 E0\nG17\nG2 Z{layer_z + 0.4} I0.86 J0.86 P1 F20000 ; spiral lift a little\nG1 Z{max_layer_z + 0.4}\nG1 X0 Y{first_layer_center_no_wipe_tower[1]} F18000 ; move to safe pos\nG1 X-13.0 F3000 ; move to safe pos\nM400 P300\nM971 S11 C11 O0\nG92 E0\nG1 X0 F18000\nM623\n\nM622.1 S1\nM1002 judge_flag g39_3rd_layer_detect_flag\nM622 J1\n    ; enable nozzle clog detect at 3rd layer\n    {if layer_num == 2}\n      M400\n      G90\n      M83\n      M204 S5000\n      G0 Z2 F4000\n      G0 X187 Y178 F20000\n      G39 S1 X187 Y178\n      G0 Z2 F4000\n    {endif}\n\n\n    M622.1 S1\n    M1002 judge_flag g39_detection_flag\n    M622 J1\n      {if !in_head_wrap_detect_zone}\n        M622.1 S0\n        M1002 judge_flag g39_mass_exceed_flag\n        M622 J1\n        {if layer_num > 2}\n            G392 S0\n            M400\n            G90\n            M83\n            M204 S5000\n            G0 Z{max_layer_z + 0.4} F4000\n            G39.3 S1\n            G0 Z{max_layer_z + 0.4} F4000\n            G392 S0\n          {endif}\n        M623\n    {endif}\n    M623\nM623\n{endif}\n\n\n
+; time_lapse_gcode = ;===================== date: 20240606 =====================\n{if !spiral_mode && print_sequence != "by object"}\n; don't support timelapse gcode in spiral_mode and by object sequence for I3 structure printer\nM622.1 S1 ; for prev firware, default turned on\nM1002 judge_flag timelapse_record_flag\nM622 J1\nG92 E0\nG17\nG2 Z{layer_z + 0.4} I0.86 J0.86 P1 F20000 ; spiral lift a little\nG1 Z{max_layer_z + 0.4}\nG1 X0 Y{first_layer_center_no_wipe_tower[1]} F18000 ; move to safe pos\nG1 X-13.0 F3000 ; move to safe pos\nM400\nM1004 S5 P1  ; external shutter\nM400 P300\nM971 S11 C11 O0\nG92 E0\nG1 X0 F18000\nM623\n\nM622.1 S1\nM1002 judge_flag g39_3rd_layer_detect_flag\nM622 J1\n    ; enable nozzle clog detect at 3rd layer\n    {if layer_num == 2}\n      M400\n      G90\n      M83\n      M204 S5000\n      G0 Z2 F4000\n      G0 X187 Y178 F20000\n      G39 S1 X187 Y178\n      G0 Z2 F4000\n    {endif}\n\n\n    M622.1 S1\n    M1002 judge_flag g39_detection_flag\n    M622 J1\n      {if !in_head_wrap_detect_zone}\n        M622.1 S0\n        M1002 judge_flag g39_mass_exceed_flag\n        M622 J1\n        {if layer_num > 2}\n            G392 S0\n            M400\n            G90\n            M83\n            M204 S5000\n            G0 Z{max_layer_z + 0.4} F4000\n            G39.3 S1\n            G0 Z{max_layer_z + 0.4} F4000\n            G392 S0\n          {endif}\n        M623\n    {endif}\n    M623\nM623\n{endif}\n\n\n
 ; timelapse_type = 0
 ; top_area_threshold = 100%
 ; top_one_wall_type = all top
@@ -376,14 +377,19 @@ M106 P2 S0
 ; FEATURE: Custom
 ;===== machine: A1 mini =========================
 ;===== date: 20240620 =====================
+;===== modified by KK v1.31 =====================
 
 ;===== start to heat heatbead&hotend==========
 M1002 gcode_claim_action : 2
 M1002 set_filament_type:PLA
-M104 S170
-M140 S65
+M104 S140 ; nozzle heat to bed safe temperature
+M140 S61 ; bed heat to -4 degree
 G392 S0 ;turn off clog detect
 M9833.2
+
+
+
+
 ;=====start printer sound ===================
 M17
 M400 S1
@@ -407,12 +413,21 @@ M1006 A0 B0 L100 C0 D10 M100 E0 F10 N100
 M1006 A43 B10 L100 C39 D10 M100 E46 F10 N100
 M1006 W
 M18
+
+
+
+
 ;=====avoid end stop =================
-G91
-G380 S2 Z30 F1200
-G380 S3 Z-20 F1200
+G91 ; Set to relative positioning
+G380 S2 Z10 F1200 ;carefully move up and down
+G380 S3 Z-5 F1200
 G1 Z5 F1200
-G90
+G90 ; set to absolute positioning
+
+;G0 Z50 F30000 ;fast moving down
+
+
+
 
 ;===== reset machine status =================
 M204 S6000
@@ -429,25 +444,33 @@ M83
 M220 S100 ;Reset Feedrate
 M221 S100 ;Reset Flowrate
 M73.2   R1.0 ;Reset left time magnitude
+
+
+
 ;====== cog noise reduction=================
 M982.2 S1 ; turn on cog noise reduction
 
+
+
+
+
 ;===== prepare print temperature and material ==========
+M400 ; Wait for all moves to complete
+M18 ; Disable motors
+;M109 S80 H170 ; Heat hotend to 80°C with a specific heatbreak temperature
+M104 S140
 M400
-M18
-M109 S100 H170
-M104 S170
+M17 ; Enable motors
 M400
-M17
-M400
-G28 X
+G28 X ; =====actually Home X and Y?, not sure why, home later?..nahh the printer exploded without it
 
 M211 X0 Y0 Z0 ;turn off soft endstop ; turn off soft endstop to prevent protential logic problem
 
-M975 S1 ; turn on
+M975 S1 ; Turn on vibration suppression
 
-G1 X0.0 F30000
-G1 X-13.5 F3000
+M73 P70 R1
+G1 X0.0 F3000
+G1 X-13.5 F3000 ;quick clean
 
 M620 M ;enable remap
 M620 S0A   ; switch material if AMS exist
@@ -474,18 +497,16 @@ M620 S0A   ; switch material if AMS exist
     M400
     M106 P1 S178
     G92 E0
-M73 P4 R5
+M73 P74 R1
     G1 E5 F523.843
     M109 S200 ; drop nozzle temp, make filament shink a bit
     M104 S180
     G92 E0
-M73 P5 R5
+M73 P76 R1
     G1 E-0.5 F300
-
     G1 X0 F30000
     G1 X-13.5 F3000
     G1 X0 F30000 ;wipe and shake
-M73 P6 R5
     G1 X-13.5 F3000
     G1 X0 F12000 ;wipe and shake
     G1 X0 F30000
@@ -499,43 +520,57 @@ M106 P1 S0
 ;===== prepare print temperature and material end =====
 
 
-;===== mech mode fast check============================
-M1002 gcode_claim_action : 3
-G0 X25 Y175 F20000 ; find a soft place to home
-;M104 S0
+;=====home the Z=====================
+G0 X55 Y175 F10000 ; find a soft place to home Z
 G28 Z P0 T300; home z with low precision,permit 300deg temperature
-G29.2 S0 ; turn off ABL
-M104 S170
+G29.2 S0 ; turn off ABL ; bed leveling related...
+M104 S140
 
-; build plate detect
+
+
+
+;===do a quick plate detection===============
+G1 Z5
+G1 F10000
 M1002 judge_flag build_plate_detect_flag
 M622 S1
   G39.4
   M400
 M623
+G1 Z5
 
-G1 Z5 F3000
-G1 X90 Y-1 F30000
-M400 P200
-M970.3 Q1 A7 K0 O2
-M974 Q1 S2 P0
 
-G1 X90 Y0 Z5 F30000
-M400 P200
-M970 Q0 A10 B50 C90 H15 K0 M20 O3
-M974 Q0 S2 P0
 
-M975 S1
+
+;===== mech mode fast check============================
+M1002 gcode_claim_action : 3
+
+;G1 Z5 F3000
+;G1 X90 Y-1 F30000
+;M400 P200
+;shaking removed M970.3 Q1 A7 K0 O2
+;shaking removed M974 Q1 S2 P0
+
+;G1 X90 Y0 Z5 F30000
+;M400 P200
+;shaking removed M970 Q0 A10 B50 C90 H15 K0 M20 O3
+;shaking removed M974 Q0 S2 P0
+
+M975 S1 ; turn on vibration suppression
+M73 P77 R1
 G1 F30000
-G1 X-1 Y10
-G28 X ; re-home XY
+;G1 X-1 Y10
+;G28 X ; re-home XY
+
+
+
 
 ;===== wipe nozzle ===============================
 M1002 gcode_claim_action : 14
-M975 S1
+M975 S1 ; turn on vibration suppression
 
-M104 S170 ; set temp down to heatbed acceptable
-M106 S255 ; turn on fan (G28 has turn off fan)
+M104 S140 ; set temp down to heatbed acceptable
+M106 S150 ; turn on fan (G28 has turn off fan)
 M211 S; push soft endstop status
 M211 X0 Y0 Z0 ;turn off Z axis endstop
 
@@ -544,56 +579,20 @@ G1 E-1 F500
 G90
 M83
 
-M109 S170
-M104 S140
-G0 X90 Y-4 F30000
-G380 S3 Z-5 F1200
-M73 P76 R1
-G1 Z2 F1200
-G1 X91 F10000
-G380 S3 Z-5 F1200
-G1 Z2 F1200
-G1 X92 F10000
-G380 S3 Z-5 F1200
-G1 Z2 F1200
-M73 P77 R1
-G1 X93 F10000
-G380 S3 Z-5 F1200
-G1 Z2 F1200
-G1 X94 F10000
-G380 S3 Z-5 F1200
-G1 Z2 F1200
-G1 X95 F10000
-G380 S3 Z-5 F1200
-G1 Z2 F1200
-G1 X96 F10000
-G380 S3 Z-5 F1200
-G1 Z2 F1200
-G1 X97 F10000
-G380 S3 Z-5 F1200
-G1 Z2 F1200
-G1 X98 F10000
-G380 S3 Z-5 F1200
-G1 Z2 F1200
-G1 X99 F10000
-G380 S3 Z-5 F1200
-G1 Z2 F1200
-G1 X99 F10000
-G380 S3 Z-5 F1200
-G1 Z2 F1200
-G1 X99 F10000
-G380 S3 Z-5 F1200
-G1 Z2 F1200
-G1 X99 F10000
-G380 S3 Z-5 F1200
-G1 Z2 F1200
-G1 X99 F10000
-G380 S3 Z-5 F1200
+M104 S140  ;keep safe heat
 
-G1 Z5 F30000
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-G1 X25 Y175 F30000.1 ;Brush material
-G1 Z0.2 F30000.1
+;knocks quickly;;;;;
+G1 X55 Y185 F30000
+G380 S3 Z-5 F1200
+G1 Z2 F1200
+G1 X54 F10000
+G380 S3 Z-5 F1200
+G1 Z2 F1200
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;Brush material on rubber
+G1 X25 Y175 F30000
+G1 Z0.2 F30000
 G1 Y185
 G91
 G1 X-30 F30000
@@ -607,44 +606,47 @@ G1 Y1.5
 G1 X-30
 G90
 M83
+G1 Z2 F30000
 
-G1 Z5 F3000
-G0 X50 Y175 F20000 ; find a soft place to home
-G28 Z P0 T300; home z with low precision, permit 300deg temperature
-G29.2 S0 ; turn off ABL
+;G0 X50 Y175 F20000 ; find a soft place to home
+;G28 Z P0 T300; home z with low precision, permit 300deg temperature
+;G29.2 S0 ; turn off ABL
 
-G0 X85 Y185 F10000 ;move to exposed steel surface and stop the nozzle
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;Brush material on steal
+G0 X86 Y184 F30000 ;move to exposed steel surface and stop the nozzle
 G0 Z-1.01 F10000
 G91
-
-G2 I1 J0 X2 Y0 F2000.1
-G2 I-0.75 J0 X-1.5
+G2 I1 J0 X2 Y0 F2000
+G2 I-0.7 J0 X-1.4
 G2 I1 J0 X2
-G2 I-0.75 J0 X-1.5
+G2 I-0.7 J0 X-1.4
 G2 I1 J0 X2
-G2 I-0.75 J0 X-1.5
+G2 I-0.7 J0 X-1.4
 G2 I1 J0 X2
-G2 I-0.75 J0 X-1.5
+G2 I-0.7 J0 X-1.4
 G2 I1 J0 X2
-G2 I-0.75 J0 X-1.5
-G2 I1 J0 X2
-G2 I-0.75 J0 X-1.5
-G2 I1 J0 X2
-G2 I-0.75 J0 X-1.5
-G2 I1 J0 X2
-G2 I-0.75 J0 X-1.5
-G2 I1 J0 X2
-G2 I-0.75 J0 X-1.5
-G2 I1 J0 X2
-G2 I-0.75 J0 X-1.5
-
+G2 I-0.7 J0 X-1.4
+G3 I1 J0 X2
+G3 I-0.7 J0 X-1.4
+G3 I1 J0 X2
+G3 I-0.7 J0 X-1.4
+G3 I1 J0 X2
+G3 I-0.7 J0 X-1.4
+G3 I1 J0 X2
+G3 I-0.7 J0 X-1.4
+G3 I1 J0 X2
+G3 I-0.7 J0 X-1.4
 G90
-M73 P78 R1
-G1 Z5 F30000
-G1 X25 Y175 F30000.1 ;Brush material
-G1 Z0.2 F30000.1
+G1 Z2 F30000
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;Brush material on rubber
+G1 X25 Y175 F30000
+G1 Z0.2 F30000
 G1 Y185
 G91
+M73 P78 R1
 G1 X-30 F30000
 G1 Y-2
 G1 X27
@@ -656,17 +658,25 @@ G1 Y1.5
 G1 X-30
 G90
 M83
+G1 Z2 F30000
 
-G1 Z5
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;Wipe material on steal
+G1 Z10
+G1 X85 Y184
+G1 Z-1.01
+G1 X95
+G1 X90
+G1 Z5 F30000
+G1 Y175
+
+;;;;;;;;;;;;;;;;;;;;;;re-check nozzle height and re-home Z
 G0 X55 Y175 F20000 ; find a soft place to home
 G28 Z P0 T300; home z with low precision, permit 300deg temperature
 G29.2 S0 ; turn off ABL
 
-G1 Z10
-G1 X85 Y185
-G1 Z-1.01
-G1 X95
-G1 X90
 
 M211 R; pop softend status
 
@@ -674,51 +684,86 @@ M106 S0 ; turn off fan , too noisy
 ;===== wipe nozzle end ================================
 
 
+
+
+
 ;===== wait heatbed  ====================
 M1002 gcode_claim_action : 2
-M104 S0
-M190 S65;set bed temp
-M109 S140
+M104 S140
+;M140 S65;set bed temp
+
 
 G1 Z5 F3000
 G29.2 S1
-G1 X10 Y10 F20000
+;G1 X10 Y10 F20000
+
+
+
 
 ;===== bed leveling ==================================
 ;M1002 set_flag g29_before_print_flag=1
-M1002 judge_flag g29_before_print_flag
+M1002 judge_flag g29_before_print_flag ;check if leveling is on J1 off J0
 M622 J1
     M1002 gcode_claim_action : 1
-    G29 A1 X115.864 Y159.869 I39.5163 J10.2576
+	;G28 T180
+    G29 A1 X45.8781 Y140.105 I10 J10
     M400
     M500 ; save cali data
 M623
-;===== bed leveling end ================================
 
-;===== home after wipe mouth============================
-M1002 judge_flag g29_before_print_flag
-M622 J0
-
-    M1002 gcode_claim_action : 13
-    G28 T145
-
+M1002 judge_flag g29_before_print_flag ;check if leveling is on J1 off J0
+M622 J1
+    M400
+    G1 X0 Z10 F30000
+    G1 X-13.5 F3000
+    M400
+    M190 S61 ; wait till bed -4 degree
+    M400    
 M623
 
-;===== home after wipe mouth end =======================
+M1002 judge_flag g29_before_print_flag ;check if leveling is on J1 off J0
+M622 J0
+    M104 S180 ;nozzle keeps start heat a little more, saves 5 seconds
+    M1002 gcode_claim_action : 13  ;this is the quick 1 touch bed leveling
+    G28 T180
+M623
 
 M975 S1 ; turn on vibration supression
-;===== nozzle load line ===============================
+
+
+
+
+
+;===== nozzle load filament ===============================
+
 M975 S1
 G90
 M83
 T1000
 
-G1 X-13.5 Y0 Z10 F10000
+G1 X0 Y0 Z10 F30000
+G1 X-13.5 Y0 Z10 F3000
 G1 E1.2 F500
 M400
 M1002 set_filament_type:UNKNOWN
-M109 S220
+
+
+
+
+
+;===============================nozzle heat up====================
+
+M140 S65 ;bed keeps heating more
+M104 S220 ;nozzle keeps heating more
+
+M109 S220 ;wait nozzle to fully heat up
 M400
+
+
+
+
+
+
 
 M412 S1 ;    ===turn on  filament runout detection===
 M400 P10
@@ -729,7 +774,7 @@ M620.3 W1; === turn on filament tangle detection===
 M400 S2
 
 M1002 set_filament_type:PLA
-;M1002 set_flag extrude_cali_flag=1
+M1002 set_flag extrude_cali_flag=0
 M1002 judge_flag extrude_cali_flag
 M622 J1
     M1002 gcode_claim_action : 8
@@ -738,6 +783,11 @@ M622 J1
     M900 K0.0 L1000.0 M1.0
     G90
     M83
+	
+	;force bed temperature, no more needed
+	;M190 S65
+	;M400
+	
     G0 X68 Y-4 F30000
     G0 Z0.3 F18000 ;Move to start position
     M400
@@ -759,9 +809,10 @@ M622 J1
     M400 S7
     G1 X0 F18000
     G1 X-13.5 F3000
-    G1 X0 F18000 ;wipe and shake
 M73 P79 R1
+    G1 X0 F18000 ;wipe and shake
     G1 X-13.5 F3000
+M73 P80 R1
     G1 X0 F12000 ;wipe and shake
     G1 X-13.5 F3000
     M400
@@ -773,6 +824,7 @@ M73 P79 R1
         M106 P1 S178
         M400 S7
         G1 X0 F18000
+M73 P82 R1
         G1 X-13.5 F3000
         G1 X0 F18000 ;wipe and shake
         G1 X-13.5 F3000
@@ -781,7 +833,6 @@ M73 P79 R1
         M106 P1 S0
     M623
     
-M73 P81 R1
     G1 X-13.5 F3000
     M400
     M984 A0.1 E1 S1 F6.28466 H0.4
@@ -791,28 +842,45 @@ M73 P81 R1
     G1 X-13.5 F3000
     G1 X0 F18000 ;wipe and shake
     G1 X-13.5 F3000
+M73 P83 R1
     G1 X0 F12000 ;wipe and shake
-M73 P82 R1
     G1 X-13.5 F3000
     M400
     M106 P1 S0
 
 M623 ; end of "draw extrinsic para cali paint"
 
-;===== extrude cali test ===============================
+
+;===== adding oozing clearing ===============================
+M73 P85 R0
+G1 E20 F100
+M400
+M106 P1 S200
+G1 E-0.5 F300 
+M400 S2
+G1 E-0.5 F300 
+M400 S2
+G1 X0 F30000
+G1 X-13.5 F3000
+G1 X0 F30000 ;wipe and shake
+M73 P87 R0
+G1 X-13.5 F3000
+G1 X0 F30000 ;wipe and shake
+G1 X-13.5 F3000
+G1 X0 F30000 ;wipe and shake
+G1 X-13.5 F3000
+
+
+
+
+;===== extrude cali test 1 bar ===============================
 M104 S220
-G90
-M83
-G0 X68 Y-2.5 F30000
-G0 Z0.3 F18000 ;Move to start position
-G0 X88 E10  F904.991
-G0 X93 E.3742  F1508.32
-G0 X98 E.3742  F6033.27
-G0 X103 E.3742  F1508.32
-G0 X108 E.3742  F6033.27
-G0 X113 E.3742  F1508.32
-G0 X115 Z0 F20000
-G0 Z5
+G90 ; Absolute positioning
+M83 ; Relative extrusion mode
+
+;M190 S65
+;M400
+
 M400
 
 ;========turn off light and wait extrude temperature =============
@@ -840,8 +908,9 @@ T1000
 M211 X0 Y0 Z0 ;turn off soft endstop
 M1007 S1
 
-
-
+;==========time to fly===========
+G0 Z1 F30000
+G0 X150 Z2 F30000
 G90
 G21
 M83 ; use relative distances for extrusion
@@ -862,27 +931,25 @@ M991 S0 P0 ;notify layer change
 M106 S0
 M106 P2 S0
 M204 S500
-; start printing object, unique label id: 1735
-M624 BAAAAAAAAAA=
-G1 X155.13 Y169.877 F42000
+M73 P88 R0
+G1 X55.628 Y149.855 F42000
 G1 Z.4
 G1 Z.2
-M73 P84 R0
 G1 E.8 F1800
 ; FEATURE: Outer wall
 ; LINE_WIDTH: 0.5
-G1 F3000
-G1 X145.63 Y169.877 E.35384
-G1 X145.63 Y160.377 E.35384
-G1 X155.13 Y160.377 E.35384
-G1 X155.13 Y169.817 E.3516
+G1 F2614
+G1 X46.128 Y149.855 E.35384
+M73 P91 R0
+G1 X46.128 Y140.355 E.35384
+G1 X55.628 Y140.355 E.35384
+M73 P92 R0
+G1 X55.628 Y149.795 E.3516
 ; WIPE_START
-M73 P86 R0
-G1 X153.13 Y169.829 E-.76
+G1 F3000
+G1 X53.628 Y149.808 E-.76
 ; WIPE_END
 G1 E-.04 F1800
-; stop printing object, unique label id: 1735
-M625
 ;===================== date: 20240606 =====================
 
 ; don't support timelapse gcode in spiral_mode and by object sequence for I3 structure printer
@@ -893,9 +960,10 @@ G92 E0
 G17
 G2 Z0.6 I0.86 J0.86 P1 F20000 ; spiral lift a little
 G1 Z0.6
-M73 P87 R0
-G1 X0 Y164.998 F18000 ; move to safe pos
+G1 X0 Y145.105 F18000 ; move to safe pos
 G1 X-13.0 F3000 ; move to safe pos
+M400
+M1004 S5 P1  ; external shutter
 M400 P300
 M971 S11 C11 O0
 G92 E0
@@ -925,249 +993,75 @@ M623
 
 
 
-; start printing object, unique label id: 1735
-M624 BAAAAAAAAAA=
 G1 Z1 F42000
-G1 X154.009 Y160.559
+G1 X54.507 Y140.538
 G1 Z.2
 G1 E.8 F1800
 ; FEATURE: Bottom surface
 ; LINE_WIDTH: 0.506582
-G1 F6300
-G1 X154.742 Y161.292 E.03913
-G1 X154.742 Y161.947 E.02477
-G1 X153.559 Y160.765 E.06317
-M73 P88 R0
-G1 X152.904 Y160.765 E.02477
-G1 X154.742 Y162.603 E.09821
-G1 X154.742 Y163.259 E.02477
-G1 X152.248 Y160.765 E.13325
-G1 X151.592 Y160.765 E.02477
-G1 X154.742 Y163.914 E.16828
-G1 X154.742 Y164.57 E.02477
-G1 X150.936 Y160.765 E.20332
-G1 X150.281 Y160.765 E.02477
-G1 X154.742 Y165.226 E.23836
-G1 X154.742 Y165.882 E.02477
-G1 X149.625 Y160.765 E.27339
-G1 X148.969 Y160.765 E.02477
-G1 X154.742 Y166.537 E.30843
-G1 X154.742 Y167.193 E.02477
-G1 X148.314 Y160.765 E.34347
-G1 X147.658 Y160.765 E.02477
-G1 X154.742 Y167.849 E.3785
-G1 X154.742 Y168.505 E.02477
-M73 P89 R0
-G1 X147.002 Y160.765 E.41354
-G1 X146.346 Y160.765 E.02477
-G1 X154.742 Y169.16 E.44858
-G1 X154.742 Y169.488 E.01238
-G1 X154.414 Y169.488 E.01239
-G1 X146.019 Y161.093 E.44857
-G1 X146.019 Y161.749 E.02477
-G1 X153.758 Y169.488 E.41353
-G1 X153.102 Y169.488 E.02477
-G1 X146.019 Y162.404 E.3785
-G1 X146.019 Y163.06 E.02477
-G1 X152.446 Y169.488 E.34346
-G1 X151.791 Y169.488 E.02477
-G1 X146.019 Y163.716 E.30842
-G1 X146.019 Y164.372 E.02477
-G1 X151.135 Y169.488 E.27339
-G1 X150.479 Y169.488 E.02477
-G1 X146.019 Y165.027 E.23835
-M73 P90 R0
-G1 X146.019 Y165.683 E.02477
-G1 X149.824 Y169.488 E.20331
-G1 X149.168 Y169.488 E.02477
-G1 X146.019 Y166.339 E.16828
-G1 X146.019 Y166.994 E.02477
-G1 X148.512 Y169.488 E.13324
-G1 X147.856 Y169.488 E.02477
-G1 X146.019 Y167.65 E.0982
-G1 X146.019 Y168.306 E.02477
-G1 X147.201 Y169.488 E.06317
-G1 X146.545 Y169.488 E.02477
-G1 X145.813 Y168.756 E.03912
-; WIPE_START
-G1 X146.545 Y169.488 E-.39344
-G1 X147.201 Y169.488 E-.24917
-G1 X146.982 Y169.27 E-.11738
-; WIPE_END
-G1 E-.04 F1800
-; stop printing object, unique label id: 1735
-M625
-; start printing object, unique label id: 1615
-M624 AgAAAAAAAAA=
-G1 X140.046 Y169.619 Z.6 F42000
-G1 Z.2
-G1 E.8 F1800
-; FEATURE: Outer wall
-; LINE_WIDTH: 0.5
-G1 F3000
-G1 X130.546 Y169.619 E.35384
-G1 X130.546 Y160.119 E.35384
-G1 X140.046 Y160.119 E.35384
-G1 X140.046 Y169.559 E.3516
-; WIPE_START
-G1 X138.046 Y169.572 E-.76
-; WIPE_END
-G1 E-.04 F1800
-G1 X138.767 Y161.973 Z.6 F42000
-M73 P91 R0
-G1 X138.925 Y160.302 Z.6
-G1 Z.2
-G1 E.8 F1800
-; FEATURE: Bottom surface
-; LINE_WIDTH: 0.506582
-G1 F6300
-G1 X139.657 Y161.034 E.03913
-G1 X139.657 Y161.69 E.02477
-G1 X138.475 Y160.507 E.06317
-G1 X137.819 Y160.507 E.02477
-G1 X139.657 Y162.345 E.09821
-G1 X139.657 Y163.001 E.02477
-G1 X137.164 Y160.507 E.13325
-G1 X136.508 Y160.507 E.02477
-G1 X139.657 Y163.657 E.16828
-G1 X139.657 Y164.313 E.02477
-G1 X135.852 Y160.507 E.20332
-G1 X135.196 Y160.507 E.02477
-G1 X139.657 Y164.968 E.23836
-G1 X139.657 Y165.624 E.02477
-G1 X134.541 Y160.507 E.27339
-G1 X133.885 Y160.507 E.02477
-G1 X139.657 Y166.28 E.30843
-G1 X139.657 Y166.935 E.02477
-G1 X133.229 Y160.507 E.34347
-G1 X132.574 Y160.507 E.02477
-G1 X139.657 Y167.591 E.3785
-G1 X139.657 Y168.247 E.02477
-G1 X131.918 Y160.507 E.41354
-G1 X131.262 Y160.507 E.02477
-G1 X139.657 Y168.903 E.44858
-G1 X139.657 Y169.23 E.01238
-G1 X139.329 Y169.23 E.01239
-G1 X130.934 Y160.835 E.44857
-G1 X130.934 Y161.491 E.02477
-G1 X138.674 Y169.23 E.41353
-G1 X138.018 Y169.23 E.02477
-G1 X130.934 Y162.147 E.3785
-G1 X130.934 Y162.803 E.02477
-G1 X137.362 Y169.23 E.34346
-G1 X136.707 Y169.23 E.02477
-G1 X130.934 Y163.458 E.30842
-M73 P92 R0
-G1 X130.934 Y164.114 E.02477
-G1 X136.051 Y169.23 E.27339
-G1 X135.395 Y169.23 E.02477
-G1 X130.934 Y164.77 E.23835
-G1 X130.934 Y165.425 E.02477
-G1 X134.739 Y169.23 E.20331
-G1 X134.084 Y169.23 E.02477
-G1 X130.934 Y166.081 E.16828
-G1 X130.934 Y166.737 E.02477
-G1 X133.428 Y169.23 E.13324
-G1 X132.772 Y169.23 E.02477
-G1 X130.934 Y167.393 E.0982
-G1 X130.934 Y168.048 E.02477
-G1 X132.117 Y169.23 E.06317
-G1 X131.461 Y169.23 E.02477
-G1 X130.729 Y168.498 E.03912
-; WIPE_START
-G1 X131.461 Y169.23 E-.39344
-G1 X132.117 Y169.23 E-.24917
-G1 X131.898 Y169.012 E-.11738
-; WIPE_END
-G1 E-.04 F1800
-; stop printing object, unique label id: 1615
-M625
-; start printing object, unique label id: 1595
-M624 AQAAAAAAAAA=
-G1 X125.614 Y169.619 Z.6 F42000
-G1 Z.2
-G1 E.8 F1800
-; FEATURE: Outer wall
-; LINE_WIDTH: 0.5
-G1 F3000
-G1 X116.114 Y169.619 E.35384
-G1 X116.114 Y160.119 E.35384
-G1 X125.614 Y160.119 E.35384
-G1 X125.614 Y169.559 E.3516
-; WIPE_START
-G1 X123.614 Y169.572 E-.76
-; WIPE_END
 M73 P93 R0
-G1 E-.04 F1800
-G1 X124.335 Y161.973 Z.6 F42000
-G1 X124.493 Y160.302 Z.6
-G1 Z.2
-G1 E.8 F1800
-; FEATURE: Bottom surface
-; LINE_WIDTH: 0.506582
-G1 F6300
-G1 X125.225 Y161.034 E.03913
-G1 X125.225 Y161.69 E.02477
-G1 X124.043 Y160.507 E.06317
-G1 X123.387 Y160.507 E.02477
-G1 X125.225 Y162.345 E.09821
-G1 X125.225 Y163.001 E.02477
-G1 X122.732 Y160.507 E.13325
-G1 X122.076 Y160.507 E.02477
-G1 X125.225 Y163.657 E.16828
-G1 X125.225 Y164.313 E.02477
-G1 X121.42 Y160.507 E.20332
-G1 X120.764 Y160.507 E.02477
-G1 X125.225 Y164.968 E.23836
-G1 X125.225 Y165.624 E.02477
-G1 X120.109 Y160.507 E.27339
-G1 X119.453 Y160.507 E.02477
-G1 X125.225 Y166.28 E.30843
-G1 X125.225 Y166.935 E.02477
-G1 X118.797 Y160.507 E.34347
-G1 X118.142 Y160.507 E.02477
-G1 X125.225 Y167.591 E.3785
-G1 X125.225 Y168.247 E.02477
-G1 X117.486 Y160.507 E.41354
-G1 X116.83 Y160.507 E.02477
-G1 X125.225 Y168.903 E.44858
-G1 X125.225 Y169.23 E.01238
-G1 X124.897 Y169.23 E.01239
-G1 X116.502 Y160.835 E.44857
+G1 F2614
+G1 X55.24 Y141.27 E.03913
+G1 X55.24 Y141.926 E.02477
+G1 X54.057 Y140.744 E.06317
+G1 X53.402 Y140.744 E.02477
+G1 X55.24 Y142.582 E.09821
+G1 X55.24 Y143.238 E.02477
+G1 X52.746 Y140.744 E.13325
+G1 X52.09 Y140.744 E.02477
+G1 X55.24 Y143.893 E.16828
+G1 X55.24 Y144.549 E.02477
+G1 X51.434 Y140.744 E.20332
+G1 X50.779 Y140.744 E.02477
+G1 X55.24 Y145.205 E.23836
+G1 X55.24 Y145.86 E.02477
+G1 X50.123 Y140.744 E.27339
+G1 X49.467 Y140.744 E.02477
+G1 X55.24 Y146.516 E.30843
+G1 X55.24 Y147.172 E.02477
+G1 X48.812 Y140.744 E.34347
+G1 X48.156 Y140.744 E.02477
 M73 P94 R0
-G1 X116.502 Y161.491 E.02477
-G1 X124.242 Y169.23 E.41353
-G1 X123.586 Y169.23 E.02477
-G1 X116.502 Y162.147 E.3785
-G1 X116.502 Y162.803 E.02477
-G1 X122.93 Y169.23 E.34346
-G1 X122.275 Y169.23 E.02477
-G1 X116.502 Y163.458 E.30842
-G1 X116.502 Y164.114 E.02477
-G1 X121.619 Y169.23 E.27339
-G1 X120.963 Y169.23 E.02477
-G1 X116.502 Y164.77 E.23835
-G1 X116.502 Y165.425 E.02477
-G1 X120.307 Y169.23 E.20331
-G1 X119.652 Y169.23 E.02477
-G1 X116.502 Y166.081 E.16828
-G1 X116.502 Y166.737 E.02477
-G1 X118.996 Y169.23 E.13324
-G1 X118.34 Y169.23 E.02477
-G1 X116.502 Y167.393 E.0982
-G1 X116.502 Y168.048 E.02477
-G1 X117.684 Y169.23 E.06317
-G1 X117.029 Y169.23 E.02477
-G1 X116.297 Y168.498 E.03912
+G1 X55.24 Y147.828 E.3785
+G1 X55.24 Y148.483 E.02477
+G1 X47.5 Y140.744 E.41354
+G1 X46.844 Y140.744 E.02477
+G1 X55.24 Y149.139 E.44858
+G1 X55.24 Y149.467 E.01238
+G1 X54.912 Y149.467 E.01239
+G1 X46.517 Y141.072 E.44857
+G1 X46.517 Y141.728 E.02477
+G1 X54.256 Y149.467 E.41353
+G1 X53.6 Y149.467 E.02477
+G1 X46.517 Y142.383 E.3785
+G1 X46.517 Y143.039 E.02477
+G1 X52.945 Y149.467 E.34346
+G1 X52.289 Y149.467 E.02477
+G1 X46.517 Y143.695 E.30842
+G1 X46.517 Y144.35 E.02477
+G1 X51.633 Y149.467 E.27339
+G1 X50.977 Y149.467 E.02477
+G1 X46.517 Y145.006 E.23835
+G1 X46.517 Y145.662 E.02477
+G1 X50.322 Y149.467 E.20331
+G1 X49.666 Y149.467 E.02477
+G1 X46.517 Y146.318 E.16828
+G1 X46.517 Y146.973 E.02477
+G1 X49.01 Y149.467 E.13324
+G1 X48.355 Y149.467 E.02477
+G1 X46.517 Y147.629 E.0982
+G1 X46.517 Y148.285 E.02477
+G1 X47.699 Y149.467 E.06317
+M73 P95 R0
+G1 X47.043 Y149.467 E.02477
+G1 X46.311 Y148.735 E.03912
 ; WIPE_START
 G1 F6300
-G1 X117.029 Y169.23 E-.39344
-G1 X117.684 Y169.23 E-.24917
-G1 X117.466 Y169.012 E-.11738
+G1 X47.043 Y149.467 E-.39344
+G1 X47.699 Y149.467 E-.24917
+G1 X47.48 Y149.248 E-.11738
 ; WIPE_END
 G1 E-.04 F1800
-; stop printing object, unique label id: 1595
-M625
 M106 S0
 M106 P2 S0
 M981 S0 P20000 ; close spaghetti detector
@@ -1181,8 +1075,8 @@ G392 S0
 M400 ; wait for buffer to clear
 G92 E0 ; zero the extruder
 G1 E-0.8 F1800 ; retract
-G1 Z0.7 F900 ; lower z a little
-G1 X0 Y164.998 F18000 ; move to safe pos
+G1 Z1.2 F900 ; lower z a little
+G1 X0 Y145.105 F18000 ; move to safe pos
 G1 X-13.0 F3000 ; move to safe pos
 
 M1002 judge_flag timelapse_record_flag
@@ -1262,7 +1156,6 @@ M106 P3 S0 ; turn off chamber cooling fan
 M620 S255
 G1 X181 F12000
 T255
-M73 P95 R0
 G1 X0 F18000
 G1 X-13.0 F3000
 G1 X0 F18000 ; wipe

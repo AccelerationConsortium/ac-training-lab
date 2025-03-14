@@ -1,2 +1,2 @@
 bambulabs_api
-paho_mqtt>=1.6.1
+paho-mqtt
