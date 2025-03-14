@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 import json
 from queue import Queue
 import paho.mqtt.client as mqtt
@@ -56,7 +55,9 @@ client = get_paho_client(
 
 # Publish a command message to trigger image capture and wait for the response
 command_payload = json.dumps({"command": "capture_image"})
-response = send_and_receive(client, CAMERA_READ_TOPIC, command_payload)
+response = send_and_receive(
+    client, CAMERA_READ_TOPIC, command_payload, queue_timeout=30
+)
 
 # Process the received message
 if "image_url" in response:
@@ -67,3 +68,5 @@ elif "error" in response:
     print("Traceback:", response.get("traceback"))
 else:
     print("Unknown message received:", response)
+
+1 + 1
