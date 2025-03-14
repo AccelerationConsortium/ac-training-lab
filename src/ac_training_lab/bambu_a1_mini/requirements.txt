@@ -1,2 +1,2 @@
 bambulabs_api
-paho_mqtt
+paho-mqtt
