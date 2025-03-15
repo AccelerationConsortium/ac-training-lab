@@ -3,6 +3,10 @@ from PIL import Image
 
 
 class Picamera2:
+    def __init__(self):
+        self.options = {}
+        print("Mock: Picamera2 initialized")
+
     def set_controls(self, controls):
         logging.info(f"Mock: Setting controls: {controls}")
 
