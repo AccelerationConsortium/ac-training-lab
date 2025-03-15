@@ -18,9 +18,6 @@ from my_secrets import (
 )
 from picamera2 import Picamera2
 
-import paho.mqtt.client as mqtt
-import json
-
 # from queue import Queue
 
 # image_uri_queue: "Queue[dict]" = Queue()
@@ -30,13 +27,11 @@ def get_paho_client(
     sensor_data_topic, hostname, username, password=None, port=8883, tls=True
 ):
 
-    client = mqtt.Client(
-        mqtt.CallbackAPIVersion.VERSION2, protocol=mqtt.MQTTv5
-    )  # create new instance
+    client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2, protocol=mqtt.MQTTv5)
 
     def on_message(client, userdata, msg):
         data = json.loads(msg.payload)
-        command = data.get("command")
+        command = data["command"]
 
         if command == "capture_image":
             file_path = "image.jpeg"
@@ -104,14 +99,16 @@ try:
     client = get_paho_client(
         CAMERA_WRITE_TOPIC, MQTT_HOST, MQTT_USERNAME, password=MQTT_PASSWORD
     )
+    print("MQTT client connected successfully.")
+    print("Waiting for commands...")
     client.loop_forever()
 
 except Exception as e:
     error_trace = traceback.format_exception(*sys.exc_info())
 
-    error_client = mqtt.Client()
+    error_client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2, protocol=mqtt.MQTTv5)
     error_client.username_pw_set(MQTT_USERNAME, MQTT_PASSWORD)
-    error_client.tls_set(tls_version=mqtt.ssl.PROTOCOL_TLS)
+    error_client.tls_set(tls_version=mqtt.ssl.PROTOCOL_TLS_CLIENT)
     error_client.connect(MQTT_HOST, MQTT_PORT)
 
     error_payload = json.dumps({"error": str(e), "traceback": error_trace})
