@@ -2,6 +2,9 @@ import os
 from PIL import Image
 from picamera2 import Picamera2
 
+# Get the directory of this test file
+TEST_DIR = os.path.dirname(os.path.abspath(__file__))
+
 
 def test_camera_setup():
     picam2 = Picamera2()
@@ -15,7 +18,9 @@ def test_camera_setup():
 
 def test_capture_file():
     picam2 = Picamera2()
-    file_path = "test_image.jpeg"
+    # Write test image to the same folder as this test file
+    file_path = os.path.join(TEST_DIR, "test_image.jpeg")
+
     # Verify an image file is created
     picam2.capture_file(file_path)
     assert os.path.exists(file_path), "Expected image file to be created."
@@ -27,3 +32,9 @@ def test_capture_file():
         assert img.mode == "RGB", "Expected the image to be in RGB mode."
 
     os.remove(file_path)
+
+
+if __name__ == "__main__":
+    test_camera_setup()
+    test_capture_file()
+    print("All tests passed.")

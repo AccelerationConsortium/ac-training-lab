@@ -22,5 +22,5 @@ class Picamera2:
     def capture_file(self, file_path):
         logging.info(f"Mock: Capturing image to file: {file_path}")
         with open(file_path, "wb") as f:
-            dummy_image = Image.new("RGB", (640, 480), color="black")
+            dummy_image = Image.new("RGB", (640, 480), color="red")
             dummy_image.save(f, "JPEG")
