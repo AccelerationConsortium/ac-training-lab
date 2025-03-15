@@ -1,0 +1,4 @@
+boto3
+libcamera
+picamera2
+paho-mqtt
