@@ -27,32 +27,31 @@ command_queue: "Queue[dict]" = Queue()
 
 
 def on_message(client, userdata, msg):
-    data = json.loads(msg.payload)
-    command = data["command"]
+    try:
+        data = json.loads(msg.payload)
+        command = data["command"]
 
-    if command == "capture_image":
-        file_path = "image.jpeg"
+        if command == "capture_image":
+            file_path = "image.jpeg"
 
-        picam2.autofocus_cycle()
-        picam2.capture_file(file_path)
+            picam2.autofocus_cycle()
+            picam2.capture_file(file_path)
 
-        object_name = datetime.now(timezone.utc).strftime("%Y-%m-%d-%H:%M:%S") + ".jpeg"
+            object_name = (
+                datetime.now(timezone.utc).strftime("%Y-%m-%d-%H:%M:%S") + ".jpeg"
+            )
 
-        s3.upload_file(
-            file_path,
-            BUCKET_NAME,
-            object_name,
-            ExtraArgs={"ACL": "public-read"},
-        )
+            s3.upload_file(file_path, BUCKET_NAME, object_name)
 
-        file_uri = f"https://{BUCKET_NAME}.s3.{AWS_REGION}.amazonaws.com/{object_name}"
+            file_uri = (
+                f"https://{BUCKET_NAME}.s3.{AWS_REGION}.amazonaws.com/{object_name}"
+            )
 
-        client.publish(CAMERA_WRITE_TOPIC, json.dumps({"image_url": file_uri}))
-        print(f"Published image URL: {file_uri}")
-    else:
-        client.publish(
-            CAMERA_WRITE_TOPIC, json.dumps({"error": f"Invalid command: {command}"})
-        )
+            client.publish(CAMERA_WRITE_TOPIC, json.dumps({"image_url": file_uri}))
+            print(f"Published image URL: {file_uri}")
+    except Exception as e:
+        client.publish(CAMERA_WRITE_TOPIC, json.dumps({"error": str(e)}))
+        print(f"Error: {e}")
 
 
 # The callback for when the client receives a CONNACK response from the server.
