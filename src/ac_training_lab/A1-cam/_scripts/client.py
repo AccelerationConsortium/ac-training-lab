@@ -1,4 +1,5 @@
 import json
+import os
 from PIL import Image
 import paho.mqtt.client as mqtt
 import wget
@@ -44,7 +45,7 @@ client.loop_start()
 while True:
     queue_timeout = 30
     data = data_queue.get(True, queue_timeout)
-    image_uri = data
+    image_uri = data["image_uri"]
     client.loop_stop()
 
     assert isinstance(image_uri, str), f"Expected string, got {type(image_uri)}"
@@ -58,5 +59,8 @@ while True:
 
         # Open the downloaded image
         Image.open(temp_file).show()
+
+        # remove the temp file
+        os.remove(temp_file)
     except Exception as e:
         print(f"Error processing image: {e}")
