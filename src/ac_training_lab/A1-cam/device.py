@@ -128,3 +128,4 @@ finally:
     # Gracefully stop
     client.loop_stop()
     client.disconnect()
+    print("MQTT client disconnected.")
