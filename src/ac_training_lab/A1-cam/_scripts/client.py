@@ -40,11 +40,13 @@ payload = json.dumps(msg)
 client.publish(CAMERA_READ_TOPIC, payload, qos=2)
 print(f"Published payload: {payload}")
 
-client.loop_start()
-
 while True:
     queue_timeout = 30
-    data = data_queue.get(True, queue_timeout)
+    payload = data_queue.get(True, queue_timeout)
+    print(f"Received payload: {payload}")
+    data = json.loads(payload)
+    if "error" in data:
+        raise Exception(data["error"])
     image_uri = data["image_uri"]
     client.loop_stop()
 
