@@ -1,8 +1,8 @@
 import json
-import os
+import requests
 from PIL import Image
 import paho.mqtt.client as mqtt
-import wget
+import requests
 from my_secrets import (
     CAMERA_READ_TOPIC,
     CAMERA_WRITE_TOPIC,
@@ -17,52 +17,79 @@ from queue import Queue
 data_queue: "Queue[dict]" = Queue()
 
 
-def on_message(client, userdata, msg):
-    # received_message will be the AWS URI
-    print(f"Received message: {msg.payload}")
-    image_uri = msg.payload.decode("utf-8")
-    data_queue.put(image_uri)
+def get_paho_client(
+    sensor_data_topic, hostname, username, password=None, port=8883, tls=True
+):
+
+    client = mqtt.Client(
+        mqtt.CallbackAPIVersion.VERSION2, protocol=mqtt.MQTTv5
+    )  # create new instance
+
+    def on_message(client, userdata, msg):
+        # received_message will be the AWS URI
+        print(f"Received message: {msg.payload}")
+        data = json.loads(msg.payload)
+        data_queue.put(data)
+
+    # The callback for when the client receives a CONNACK response from the server.
+    def on_connect(client, userdata, flags, rc, properties=None):
+        if rc != 0:
+            print("Connected with result code " + str(rc))
+        # Subscribing in on_connect() means that if we lose the connection and
+        # reconnect then subscriptions will be renewed.
+        client.subscribe(sensor_data_topic, qos=1)
+
+    client.on_connect = on_connect
+    client.on_message = on_message
+
+    # enable TLS for secure connection
+    if tls:
+        client.tls_set(tls_version=mqtt.ssl.PROTOCOL_TLS_CLIENT)
+    # set username and password
+    client.username_pw_set(username, password)
+    # connect to HiveMQ Cloud on port 8883 (default for MQTT)
+    client.connect(hostname, port)
+    client.subscribe(sensor_data_topic, qos=2)
+
+    return client
 
 
-client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2, protocol=mqtt.MQTTv5)
+def send_and_receive(client, command_topic, msg, queue_timeout=60):
+    payload = json.dumps(msg)
+    client.publish(command_topic, payload, qos=2)
+    print(f"Published payload: {payload}")
 
-client.on_message = on_message
+    client.loop_start()
 
-client.tls_set(tls_version=mqtt.ssl.PROTOCOL_TLS)
-client.username_pw_set(MQTT_USERNAME, MQTT_PASSWORD)
-client.connect(MQTT_HOST, MQTT_PORT)
-client.subscribe(CAMERA_WRITE_TOPIC, qos=2)
+    while True:
+        print("Waiting for data...")
+        data = data_queue.get(True, queue_timeout)
+        print(f"Received data: {data}")
+        client.loop_stop()
+        return data
 
-client.loop_start()
+
+client = get_paho_client(
+    CAMERA_WRITE_TOPIC, MQTT_HOST, MQTT_USERNAME, password=MQTT_PASSWORD, port=MQTT_PORT
+)
 
 msg = {"command": "capture_image"}
-payload = json.dumps(msg)
-client.publish(CAMERA_READ_TOPIC, payload, qos=2)
-print(f"Published payload: {payload}")
 
-while True:
-    queue_timeout = 30
-    payload = data_queue.get(True, queue_timeout)
-    print(f"Received payload: {payload}")
-    data = json.loads(payload)
-    if "error" in data:
-        raise Exception(data["error"])
+try:
+    data = send_and_receive(client, CAMERA_READ_TOPIC, msg, queue_timeout=30)
+    print(f"Received data: {data}")
+
     image_uri = data["image_uri"]
+
+    response = requests.get(image_uri)
+    response.raise_for_status()
+    with open("image.jpeg", "wb") as f:
+        f.write(response.content)
+
+    print("Opening image...")
+    img = Image.open("image.jpeg")
+    img.show()
+finally:
     client.loop_stop()
-
-    assert isinstance(image_uri, str), f"Expected string, got {type(image_uri)}"
-
-    print(f"Received image URI: {image_uri}")
-
-    try:
-        # Download the image from the URI
-        temp_file = wget.download(image_uri)
-        print(f"\nDownloaded image to {temp_file}")
-
-        # Open the downloaded image
-        Image.open(temp_file).show()
-
-        # remove the temp file
-        os.remove(temp_file)
-    except Exception as e:
-        print(f"Error processing image: {e}")
+    client.disconnect()
+    print("Disconnected from MQTT broker")
