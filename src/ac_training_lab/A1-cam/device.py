@@ -47,7 +47,14 @@ def on_message(client, userdata, msg):
                 f"https://{BUCKET_NAME}.s3.{AWS_REGION}.amazonaws.com/{object_name}"
             )
 
-            client.publish(CAMERA_WRITE_TOPIC, json.dumps({"image_uri": file_uri}))
+            data = {
+                "image_uri": file_uri,
+                # "bucket": BUCKET_NAME,
+                # "object_name": object_name,
+                # "region": AWS_REGION,
+            }
+            payload = json.dumps(data)
+            client.publish(CAMERA_WRITE_TOPIC, payload)
             print(f"Published image URI: {file_uri}")
     except Exception as e:
         client.publish(CAMERA_WRITE_TOPIC, json.dumps({"error": str(e)}))
