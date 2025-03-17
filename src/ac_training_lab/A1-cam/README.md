@@ -10,6 +10,8 @@ fill in the necessary information. Keep in mind this will store the credentials 
 
 `libcamera` via `sudo apt install -y python3-libcamera` if not already installed, but probably handled already by `picamera2` installation. Also not preinstalled on RPi OS Lite versions.
 
+After ensuring that `picamera2` and `libcamera` are installed:
+
 ```bash
 cd ac-training-lab/src/ac_training_lab/A1-cam
 python3 -m venv .venv
