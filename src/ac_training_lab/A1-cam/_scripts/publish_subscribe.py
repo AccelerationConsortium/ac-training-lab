@@ -1,13 +1,14 @@
 import json
 from queue import Queue
+
 import paho.mqtt.client as mqtt
 from my_secrets import (
     CAMERA_READ_TOPIC,
     CAMERA_WRITE_TOPIC,
     MQTT_HOST,
+    MQTT_PASSWORD,
     MQTT_PORT,
     MQTT_USERNAME,
-    MQTT_PASSWORD,
 )
 
 sensor_data_queue: "Queue[dict]" = Queue()

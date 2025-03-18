@@ -1,6 +1,7 @@
 import os
-from PIL import Image
+
 from picamera2 import Picamera2
+from PIL import Image
 
 # Get the directory of this test file
 TEST_DIR = os.path.dirname(os.path.abspath(__file__))

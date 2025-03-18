@@ -1,6 +1,6 @@
 import json
-import requests
-from PIL import Image
+from queue import Queue
+
 import paho.mqtt.client as mqtt
 import requests
 from my_secrets import (
@@ -8,11 +8,10 @@ from my_secrets import (
     CAMERA_WRITE_TOPIC,
     MQTT_HOST,
     MQTT_PASSWORD,
-    MQTT_USERNAME,
     MQTT_PORT,
+    MQTT_USERNAME,
 )
-
-from queue import Queue
+from PIL import Image
 
 data_queue: "Queue[dict]" = Queue()
 
