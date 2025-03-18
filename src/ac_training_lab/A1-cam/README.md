@@ -6,21 +6,40 @@ Module 3.
 Make a copy of `my_secrets_example.py` called `my_secrets.py` and
 fill in the necessary information. Keep in mind this will store the credentials in plain-text format.
 
-`picamera2` via `sudo apt install python3-picamera2 --no-install-recommends` if not already installed (not pre-installed on RPi OS Lite). See https://github.com/raspberrypi/picamera2.
-
-`libcamera` via `sudo apt install -y python3-libcamera` if not already installed, but probably handled already by `picamera2` installation. Also not preinstalled on RPi OS Lite versions.
-
-After ensuring that `picamera2` and `libcamera` are installed:
+If not already installed (not pre-installed on RPi OS Lite), install [`picamera2`](https://github.com/raspberrypi/picamera2) via:
 
 ```bash
-cd ac-training-lab/src/ac_training_lab/A1-cam
-python3 -m venv .venv
-source .venv/bin/activate
+sudo apt install python3-picamera2 --no-install-recommends
+```
+
+`libcamera` should be automatically installed after installing `picamera2`. Otherwise, one would use `sudo apt install -y python3-libcamera` (`libcamera` also does not come preinstalled on RPi OS Lite versions).
+
+Optionally, you can use a virtual environment, but you will need to create it with the `--system-site-packages` flag via e.g., `python3 -m venv --system-site-packages venv` (installs to folder called "venv") so that it can use the `picamera2` and `libcamera` libraries. We are OK with *not* using a virtual environment because this device is intended to be run via a single top-level script, the RPi device (in our case RPi Zero 2W) requires minimal setup (i.e., can easily be reflashed), and the RPi device is intended for a single purpose with a single set of requirements (i.e., a "point-and-shoot" camera).
+
+```bash
+python3 -m venv --system-site-packages venv
+source venv/bin/activate
+```
+
+If you don't install a virtual environment and you are using a RPi OS Lite version, you will need to install pip first:
+```bash
+sudo apt install python3-pip -y
+```
+
+While in the same folder as this README file (e.g., `cd ac-training-lab/src/ac_training_lab/A1-cam`), run:
+
+```bash
 pip install -r requirements.txt
 ```
 
 For local development with a dummy version of picamera2 (very minimal mock package), while in the same folder as this README file, additionally run:
 
 ```bash
-pip install -e ./dummy_pkg/
+pip install -e ./dummy_pkg/ # do not install this on the Raspberry Pi for the toolhead camera -- the imports will overlap with the "real" system packages `picamera2` and `libcamera`.
+```
+
+To start the device, run:
+
+```bash
+python3 device.py
 ```

@@ -27,8 +27,9 @@ def get_paho_client(
 
     def on_message(client, userdata, msg):
         # received_message will be the AWS URI
-        print(f"Received message: {msg.payload}")
+        print(f"Received payload: {msg.payload}")
         data = json.loads(msg.payload)
+        print(f"Parsed data: {data}")
         data_queue.put(data)
 
     # The callback for when the client receives a CONNACK response from the server.
@@ -37,7 +38,7 @@ def get_paho_client(
             print("Connected with result code " + str(rc))
         # Subscribing in on_connect() means that if we lose the connection and
         # reconnect then subscriptions will be renewed.
-        client.subscribe(sensor_data_topic, qos=1)
+        client.subscribe(sensor_data_topic, qos=2)
 
     client.on_connect = on_connect
     client.on_message = on_message
@@ -64,7 +65,6 @@ def send_and_receive(client, command_topic, msg, queue_timeout=60):
     while True:
         print("Waiting for data...")
         data = data_queue.get(True, queue_timeout)
-        print(f"Received data: {data}")
         client.loop_stop()
         return data
 
@@ -77,7 +77,6 @@ msg = {"command": "capture_image"}
 
 try:
     data = send_and_receive(client, CAMERA_READ_TOPIC, msg, queue_timeout=30)
-    print(f"Received data: {data}")
 
     image_uri = data["image_uri"]
 
