@@ -26,4 +26,3 @@ You can find your Tailscale IPv4 address by running:
 ```
 tailscale ip -4
 ```
-
