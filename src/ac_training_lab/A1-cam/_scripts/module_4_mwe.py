@@ -1,13 +1,16 @@
+import json
+from queue import Queue
+
+import paho.mqtt.client as mqtt
+
+COURSE_ID = "absurd-gazelle"
+
 command_topic = f"{COURSE_ID}/onboard_led"
 sensor_data_topic = f"{COURSE_ID}/onboard_temp"
 
 HIVEMQ_USERNAME = "sgbaird"
 HIVEMQ_PASSWORD = "D.Pq5gYtejYbU#L"
 HIVEMQ_HOST = "248cc294c37642359297f75b7b023374.s2.eu.hivemq.cloud"
-
-import paho.mqtt.client as mqtt
-import json
-from queue import Queue
 
 sensor_data_queue: "Queue[dict]" = Queue()
 

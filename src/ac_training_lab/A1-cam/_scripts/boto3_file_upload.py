@@ -1,5 +1,6 @@
-import boto3
 import os
+
+import boto3
 
 AWS_ACCESS_KEY_ID = os.environ["AWS_ACCESS_KEY_ID"]
 AWS_SECRET_ACCESS_KEY = os.environ["AWS_SECRET_ACCESS_KEY"]
@@ -22,5 +23,5 @@ print(f"Uploading file '{local_file_path}' to '{bucket_name}/{s3_object_name}'..
 s3_client.upload_file(local_file_path, bucket_name, s3_object_name)
 
 print(
-    f"File '{local_file_path}' uploaded to '{bucket_name}/{s3_object_name}' successfully."
+    f"File '{local_file_path}' uploaded to '{bucket_name}/{s3_object_name}' successfully."  # noqa: E501
 )

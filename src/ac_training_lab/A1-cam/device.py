@@ -2,26 +2,25 @@ import json
 import sys
 import traceback
 from datetime import datetime, timezone
-from time import time, sleep
+from queue import Queue
+from time import sleep, time
 
 import boto3
 import paho.mqtt.client as mqtt
 from libcamera import Transform
 from my_secrets import (
+    AWS_ACCESS_KEY_ID,
+    AWS_REGION,
+    AWS_SECRET_ACCESS_KEY,
+    BUCKET_NAME,
     CAMERA_READ_TOPIC,
     CAMERA_WRITE_TOPIC,
     MQTT_HOST,
     MQTT_PASSWORD,
     MQTT_PORT,
     MQTT_USERNAME,
-    AWS_ACCESS_KEY_ID,
-    AWS_SECRET_ACCESS_KEY,
-    BUCKET_NAME,
-    AWS_REGION,
 )
 from picamera2 import Picamera2
-
-from queue import Queue
 
 command_queue: "Queue[dict]" = Queue()
 
