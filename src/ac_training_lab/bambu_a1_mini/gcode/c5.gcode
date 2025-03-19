@@ -17,9 +17,9 @@
 ; additional_cooling_fan_speed = 70
 ; auxiliary_fan = 0
 ; bed_custom_model = /Applications/BambuStudio.app/Contents/Resources/profiles/BBL/bbl-3dp-A1M.stl
-; bed_custom_texture = 
-; bed_exclude_area = 
-; before_layer_change_gcode = 
+; bed_custom_texture =
+; bed_exclude_area =
+; before_layer_change_gcode =
 ; best_object_pos = 0.7,0.5
 ; bottom_shell_layers = 3
 ; bottom_shell_thickness = 0
@@ -84,7 +84,7 @@
 ; filament_long_retractions_when_cut = 1
 ; filament_max_volumetric_speed = 21
 ; filament_minimal_purge_on_wipe_tower = 15
-; filament_notes = 
+; filament_notes =
 ; filament_retraction_distances_when_cut = 18
 ; filament_scarf_gap = 0%
 ; filament_scarf_height = 10%
@@ -206,7 +206,7 @@
 ; overhang_fan_threshold = 50%
 ; overhang_threshold_participating_cooling = 95%
 ; overhang_totally_speed = 19
-; post_process = 
+; post_process =
 ; precise_z_height = 0
 ; pressure_advance = 0.02
 ; prime_tower_brim_width = 3
@@ -219,15 +219,15 @@
 ; printable_area = 0x0,180x0,180x180,0x180
 ; printable_height = 180
 ; printer_model = Bambu Lab A1 mini
-; printer_notes = 
+; printer_notes =
 ; printer_settings_id = Bambu Lab A1 mini 0.4 nozzle - for SLD practical
 ; printer_structure = i3
 ; printer_technology = FFF
 ; printer_variant = 0.4
 ; printhost_authorization_type = key
 ; printhost_ssl_ignore_revoke = 0
-; printing_by_object_gcode = 
-; process_notes = 
+; printing_by_object_gcode =
+; process_notes =
 ; raft_contact_distance = 0.1
 ; raft_expansion = 1.5
 ; raft_first_layer_density = 90%
@@ -317,7 +317,7 @@
 ; support_top_z_distance = 0.2
 ; support_type = normal(auto)
 ; temperature_vitrification = 45
-; template_custom_gcode = 
+; template_custom_gcode =
 ; textured_plate_temp = 65
 ; textured_plate_temp_initial_layer = 65
 ; thick_bridges = 0
@@ -718,7 +718,7 @@ M622 J1
     G1 X-13.5 F3000
     M400
     M190 S61 ; wait till bed -4 degree
-    M400    
+    M400
 M623
 
 M1002 judge_flag g29_before_print_flag ;check if leveling is on J1 off J0
@@ -778,16 +778,16 @@ M1002 set_flag extrude_cali_flag=0
 M1002 judge_flag extrude_cali_flag
 M622 J1
     M1002 gcode_claim_action : 8
-    
+
     M400
     M900 K0.0 L1000.0 M1.0
     G90
     M83
-	
+
 	;force bed temperature, no more needed
 	;M190 S65
 	;M400
-	
+
     G0 X68 Y-4 F30000
     G0 Z0.3 F18000 ;Move to start position
     M400
@@ -799,10 +799,10 @@ M622 J1
     G0 X113 E.3742  F1508.32
     G0 Y0 Z0 F20000
     M400
-    
+
     G1 X-13.5 Y0 Z10 F10000
     M400
-    
+
     G1 E10 F377.08
     M983 F6.28466 A0.3 H0.4; cali dynamic extrusion compensation
     M106 P1 S178
@@ -833,7 +833,7 @@ M73 P82 R1
         M400
         M106 P1 S0
     M623
-    
+
     G1 X-13.5 F3000
     M400
     M984 A0.1 E1 S1 F6.28466 H0.4
@@ -857,9 +857,9 @@ M73 P85 R0
 G1 E20 F100
 M400
 M106 P1 S200
-G1 E-0.5 F300 
+G1 E-0.5 F300
 M400 S2
-G1 E-0.5 F300 
+G1 E-0.5 F300
 M400 S2
 G1 X0 F30000
 G1 X-13.5 F3000
@@ -975,19 +975,19 @@ M622.1 S1
 M1002 judge_flag g39_3rd_layer_detect_flag
 M622 J1
     ; enable nozzle clog detect at 3rd layer
-    
+
 
 
     M622.1 S1
     M1002 judge_flag g39_detection_flag
     M622 J1
-      
+
         M622.1 S0
         M1002 judge_flag g39_mass_exceed_flag
         M622 J1
-        
+
         M623
-    
+
     M623
 M623
 
@@ -1067,7 +1067,7 @@ M106 S0
 M106 P2 S0
 M981 S0 P20000 ; close spaghetti detector
 ; FEATURE: Custom
-; filament end gcode 
+; filament end gcode
 M106 P3 S0
 ;===== date: 20231229 =====================
 ;turn off nozzle clog detect
@@ -1214,4 +1214,3 @@ M400 S1
 M18 X Y Z
 M73 P100 R0
 ; EXECUTABLE_BLOCK_END
-

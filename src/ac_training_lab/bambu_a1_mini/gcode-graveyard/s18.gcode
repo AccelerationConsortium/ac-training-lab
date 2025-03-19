@@ -16,10 +16,10 @@
 ; activate_air_filtration = 0
 ; additional_cooling_fan_speed = 70
 ; auxiliary_fan = 0
-; bed_custom_model = 
-; bed_custom_texture = 
-; bed_exclude_area = 
-; before_layer_change_gcode = 
+; bed_custom_model =
+; bed_custom_texture =
+; bed_exclude_area =
+; before_layer_change_gcode =
 ; best_object_pos = 0.7,0.5
 ; bottom_shell_layers = 3
 ; bottom_shell_thickness = 0
@@ -83,7 +83,7 @@
 ; filament_long_retractions_when_cut = 1
 ; filament_max_volumetric_speed = 21
 ; filament_minimal_purge_on_wipe_tower = 15
-; filament_notes = 
+; filament_notes =
 ; filament_retraction_distances_when_cut = 18
 ; filament_scarf_gap = 0%
 ; filament_scarf_height = 10%
@@ -204,7 +204,7 @@
 ; overhang_fan_threshold = 50%
 ; overhang_threshold_participating_cooling = 95%
 ; overhang_totally_speed = 19
-; post_process = 
+; post_process =
 ; precise_z_height = 0
 ; pressure_advance = 0.02
 ; prime_tower_brim_width = 3
@@ -217,15 +217,15 @@
 ; printable_area = 0x0,180x0,180x180,0x180
 ; printable_height = 180
 ; printer_model = Bambu Lab A1 mini
-; printer_notes = 
+; printer_notes =
 ; printer_settings_id = Bambu Lab A1 mini 0.4 nozzle
 ; printer_structure = i3
 ; printer_technology = FFF
 ; printer_variant = 0.4
 ; printhost_authorization_type = key
 ; printhost_ssl_ignore_revoke = 0
-; printing_by_object_gcode = 
-; process_notes = 
+; printing_by_object_gcode =
+; process_notes =
 ; raft_contact_distance = 0.1
 ; raft_expansion = 1.5
 ; raft_first_layer_density = 90%
@@ -315,7 +315,7 @@
 ; support_top_z_distance = 0.2
 ; support_type = normal(auto)
 ; temperature_vitrification = 45
-; template_custom_gcode = 
+; template_custom_gcode =
 ; textured_plate_temp = 65
 ; textured_plate_temp_initial_layer = 65
 ; thick_bridges = 0
@@ -729,7 +729,7 @@ M400 S2
 
 M1002 set_filament_type:PLA
 M1002 set_flag extrude_cali_flag=0
-    
+
 M73 P81 R1
     G1 X-13.5 F3000
     M400
@@ -845,19 +845,19 @@ M622.1 S1
 M1002 judge_flag g39_3rd_layer_detect_flag
 M622 J1
     ; enable nozzle clog detect at 3rd layer
-    
+
 
 
     M622.1 S1
     M1002 judge_flag g39_detection_flag
     M622 J1
-      
+
         M622.1 S0
         M1002 judge_flag g39_mass_exceed_flag
         M622 J1
-        
+
         M623
-    
+
     M623
 M623
 
@@ -1099,7 +1099,7 @@ M106 S0
 M106 P2 S0
 M981 S0 P20000 ; close spaghetti detector
 ; FEATURE: Custom
-; filament end gcode 
+; filament end gcode
 M106 P3 S0
 ;===== date: 20231229 =====================
 ;turn off nozzle clog detect
@@ -1247,4 +1247,3 @@ M400 S1
 M18 X Y Z
 M73 P100 R0
 ; EXECUTABLE_BLOCK_END
-
