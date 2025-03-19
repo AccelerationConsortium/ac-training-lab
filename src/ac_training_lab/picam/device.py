@@ -3,9 +3,11 @@ import time
 
 from libcamera import Transform
 from my_secrets import YOUTUBE_STREAM_KEY, YOUTUBE_STREAM_URL
-from picamera2 import Picamera2, Preview
+from picamera2 import Picamera2
 from picamera2.encoders import H264Encoder
 from picamera2.outputs import FfmpegOutput
+
+# from picamera2 import Preview
 
 
 def internet(host="8.8.8.8", port=53, timeout=3):
@@ -40,7 +42,7 @@ picam2.configure(
 )
 
 # https://chatgpt.com/share/67daf904-3f6c-8006-bb41-559934e82711
-picam2.start_preview(Preview.NULL)
+# picam2.start_preview(Preview.NULL)
 
 picam2.start()
 
