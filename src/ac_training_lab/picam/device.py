@@ -1,3 +1,4 @@
+import logging
 import socket
 import time
 
@@ -8,6 +9,18 @@ from picamera2.encoders import H264Encoder
 from picamera2.outputs import FfmpegOutput
 
 # from picamera2 import Preview
+
+# Configure logging, useful when running `sudo journalctl -u a1-cam.service -f`,
+# as described in README.
+# Example log: 2025-03-18 15:00:00 - INFO - Starting camera setup...
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S",
+)
+
+# create a logger with a custom name
+logger = logging.getLogger("picam")
 
 
 def internet(host="8.8.8.8", port=53, timeout=3):
@@ -26,12 +39,13 @@ def internet(host="8.8.8.8", port=53, timeout=3):
 
 
 # Wait until internet is connected
-print("Checking for internet")
+logger.info("Checking for internet")
 while not internet():
     internet()
-print("Internet connected")
+logger.info("Internet connected")
 
 # Initialize the Picamera2 object
+logger.info("Initializing camera")
 picam2 = Picamera2()
 
 # Configure the camera for video capture (set resolution to 1280x720)
@@ -45,6 +59,7 @@ picam2.configure(
 # picam2.start_preview(Preview.NULL)
 
 picam2.start()
+logger.info("Camera started")
 
 # Create the ffmpeg command for streaming
 ffmpeg_cmd = [
@@ -60,15 +75,20 @@ h264_encoder = H264Encoder(bitrate=4000000)
 
 # Start the output stream
 picam2.start_recording(encoder=h264_encoder, output=ffmpeg_output)
+logger.info("Streaming started")
 
 try:
     while True:
         time.sleep(10)
 
 except KeyboardInterrupt:
-    print("Streaming stopped.")
+    logger.warning("Streaming stopped.")
+
+except Exception as e:
+    logger.error(f"An error occurred: {e}")
 
 finally:
     # Stop the camera and preview
     picam2.stop_recording()
     picam2.stop()
+    logger.info("Camera stopped.")
