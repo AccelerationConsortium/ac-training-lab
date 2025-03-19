@@ -116,7 +116,6 @@ Run:
 ```
 sudo systemctl daemon-reload
 sudo systemctl enable picam.service
-sudo systemctl start picam.service
 ```
 
 Run:
@@ -133,7 +132,7 @@ Add the following at the end of the crontab file:
 0 2 * * * /sbin/shutdown -r now
 ```
 
-You can manually start the service by running:
+Manually start the service by running:
 
 ```bash
 sudo systemctl start picam.service
