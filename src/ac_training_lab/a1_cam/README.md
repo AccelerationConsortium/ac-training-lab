@@ -143,7 +143,7 @@ Starting the service with `systemd` is recommended since it applies all the conf
 For more details, see the [systemctl(1)](https://www.freedesktop.org/software/systemd/man/systemctl.html) manual.
 
 
-To stop the service (for example, while you work on fixing it), run:
+To stop the service (for example, while you work on fixing it / pulling new changes), run:
 
 ```bash
 sudo systemctl stop a1-cam.service
@@ -153,6 +153,12 @@ This command stops the running instance of the service immediately. If you also 
 
 ```bash
 sudo systemctl disable a1-cam.service
+```
+
+To get it to reflect the new changes, run:
+
+```bash
+sudo systemctl daemon-reload
 ```
 
 You can list all available service unit files by running:
