@@ -63,6 +63,8 @@ To start the device manually and ensure that it's functioning normally, run:
 python3 device.py
 ```
 
+To verify quickly that this script works, you can run `_scripts/client.py` locally (e.g., on your PC), ensuring that you have the same credentials in a `my_secrets.py` file in the `_scripts` directory. This script will request the latest image from the device and save it to your local machine.
+
 ## Automatic startup
 
 To create the file, run nano (or other editor of choice):
