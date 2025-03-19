@@ -1,4 +1,5 @@
 import json
+import logging
 import sys
 import traceback
 from datetime import datetime, timezone
@@ -21,6 +22,19 @@ from my_secrets import (
     MQTT_USERNAME,
 )
 from picamera2 import Picamera2
+
+# Configure logging, useful when running `sudo journalctl -u a1-cam.service -f`,
+# as described in README.
+# Example log: 2025-03-18 15:00:00 - INFO - Starting camera setup...
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S",
+)
+
+# create a logger with the name "a1-cam"
+logger = logging.getLogger("a1-cam")
+
 
 command_queue: "Queue[dict]" = Queue()
 
@@ -54,10 +68,10 @@ def on_message(client, userdata, msg):
             }
             payload = json.dumps(data)
             client.publish(CAMERA_WRITE_TOPIC, payload)
-            print(f"Published image URI: {file_uri}")
+            logger.info(f"Published image URI: {file_uri}")
     except Exception as e:
         client.publish(CAMERA_WRITE_TOPIC, json.dumps({"error": str(e)}))
-        print(f"Error: {e}")
+        logger.error(f"Error: {e}")
 
 
 # The callback for when the client receives a CONNACK response from the server.
@@ -79,31 +93,31 @@ try:
     client.tls_set(tls_version=mqtt.ssl.PROTOCOL_TLS_CLIENT)
     # set username and password
     client.username_pw_set(MQTT_USERNAME, MQTT_PASSWORD)
-    # connect to HiveMQ Cloud on port 8883 (default for MQTT)
+    # connect to HiveMQ Cloud, usually on port 8883 for TLS
     client.connect(MQTT_HOST, MQTT_PORT)
 
-    print("Starting camera setup...")
+    logger.info("Starting camera setup...")
     picam2 = Picamera2()
     picam2.set_controls({"AfMode": "auto"})
     picam2.options["quality"] = 90
     config = picam2.create_still_configuration(transform=Transform(vflip=1))
     picam2.configure(config)
     picam2.start()
-    print("Camera configured successfully.")
+    logger.info("Camera configured successfully.")
 
-    print("Setting up AWS S3...")
+    logger.info("Setting up AWS S3...")
     s3 = boto3.client(
         "s3",
         aws_access_key_id=AWS_ACCESS_KEY_ID,
         aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
         region_name=AWS_REGION,
     )
-    print("AWS S3 configured successfully.")
+    logger.info("AWS S3 configured successfully.")
 
-    print("MQTT client connected successfully.")
+    logger.info("MQTT client connected successfully.")
     # Start the MQTT network loop in a separate thread
     client.loop_start()
-    print("Waiting for commands...")
+    logger.info("Waiting for commands...")
 
     start_time = time()
     # Keep the script running to handle incoming messages
@@ -122,7 +136,7 @@ except Exception as e:
 
     error_payload = json.dumps({"error": str(e), "traceback": error_trace})
     error_client.publish(CAMERA_WRITE_TOPIC, error_payload)
-    print("Error details published to MQTT.")
+    logger.info("Error details published to MQTT.")
 
     error_client.disconnect()
 
@@ -134,4 +148,4 @@ finally:
     # Gracefully stop
     client.loop_stop()
     client.disconnect()
-    print("MQTT client disconnected.")
+    logger.info("MQTT client disconnected.")
