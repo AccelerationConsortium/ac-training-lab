@@ -32,7 +32,7 @@ logging.basicConfig(
     datefmt="%Y-%m-%d %H:%M:%S",
 )
 
-# create a logger with the name "a1-cam"
+# create a logger with a custom name
 logger = logging.getLogger("a1-cam")
 
 
