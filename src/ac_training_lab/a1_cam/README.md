@@ -18,23 +18,25 @@ sudo apt install python3-picamera2 --no-install-recommends
 
 `libcamera` should be automatically installed after installing `picamera2`. Otherwise, one would use `sudo apt install -y python3-libcamera` (`libcamera` also does not come preinstalled on RPi OS Lite versions).
 
-Optionally, you can use a virtual environment, but you will need to create it with the `--system-site-packages` flag via e.g., `python3 -m venv --system-site-packages venv` (installs to folder called "venv") followed by `source venv/bin/activate` so that it can use the `picamera2` and `libcamera` libraries. We are OK with *not* using a virtual environment because this device is intended to be run via a single top-level script, the RPi device (in our case RPi Zero 2W) requires minimal setup (i.e., can easily be reflashed), and the RPi device is intended for a single purpose with a single set of requirements (i.e., a "point-and-shoot" camera) [[context](https://github.com/AccelerationConsortium/ac-training-lab/pull/178#issuecomment-2730490626)].
+Within the same directory as this README file, use the `venv` command to create a virtual environment to a new folder `venv` with the `--system-site-packages` flag so that it can use the `picamera2` and `libcamera` libraries and activate the environment via the following commands:
 
-While a virtual environment on RPi OS Lite will give you pip, this does not come preinstalled on the built-in Python on RPi OS Lite. To install pip, run:
 ```bash
-sudo apt install python3-pip -y
+cd /home/ac/ac-training-lab/src/ac_training_lab/a1_cam/
+python3 -m venv --system-site-packages venv
+source venv/bin/activate
 ```
-> NOTE: The `-y` flag is used to automatically answer "yes" to any installation prompts.
 
-While in the same folder as this README file (e.g., `cd ac-training-lab/src/ac_training_lab/a1_cam`), run:
+While one could use the built-in Python installation (this device is intended to be run via a single top-level script, the RPi device (in our case RPi Zero 2W) requires minimal setup (i.e., can easily be reflashed), and the RPi device is intended for a single purpose with a single set of requirements (i.e., a "point-and-shoot" camera)), the extra steps involved to make this work are as equally onerous as using a venv [[context](https://github.com/AccelerationConsortium/ac-training-lab/pull/178#issuecomment-2730490626)], hence we only include instructions assuming a venv.
+
+Next, install the requirements via:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-## Non-RPi OS Development
+## "Local" (i.e., not RPi OS) OS Development
 
-For local development with a dummy version of picamera2 (very minimal mock package), while in the same folder as this README file, additionally run:
+For local development (e.g., on your PC rather than the Raspberry Pi to make version control easier) with a dummy version of `picamera2` (very minimal mock package), while in the same folder as this README file, additionally run:
 
 ```bash
 pip install -e ./dummy_pkg/ # WARNING: do not install this on the Raspberry Pi for the toolhead camera -- the imports will overlap with the "real" system packages `picamera2` and `libcamera`.
@@ -42,8 +44,109 @@ pip install -e ./dummy_pkg/ # WARNING: do not install this on the Raspberry Pi f
 
 ## Running the Device
 
-To start the device manually, run:
+To start the device manually and ensure that it's functioning normally, run:
 
 ```bash
 python3 device.py
 ```
+
+## Automatic startup
+
+To create the file, run nano (or other editor of choice):
+
+```bash
+sudo nano /etc/systemd/system/a1-cam.service
+```
+
+Copy the following code into the file (right click to paste), save it via `Ctrl+O` and `Enter` and exit via `Ctrl+X`:
+
+```yaml
+[Unit]
+Description=Start a1-cam device.py script
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+# Launch the device script (adjust the path as needed)
+WorkingDirectory=/home/ac/ac-training-lab/src/ac_training_lab/a1_cam
+ExecStart=venv/bin/python3 device.py
+# Restart on unexpected failure – if the script exits with an error, systemd will restart it
+Restart=on-failure
+RestartSec=10
+
+# Limit restart attempts to avoid a rapid infinite loop:
+StartLimitIntervalSec=12h # (i.e., up to max 9 times per day, assuming a StartLimitBurst of 3)
+StartLimitBurst=3
+
+# Allow up to 60 seconds for the script to start properly
+TimeoutStartSec=60
+
+[Install]
+WantedBy=multi-user.target
+```
+
+Run:
+```
+sudo systemctl daemon-reload
+sudo systemctl enable a1-cam.service
+sudo systemctl start a1-cam.service
+```
+
+Run:
+
+```bash
+crontab -e
+```
+
+Add the following at the end of the crontab file:
+
+```bash
+#
+# Restart at 2 am, local time (set up during flashing, or specified manually via e.g., `sudo timedatectl set-timezone America/New_York`)
+0 2 * * * /sbin/shutdown -r now
+```
+
+You can manually start the service by running:
+
+```bash
+sudo systemctl start ac-device.service
+```
+
+This command tells systemd to run your service immediately (as if it had been triggered at boot). To check its status, use:
+
+```bash
+sudo systemctl status a1-cam.service
+```
+
+To view any logs:
+
+```bash
+sudo journalctl -u a1-cam.service -f
+```
+
+Starting the service with `systemd` is recommended since it applies all the configured options (dependencies, restart behavior, etc.).
+
+For more details, see the [systemctl(1)](https://www.freedesktop.org/software/systemd/man/systemctl.html) manual.
+
+
+To stop the service (for example, while you work on fixing it), run:
+
+```bash
+sudo systemctl stop a1-cam.service
+```
+
+This command stops the running instance of the service immediately. If you also want to prevent it from starting at boot until you've fixed it, you can disable it with:
+
+```bash
+sudo systemctl disable a1-cam.service
+```
+
+For more details on managing services, check out the [systemctl(1)](https://www.freedesktop.org/software/systemd/man/systemctl.html) manual [[transcript](https://chatgpt.com/share/67da116e-184c-8006-99b3-a49fc08eb1bb)].
+
+
+
+<!-- While a virtual environment on RPi OS Lite will give you pip, this does not come preinstalled on the built-in Python on RPi OS Lite. To install pip, run:
+```bash
+sudo apt install python3-pip -y
+```
+> NOTE: The `-y` flag is used to automatically answer "yes" to any installation prompts. -->
