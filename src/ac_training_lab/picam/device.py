@@ -37,7 +37,7 @@ picam2.configure(
     picam2.create_video_configuration(
         main={"size": (1280, 720)}, transform=Transform(hflip=1, vflip=1)
     )
-)  # Video configuration
+)
 
 # https://chatgpt.com/share/67daf904-3f6c-8006-bb41-559934e82711
 picam2.start_preview(Preview.NULL)
