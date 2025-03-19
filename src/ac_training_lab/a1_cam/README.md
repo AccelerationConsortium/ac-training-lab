@@ -32,22 +32,18 @@ While in the same folder as this README file (e.g., `cd ac-training-lab/src/ac_t
 pip install -r requirements.txt
 ```
 
+## Non-RPi OS Development
+
 For local development with a dummy version of picamera2 (very minimal mock package), while in the same folder as this README file, additionally run:
 
 ```bash
 pip install -e ./dummy_pkg/ # WARNING: do not install this on the Raspberry Pi for the toolhead camera -- the imports will overlap with the "real" system packages `picamera2` and `libcamera`.
 ```
 
-To start the device, run:
+## Running the Device
+
+To start the device manually, run:
 
 ```bash
 python3 device.py
-```
-
-To set the device to run automatically on boot and restart every day at 2 am, run:
-
-```bash
-sudo cp a1_cam.service /etc/systemd/system/
-sudo systemctl enable a1_cam.service
-sudo systemctl start a1_cam.service
 ```
