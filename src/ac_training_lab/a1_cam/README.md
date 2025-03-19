@@ -3,10 +3,28 @@
 This is intended to be run on a Raspberry Pi Zero 2W with a Raspberry Pi Camera
 Module 3.
 
+## Codebase
+
+Clone the repository to your Raspberry Pi Zero 2W device via HTTPS (allows for `git pull` to work without needing to enter credentials each time):
+
+```bash
+git clone https://github.com/AccelerationConsortium/ac-training-lab.git
+```
+
+Navigate to the same directory as this README file:
+
+```bash
+cd /home/ac/ac-training-lab/src/ac_training_lab/a1_cam/
+```
+
 ## Secrets
 
-Make a copy of `my_secrets_example.py` called `my_secrets.py` and
-fill in the necessary information. Keep in mind this will store the credentials in plain-text format.
+Make a copy of `my_secrets_example.py` called `my_secrets.py`:
+```bash
+cp my_secrets_example.py my_secrets.py
+```
+
+Fill in the necessary information. Keep in mind this will store the credentials in plain-text format, so try to keep your Pi login secure and restrict the access scope for the credentials as much as possible (e.g., topic filtering for MQTT and bucket policies for S3).
 
 ## Dependencies
 
@@ -18,10 +36,9 @@ sudo apt install python3-picamera2 --no-install-recommends
 
 `libcamera` should be automatically installed after installing `picamera2`. Otherwise, one would use `sudo apt install -y python3-libcamera` (`libcamera` also does not come preinstalled on RPi OS Lite versions).
 
-Within the same directory as this README file, use the `venv` command to create a virtual environment to a new folder `venv` with the `--system-site-packages` flag so that it can use the `picamera2` and `libcamera` libraries and activate the environment via the following commands:
+Use the `venv` command to create a virtual environment to a new folder `venv` with the `--system-site-packages` flag so that it can use the `picamera2` and `libcamera` libraries and activate the environment via the following commands:
 
 ```bash
-cd /home/ac/ac-training-lab/src/ac_training_lab/a1_cam/
 python3 -m venv --system-site-packages venv
 source venv/bin/activate
 ```
@@ -36,11 +53,7 @@ pip install -r requirements.txt
 
 ## "Local" (i.e., not RPi OS) OS Development
 
-For local development (e.g., on your PC rather than the Raspberry Pi to make version control easier) with a dummy version of `picamera2` (very minimal mock package), while in the same folder as this README file, additionally run:
-
-```bash
-pip install -e ./dummy_pkg/ # WARNING: do not install this on the Raspberry Pi for the toolhead camera -- the imports will overlap with the "real" system packages `picamera2` and `libcamera`.
-```
+For local development (e.g., on your PC rather than the Raspberry Pi to make version control easier) with a dummy version of `picamera2` (very minimal mock package), while in the same folder as this README file, additionally run `pip install -e ./dummy_pkg/`. WARNING: do not install this on the Raspberry Pi for the toolhead camera -- the imports will overlap with the "real" system packages `picamera2` and `libcamera`.
 
 ## Running the Device
 
@@ -69,13 +82,14 @@ Wants=network-online.target
 [Service]
 # Launch the device script (adjust the path as needed)
 WorkingDirectory=/home/ac/ac-training-lab/src/ac_training_lab/a1_cam
-ExecStart=venv/bin/python3 device.py
+# Best to specify the full path to the Python interpreter or use ExecSearchPath
+ExecStart=/home/ac/ac-training-lab/src/ac_training_lab/a1_cam/venv/bin/python3 device.py
 # Restart on unexpected failure – if the script exits with an error, systemd will restart it
 Restart=on-failure
 RestartSec=10
 
-# Limit restart attempts to avoid a rapid infinite loop:
-StartLimitIntervalSec=12h # (i.e., up to max 9 times per day, assuming a StartLimitBurst of 3)
+# Limit restart attempts to avoid a rapid infinite loop (i.e., up to max 9 times per day, assuming a StartLimitBurst of 3)
+StartLimitIntervalSec=12h
 StartLimitBurst=3
 
 # Allow up to 60 seconds for the script to start properly
@@ -139,6 +153,20 @@ This command stops the running instance of the service immediately. If you also 
 
 ```bash
 sudo systemctl disable a1-cam.service
+```
+
+You can list all available service unit files by running:
+
+```bash
+systemctl list-unit-files --type=service
+```
+
+This will display a list of service files along with their state (enabled, disabled, static, etc.). It shows unit files from all directories (such as `/etc/systemd/system`, `/usr/lib/systemd/system`, and `/run/systemd/system`).
+
+For a list of all loaded (active or inactive) service units, you can use:
+
+```bash
+systemctl list-units --all --type=service
 ```
 
 For more details on managing services, check out the [systemctl(1)](https://www.freedesktop.org/software/systemd/man/systemctl.html) manual [[transcript](https://chatgpt.com/share/67da116e-184c-8006-99b3-a49fc08eb1bb)].
