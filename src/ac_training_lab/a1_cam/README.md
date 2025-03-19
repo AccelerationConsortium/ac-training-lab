@@ -136,7 +136,7 @@ Add the following at the end of the crontab file:
 You can manually start the service by running:
 
 ```bash
-sudo systemctl start ac-device.service
+sudo systemctl start a1-cam.service
 ```
 
 This command tells systemd to run your service immediately (as if it had been triggered at boot). To check its status, use:
