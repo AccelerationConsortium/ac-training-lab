@@ -25,7 +25,7 @@ git clone https://github.com/AccelerationConsortium/ac-training-lab.git
 Navigate to the same directory as this README file:
 
 ```bash
-cd /home/ac/ac-training-lab/src/ac_training_lab/a1_cam/
+cd /home/ac/ac-training-lab/src/ac_training_lab/picam/
 ```
 
 ## Secrets
@@ -35,7 +35,7 @@ Make a copy of `my_secrets_example.py` called `my_secrets.py`:
 cp my_secrets_example.py my_secrets.py
 ```
 
-Fill in the necessary information. Keep in mind this will store the credentials in plain-text format, so try to keep your Pi login secure and restrict the access scope for the credentials as much as possible (e.g., topic filtering for MQTT and bucket policies for S3).
+Fill in the necessary information. Keep in mind this will store the credentials in plain-text format, so try to keep your Pi login secure and restrict the access scope for the credentials as much as possible.
 
 ## Dependencies
 
@@ -56,11 +56,11 @@ source venv/bin/activate
 
 While one could use the built-in Python installation (this device is intended to be run via a single top-level script, the RPi device (in our case RPi Zero 2W) requires minimal setup (i.e., can easily be reflashed), and the RPi device is intended for a single purpose with a single set of requirements (i.e., a "point-and-shoot" camera)), the extra steps involved to make this work are as equally onerous as using a venv [[context](https://github.com/AccelerationConsortium/ac-training-lab/pull/178#issuecomment-2730490626)], hence we only include instructions assuming a venv.
 
-Next, install the requirements via:
+<!-- Next, install the requirements via:
 
 ```bash
 pip install -r requirements.txt
-```
+``` -->
 
 ## "Local" (i.e., not RPi OS) OS Development
 
@@ -81,22 +81,22 @@ To verify quickly that this script works, you can run `_scripts/client.py` local
 To create the file, run nano (or other editor of choice):
 
 ```bash
-sudo nano /etc/systemd/system/a1-cam.service
+sudo nano /etc/systemd/system/picam.service
 ```
 
 Copy the following code into the file (right click to paste), save it via `Ctrl+O` and `Enter` and exit via `Ctrl+X`:
 
 ```yaml
 [Unit]
-Description=Start a1-cam device.py script
+Description=Start picam device.py script
 After=network-online.target
 Wants=network-online.target
 
 [Service]
 # Launch the device script (adjust the path as needed)
-WorkingDirectory=/home/ac/ac-training-lab/src/ac_training_lab/a1_cam
+WorkingDirectory=/home/ac/ac-training-lab/src/ac_training_lab/picam
 # Best to specify the full path to the Python interpreter or use ExecSearchPath
-ExecStart=/home/ac/ac-training-lab/src/ac_training_lab/a1_cam/venv/bin/python3 device.py
+ExecStart=/home/ac/ac-training-lab/src/ac_training_lab/picam/venv/bin/python3 device.py
 # Restart on unexpected failure – if the script exits with an error, systemd will restart it
 Restart=on-failure
 RestartSec=10
@@ -115,8 +115,7 @@ WantedBy=multi-user.target
 Run:
 ```
 sudo systemctl daemon-reload
-sudo systemctl enable a1-cam.service
-sudo systemctl start a1-cam.service
+sudo systemctl enable picam.service
 ```
 
 Run:
@@ -133,22 +132,22 @@ Add the following at the end of the crontab file:
 0 2 * * * /sbin/shutdown -r now
 ```
 
-You can manually start the service by running:
+Manually start the service by running:
 
 ```bash
-sudo systemctl start a1-cam.service
+sudo systemctl start picam.service
 ```
 
 This command tells systemd to run your service immediately (as if it had been triggered at boot). To check its status, use:
 
 ```bash
-sudo systemctl status a1-cam.service
+sudo systemctl status picam.service
 ```
 
 To view any logs:
 
 ```bash
-sudo journalctl -u a1-cam.service -f
+sudo journalctl -u picam.service -f
 ```
 
 Starting the service with `systemd` is recommended since it applies all the configured options (dependencies, restart behavior, etc.).
@@ -159,13 +158,13 @@ For more details, see the [systemctl(1)](https://www.freedesktop.org/software/sy
 To stop the service (for example, while you work on fixing it / pulling new changes), run:
 
 ```bash
-sudo systemctl stop a1-cam.service
+sudo systemctl stop picam.service
 ```
 
 This command stops the running instance of the service immediately. If you also want to prevent it from starting at boot until you've fixed it, you can disable it with:
 
 ```bash
-sudo systemctl disable a1-cam.service
+sudo systemctl disable picam.service
 ```
 
 To get it to reflect the new changes, run:
