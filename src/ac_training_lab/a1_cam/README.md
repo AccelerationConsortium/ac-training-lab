@@ -141,6 +141,20 @@ This command stops the running instance of the service immediately. If you also 
 sudo systemctl disable a1-cam.service
 ```
 
+You can list all available service unit files by running:
+
+```bash
+systemctl list-unit-files --type=service
+```
+
+This will display a list of service files along with their state (enabled, disabled, static, etc.). It shows unit files from all directories (such as `/etc/systemd/system`, `/usr/lib/systemd/system`, and `/run/systemd/system`).
+
+For a list of all loaded (active or inactive) service units, you can use:
+
+```bash
+systemctl list-units --all --type=service
+```
+
 For more details on managing services, check out the [systemctl(1)](https://www.freedesktop.org/software/systemd/man/systemctl.html) manual [[transcript](https://chatgpt.com/share/67da116e-184c-8006-99b3-a49fc08eb1bb)].
 
 
