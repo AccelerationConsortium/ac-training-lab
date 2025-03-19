@@ -1,9 +1,20 @@
 # A1 Mini Overhead Toolhead Camera
 
-This is intended to be run on a Raspberry Pi Zero 2W with a Raspberry Pi Camera
-Module 3.
+This is intended to be run on a Raspberry Pi Zero 2W Raspberry Pi Camera
+Module 3 running RPi OS Lite (bookworm).
 
 ## Codebase
+
+Optionally, update the system packages to the latest versions (`-y` flag is used to automatically answer "yes" to any installation prompts):
+```bash
+sudo apt update
+sudo apt upgrade -y
+```
+
+Ensure that `git` is installed:
+```bash
+sudo apt-get install git -y
+```
 
 Clone the repository to your Raspberry Pi Zero 2W device via HTTPS (allows for `git pull` to work without needing to enter credentials each time):
 
