@@ -39,7 +39,9 @@ picam2.configure(
     )
 )  # Video configuration
 
-picam2.start_preview(Preview.QTGL)
+# https://chatgpt.com/share/67daf904-3f6c-8006-bb41-559934e82711
+picam2.start_preview(Preview.NULL)
+
 picam2.start()
 
 # Create the ffmpeg command for streaming
