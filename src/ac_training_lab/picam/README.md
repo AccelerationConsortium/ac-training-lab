@@ -74,8 +74,6 @@ To start the device manually and ensure that it's functioning normally, run:
 python3 device.py
 ```
 
-To verify quickly that this script works, you can run `_scripts/client.py` locally (e.g., on your PC), ensuring that you have the same credentials in a `my_secrets.py` located in the `_scripts` directory as you do on the RPi. This script will request the latest image from the device and save it to your local machine.
-
 ## Automatic startup
 
 To create the file, run nano (or other editor of choice):
@@ -101,8 +99,8 @@ ExecStart=/home/ac/ac-training-lab/src/ac_training_lab/picam/venv/bin/python3 de
 Restart=on-failure
 RestartSec=10
 
-# Limit restart attempts to avoid a rapid infinite loop (i.e., up to max 9 times per day, assuming a StartLimitBurst of 3)
-StartLimitIntervalSec=12h
+# Limit restart attempts to avoid a rapid infinite loop (i.e., up to max 9 times per day, assuming a StartLimitBurst of 3, 28800 seconds == 8 hours, "h" syntax wasn't working on RPi)
+StartLimitInterval=28800
 StartLimitBurst=3
 
 # Allow up to 60 seconds for the script to start properly
