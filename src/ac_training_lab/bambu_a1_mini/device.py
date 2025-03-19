@@ -1,12 +1,12 @@
 import json
-import paho.mqtt.client as mqtt
 import os
-import sys
-import traceback
-import time
-from queue import Queue, Empty
 import subprocess
+import sys
+import time
+import traceback
+from queue import Empty, Queue
 
+import paho.mqtt.client as mqtt
 from my_secrets import (
     MQTT_BROKER,
     MQTT_PASSWORD,
@@ -21,7 +21,7 @@ client = mqtt.Client()
 client.tls_set(tls_version=mqtt.ssl.PROTOCOL_TLS)
 client.username_pw_set(MQTT_USERNAME, MQTT_PASSWORD)
 
-TEMPLATE_DIR = "/home/ac/Documents/GitHub/AccelerationConsortium/ac-training-lab/src/ac_training_lab/bambu_a1_mini/gcode"
+TEMPLATE_DIR = "/home/ac/ac-training-lab/src/ac_training_lab/bambu_a1_mini/gcode"
 CURRENT_TEMPLATE_INDEX = 1
 MAX_TEMPLATE_INDEX = 27
 
