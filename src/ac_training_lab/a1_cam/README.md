@@ -19,8 +19,12 @@ cd /home/ac/ac-training-lab/src/ac_training_lab/a1_cam/
 
 ## Secrets
 
-Make a copy of `my_secrets_example.py` called `my_secrets.py` and
-fill in the necessary information. Keep in mind this will store the credentials in plain-text format.
+Make a copy of `my_secrets_example.py` called `my_secrets.py`:
+```bash
+cp my_secrets_example.py my_secrets.py
+```
+
+Fill in the necessary information. Keep in mind this will store the credentials in plain-text format, so try to keep your Pi login secure and restrict the access scope for the credentials as much as possible (e.g., topic filtering for MQTT and bucket policies for S3).
 
 ## Dependencies
 
@@ -49,11 +53,7 @@ pip install -r requirements.txt
 
 ## "Local" (i.e., not RPi OS) OS Development
 
-For local development (e.g., on your PC rather than the Raspberry Pi to make version control easier) with a dummy version of `picamera2` (very minimal mock package), while in the same folder as this README file, additionally run:
-
-```bash
-pip install -e ./dummy_pkg/ # WARNING: do not install this on the Raspberry Pi for the toolhead camera -- the imports will overlap with the "real" system packages `picamera2` and `libcamera`.
-```
+For local development (e.g., on your PC rather than the Raspberry Pi to make version control easier) with a dummy version of `picamera2` (very minimal mock package), while in the same folder as this README file, additionally run `pip install -e ./dummy_pkg/`. WARNING: do not install this on the Raspberry Pi for the toolhead camera -- the imports will overlap with the "real" system packages `picamera2` and `libcamera`.
 
 ## Running the Device
 
