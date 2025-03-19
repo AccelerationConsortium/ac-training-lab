@@ -3,6 +3,20 @@
 This is intended to be run on a Raspberry Pi Zero 2W with a Raspberry Pi Camera
 Module 3.
 
+## Codebase
+
+Clone the repository to your Raspberry Pi Zero 2W device via HTTPS (allows for `git pull` to work without needing to enter credentials each time):
+
+```bash
+git clone https://github.com/AccelerationConsortium/ac-training-lab.git
+```
+
+Navigate to the same directory as this README file:
+
+```bash
+cd /home/ac/ac-training-lab/src/ac_training_lab/a1_cam/
+```
+
 ## Secrets
 
 Make a copy of `my_secrets_example.py` called `my_secrets.py` and
@@ -18,10 +32,9 @@ sudo apt install python3-picamera2 --no-install-recommends
 
 `libcamera` should be automatically installed after installing `picamera2`. Otherwise, one would use `sudo apt install -y python3-libcamera` (`libcamera` also does not come preinstalled on RPi OS Lite versions).
 
-Within the same directory as this README file, use the `venv` command to create a virtual environment to a new folder `venv` with the `--system-site-packages` flag so that it can use the `picamera2` and `libcamera` libraries and activate the environment via the following commands:
+Use the `venv` command to create a virtual environment to a new folder `venv` with the `--system-site-packages` flag so that it can use the `picamera2` and `libcamera` libraries and activate the environment via the following commands:
 
 ```bash
-cd /home/ac/ac-training-lab/src/ac_training_lab/a1_cam/
 python3 -m venv --system-site-packages venv
 source venv/bin/activate
 ```
