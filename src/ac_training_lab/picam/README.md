@@ -1,4 +1,4 @@
-# A1 Mini Overhead Toolhead Camera
+# RPi Zero 2W Streaming Cameras
 
 This is intended to be run on a Raspberry Pi Zero 2W Raspberry Pi Camera
 Module 3 running RPi OS Lite (bookworm).
