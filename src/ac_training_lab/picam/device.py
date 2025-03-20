@@ -8,8 +8,6 @@ from picamera2 import Picamera2
 from picamera2.encoders import H264Encoder
 from picamera2.outputs import FfmpegOutput
 
-# from picamera2 import Preview
-
 # Configure logging, useful when running `sudo journalctl -u a1-cam.service -f`,
 # as described in README.
 # Example log: 2025-03-18 15:00:00 - INFO - Starting camera setup...
@@ -55,16 +53,15 @@ picam2.configure(
     )
 )
 
-# https://chatgpt.com/share/67daf904-3f6c-8006-bb41-559934e82711
-# picam2.start_preview(Preview.NULL)
-
 picam2.start()
 logger.info("Camera started")
 
 # Create the ffmpeg command for streaming
+#
 ffmpeg_cmd = [
     "-b:v 4M",
     "-f flv",  # Output format for RTMP stream
+    "anullsrc=channel_layout=stereo:sample_rate=48000",
     f"{YOUTUBE_STREAM_URL}/{YOUTUBE_STREAM_KEY}",  # YouTube RTMP URL and stream key
 ]
 ffmpeg_cmd = " ".join(ffmpeg_cmd)
@@ -79,6 +76,7 @@ logger.info("Streaming started")
 
 try:
     while True:
+        logger.info("Streaming...")
         time.sleep(10)
 
 except KeyboardInterrupt:
