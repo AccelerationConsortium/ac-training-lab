@@ -5,12 +5,13 @@ from io import BytesIO
 
 import bambulabs_api as bl
 
-IP = "192.168.1.124"
-SERIAL = "0309CA471800852"
-ACCESS_CODE = "14011913"
+from my_secrets import IP, SERIAL, ACCESS_CODE
 
-INPUT_FILE_PATH = "src/ac_training_lab/bambu_a1_mini/gcode/A1.gcode"
-UPLOAD_FILE_NAME = "A1.gcode"
+input_dir = "/home/ac/Documents/GitHub/AccelerationConsortium/ac-training-lab/src/ac_training_lab/bambu_a1_mini/gcode/"
+input_fname = "a1.gcode"
+input_fpath = os.path.join(input_dir, input_fname)
+upload_fname = os.path.basename(input_fpath)
+# UPLOAD_FILE_NAME = "a1.gcode"
 
 env = os.getenv("env", "debug")
 plate = os.getenv("plate", "true").lower() == "true"
@@ -52,19 +53,19 @@ if __name__ == "__main__":
 
     time.sleep(2)
 
-    with open(INPUT_FILE_PATH, "r") as file:
+    with open(input_fpath, "r") as file:
         gcode = file.read()
 
     gcode_location = "Metadata/plate_1.gcode"
     io_file = create_zip_archive_in_memory(gcode, gcode_location)
     if file:
-        result = printer.upload_file(io_file, UPLOAD_FILE_NAME)
+        result = printer.upload_file(io_file, upload_fname)
         if "226" not in result:
             print("Error Uploading File to Printer")
 
         else:
             print("Done Uploading/Sending Start Print Command")
-            printer.start_print(UPLOAD_FILE_NAME, 1)
+            printer.start_print(upload_fname, 1)
             print("Start Print Command Sent")
 
     time.sleep(2)
