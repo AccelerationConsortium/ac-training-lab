@@ -47,7 +47,7 @@ sudo apt install python3-picamera2 --no-install-recommends
 
 `libcamera` should be automatically installed after installing `picamera2`. Otherwise, one would use `sudo apt install -y python3-libcamera` (`libcamera` also does not come preinstalled on RPi OS Lite versions).
 
-and [`FFmpeg`](https://github.com/FFmpeg/FFmpeg) :
+Also install [`FFmpeg`](https://github.com/FFmpeg/FFmpeg):
 
 ```bash
 sudo apt install ffmpeg --no-install-recommends
