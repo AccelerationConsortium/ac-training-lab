@@ -77,13 +77,13 @@ def modify_gcode_template(gcode, nozzle_temp, bed_temp, print_speed, fan_speed):
     )
     gcode = gcode.replace("M140 S65", f"M140 S{bed_temp}")
     gcode = gcode.replace("M190 S65", f"M190 S{bed_temp}")
-    #to reduce wait time for low temp
-    gcode = gcode.replace("M140 S61 ", f"M140 S{bed_temp}") 
-    gcode = gcode.replace("M190 S61", f"M190 S{bed_temp}")  
+    # to reduce wait time for low temp
+    gcode = gcode.replace("M140 S61 ", f"M140 S{bed_temp}")
+    gcode = gcode.replace("M190 S61", f"M190 S{bed_temp}")
 
     gcode = gcode.replace("M109 S220", f"M109 S{nozzle_temp}")
     gcode = gcode.replace("M104 S220", f"M109 S{nozzle_temp}")
-    
+
     return gcode
 
 
