@@ -47,6 +47,12 @@ sudo apt install python3-picamera2 --no-install-recommends
 
 `libcamera` should be automatically installed after installing `picamera2`. Otherwise, one would use `sudo apt install -y python3-libcamera` (`libcamera` also does not come preinstalled on RPi OS Lite versions).
 
+and [`FFmpeg`](https://github.com/FFmpeg/FFmpeg) :
+
+```bash
+sudo apt install ffmpeg --no-install-recommends
+```
+
 Use the `venv` command to create a virtual environment to a new folder `venv` with the `--system-site-packages` flag so that it can use the `picamera2` and `libcamera` libraries and activate the environment via the following commands:
 
 ```bash
