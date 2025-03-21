@@ -4,10 +4,9 @@ import zipfile
 from io import BytesIO
 
 import bambulabs_api as bl
+from my_secrets import ACCESS_CODE, IP, SERIAL
 
-from my_secrets import IP, SERIAL, ACCESS_CODE
-
-input_dir = "/home/ac/Documents/GitHub/AccelerationConsortium/ac-training-lab/src/ac_training_lab/bambu_a1_mini/gcode/"
+input_dir = "/home/ac/Documents/GitHub/AccelerationConsortium/ac-training-lab/src/ac_training_lab/bambu_a1_mini/gcode/"  # noqa: E501
 input_fname = "a1.gcode"
 input_fpath = os.path.join(input_dir, input_fname)
 upload_fname = os.path.basename(input_fpath)

@@ -1,9 +1,9 @@
 # https://mchrisgm.github.io/bambulabs_api/examples.html
 
 from time import sleep
-import bambulabs_api as bl
 
-from my_secrets import IP, SERIAL, ACCESS_CODE
+import bambulabs_api as bl
+from my_secrets import ACCESS_CODE, IP, SERIAL
 
 printer = bl.Printer(IP, ACCESS_CODE, SERIAL)
 
