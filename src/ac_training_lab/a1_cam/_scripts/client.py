@@ -75,7 +75,7 @@ client = get_paho_client(
 msg = {"command": "capture_image"}
 
 try:
-    data = send_and_receive(client, CAMERA_READ_TOPIC, msg, queue_timeout=30)
+    data = send_and_receive(client, CAMERA_READ_TOPIC, msg)
 
     image_uri = data["image_uri"]
 
