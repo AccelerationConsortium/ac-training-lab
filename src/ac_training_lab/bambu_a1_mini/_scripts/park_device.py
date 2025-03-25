@@ -17,11 +17,9 @@ z_current_lowered = printer.gcode("M17 Z0.4 ; lower z motor current to reduce im
 z_moved_high = printer.gcode("G1 Z100.2 F600   ; Move Z very high up")
 z_backed_off = printer.gcode("G1 Z98.2        ; Back off slightly to release pressure")
 
-# restore_z_current = printer.gcode("M17 R ; restore z current")
-# restore_z_current = printer.gcode("M17 X1.1 Y1.1 Z0.75 ; restore z current")
-
-# HACK: bambulabs_api treating this as invalid, so circumventing check for this one
-restore_z_current = printer.mqtt_client.__send_gcode_line("M17 R ; restore z current")
+restore_z_current = printer.mqtt_client.send_gcode(
+    "M17 R ; restore z current", gcode_check=False
+)
 
 abs_positioning_set = printer.gcode("G90")
 final_xy_position_set = printer.gcode("G1 X-13 Y180 F3600  ; Final XY position")
@@ -91,3 +89,10 @@ nozzle away from the print surface when not in use.
 If your printer is in standard configuration without modifications, this should
 execute safely.
 """
+
+
+# restore_z_current = printer.gcode("M17 R ; restore z current", )
+# restore_z_current = printer.gcode("M17 X1.1 Y1.1 Z0.75 ; restore z current")
+
+# HACK: bambulabs_api treating this as invalid, so circumventing check for this one
+# restore_z_current = printer.mqtt_client.send_gcode("M17 R ; restore z current", gcode_check=True)
