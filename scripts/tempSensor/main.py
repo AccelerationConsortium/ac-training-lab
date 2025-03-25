@@ -1,83 +1,59 @@
+import uasyncio as asyncio
 import json
 import time
-
-from bme680 import BME680_I2C
 from machine import I2C, Pin, reset
-from netman import connectWiFi
-from umqtt.simple import MQTTClient
+from bme680 import BME680_I2C
+import mqtt_as
+from my_secrets import SSID, PASSWORD, MQTT_BROKER, MQTT_PORT, MQTT_TOPIC, MQTT_USER, MQTT_PASS
 
-# Configuration
-SSID = "Pixel 8"
-PASSWORD = "123456789"
-MQTT_BROKER = b"b6bdb89571144b3d8e5ca4bbe666ddb5.s1.eu.hivemq.cloud"
-MQTT_PORT = 8883
-MQTT_TOPIC = b"sensors/bme680/data"
-MQTT_USER = b"Luthiraa"
-MQTT_PASS = b"theboss1010"
+# configure mqtt_as settings 
+mqtt_as.config["ssid"] = SSID
+mqtt_as.config["wifi_pw"] = PASSWORD
+mqtt_as.config["server"] = MQTT_BROKER
+mqtt_as.config["port"] = MQTT_PORT
+mqtt_as.config["user"] = MQTT_USER
+mqtt_as.config["password"] = MQTT_PASS
+mqtt_as.config["client_id"] = "pico_w"
+mqtt_as.config["ssl"] = True
+mqtt_as.config["ssl_params"] = {"server_hostname": MQTT_BROKER}
+mqtt_as.config["keepalive"] = 60
+mqtt_as.config["clean"] = True  
 
-# Initialize I2C and Sensor
+# init I2C and the BME680 sensor
 i2c = I2C(0, scl=Pin(5), sda=Pin(4))
 bme = BME680_I2C(i2c)
 
-
-def connect_to_wifi():
-    """Connects to Wi-Fi, restarts on failure."""
-    try:
-        status = connectWiFi(SSID, PASSWORD, country="US", retries=5)
-        print("Wi-Fi connected! IP:", status[0])
-    except Exception as e:
-        print(f"Wi-Fi error: {e}")
-        time.sleep(5)
-        reset()
-
-
-def connect_to_mqtt():
-    """Connects to MQTT broker, restarts on failure."""
-    client = MQTTClient(
-        client_id=b"pico_w",
-        server=MQTT_BROKER,
-        port=MQTT_PORT,
-        user=MQTT_USER,
-        password=MQTT_PASS,
-        keepalive=60,
-        ssl=True,
-        ssl_params={"server_hostname": MQTT_BROKER},
-    )
-    try:
-        client.connect()
-        print("Connected to MQTT broker!")
-        return client
-    except Exception as e:
-        print(f"MQTT error: {e}")
-        time.sleep(5)
-        reset()
-
-
-def main():
-    connect_to_wifi()
-    mqtt_client = connect_to_mqtt()
-
+async def pub_sensor_data(client):
+    """Periodically publishes sensor data as a JSON payload."""
     while True:
         try:
-            # Create JSON payload
-            payload = json.dumps(
-                {
-                    "temperature": round(bme.temperature, 2),
-                    "humidity": round(bme.humidity, 2),
-                    "pressure": round(bme.pressure, 2),
-                    "gas": round(bme.gas, 2),
-                }
-            )
-
-            mqtt_client.publish(MQTT_TOPIC, payload)
+            payload = json.dumps({
+                "temperature": round(bme.temperature, 2),
+                "humidity": round(bme.humidity, 2),
+                "pressure": round(bme.pressure, 2),
+                "gas": round(bme.gas, 2)
+            })
+            await client.publish(MQTT_TOPIC, payload)
             print("Published:", payload)
-            time.sleep(2)
-
         except Exception as e:
-            print(f"Runtime error: {e}")
+            print("Runtime error:", e)
             time.sleep(5)
-            reset()
+            reset()  
+        await asyncio.sleep(2)
 
+async def main():
+    client = mqtt_as.MQTTClient()
+    await client.connect()
+    print("Connected to MQTT broker!")
+    
+    # Start the sensor data publishing task
+    asyncio.create_task(pub_sensor_data(client))
+    
+    # Keep the main loop running
+    while True:
+        await asyncio.sleep(1)
 
-if __name__ == "__main__":
-    main()
+try:
+    asyncio.run(main())
+finally:
+    asyncio.new_event_loop()  
