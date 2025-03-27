@@ -94,21 +94,21 @@ Copy the following code into the file (right click to paste), save it via `Ctrl+
 
 ```yaml
 [Unit]
-Description=Start a1-cam device.py script
+Description=Start picam device.py script
 After=network-online.target
 Wants=network-online.target
 
 [Service]
 # Launch the device script (adjust the path as needed)
-WorkingDirectory=/home/ac/ac-training-lab/src/ac_training_lab/a1_cam
+WorkingDirectory=/home/ac/ac-training-lab/src/ac_training_lab/picam
 # Best to specify the full path to the Python interpreter or use ExecSearchPath
-ExecStart=/home/ac/ac-training-lab/src/ac_training_lab/a1_cam/venv/bin/python3 device.py
-# Restart on unexpected failure – if the script exits with an error, systemd will restart it
-Restart=on-failure
+ExecStart=/home/ac/ac-training-lab/src/ac_training_lab/picam/venv/bin/python3 device.py
+# Restart whenever the script exits ('always' because sometimes it throws an error but still exits gracefully)
+Restart=always
 RestartSec=10
 
-# Limit restart attempts to avoid a rapid infinite loop (i.e., up to max 9 times per day, assuming a StartLimitBurst of 3)
-StartLimitIntervalSec=12h
+# Limit restart attempts to avoid a rapid infinite loop (e.g., up to max 9 times per day, assuming a StartLimitBurst of 3, 28800 seconds == 8 hours, "h" syntax wasn't working on RPi, so using seconds)
+StartLimitInterval=3600
 StartLimitBurst=3
 
 # Allow up to 60 seconds for the script to start properly
