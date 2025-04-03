@@ -81,13 +81,19 @@ def start_stream():
 
 
 if __name__ == "__main__":
-    p1, p2 = start_stream()
-    try:
-        # This will block until ffmpeg stops or the script is interrupted
-        p2.wait()
-    except KeyboardInterrupt:
-        pass
-    finally:
-        # Cleanup: terminate both processes if still running
-        p1.terminate()
-        p2.terminate()
+    while True:
+        print("Starting stream..")
+        p1, p2 = start_stream()
+        print("Stream started")
+        try:
+            # This will block until ffmpeg stops or the script is interrupted
+            p2.wait()
+        except Exception as e:
+            print(e)
+        finally:
+            print("Terminating processes..")
+            # Cleanup: terminate both processes if still running
+            p1.terminate()
+            p2.terminate()
+            print("Processes terminated. Retrying..")
+            
