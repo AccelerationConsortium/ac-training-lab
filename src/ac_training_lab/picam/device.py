@@ -88,8 +88,6 @@ if __name__ == "__main__":
         try:
             # This will block until ffmpeg stops or the script is interrupted
             p2.wait()
-        except KeyboardInterrupt:
-            pass
         except Exception as e:
             print(e)
         finally:
