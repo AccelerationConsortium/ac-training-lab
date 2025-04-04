@@ -128,7 +128,7 @@ sudo systemctl start a1-cam.service
 Run:
 
 ```bash
-crontab -e
+sudo crontab -e
 ```
 
 Add the following at the end of the crontab file:
