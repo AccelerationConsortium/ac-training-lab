@@ -125,7 +125,7 @@ sudo systemctl enable picam.service
 Run:
 
 ```bash
-crontab -e
+sudo crontab -e
 ```
 
 Add the following at the end of the crontab file:
