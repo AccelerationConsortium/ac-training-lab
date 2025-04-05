@@ -194,6 +194,11 @@ systemctl list-units --all --type=service
 For more details on managing services, check out the [systemctl(1)](https://www.freedesktop.org/software/systemd/man/systemctl.html) manual [[transcript](https://chatgpt.com/share/67da116e-184c-8006-99b3-a49fc08eb1bb)].
 
 
+Related issue(s):
+- https://github.com/AccelerationConsortium/ac-training-lab/issues/11
+- https://github.com/AccelerationConsortium/ac-training-lab/issues/161
+- https://github.com/AccelerationConsortium/ac-training-lab/issues/80
+
 
 <!-- While a virtual environment on RPi OS Lite will give you pip, this does not come preinstalled on the built-in Python on RPi OS Lite. To install pip, run:
 ```bash
