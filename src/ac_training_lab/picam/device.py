@@ -96,4 +96,3 @@ if __name__ == "__main__":
             p1.terminate()
             p2.terminate()
             print("Processes terminated. Retrying..")
-            
