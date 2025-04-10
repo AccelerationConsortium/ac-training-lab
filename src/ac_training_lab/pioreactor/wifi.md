@@ -24,7 +24,7 @@ Then navigate to:
 ### 4. Power cycle the Pioreactor
 
 ### 5. Connect to new wifi and find the IP address
-After changing the wifi settings, the Pioreactor will be disconnected from the current wifi network and will attempt to connect to the new one. 
+After changing the wifi settings, the Pioreactor will be disconnected from the current wifi network and will attempt to connect to the new one.
 
 
 # Recommendations when traveling with the Pioreactor
