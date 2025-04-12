@@ -26,7 +26,8 @@ Author: Enrui (Edison) Lin
 
 
 # This should reflect the domain_alias in the PioReactor Configuration
-HTTP = "http://piobio.local/api"
+# HTTP = "http://piobio.local/api"
+HTTP = "http://pioreactor01.local/api"
 
 automation_name = None
 stirring_target_rpm = None
