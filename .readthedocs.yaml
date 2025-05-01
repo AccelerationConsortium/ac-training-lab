@@ -20,6 +20,9 @@ build:
   os: ubuntu-22.04
   tools:
     python: "3.11"
+  jobs:
+    pre_build:
+      - python scripts/generate_device_docs.py
 
 python:
   install:
