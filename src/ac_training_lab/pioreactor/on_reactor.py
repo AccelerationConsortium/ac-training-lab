@@ -337,7 +337,7 @@ def get_worker(client, reactor):
 
         client_temp.connect(broker, lookhere.port_pio)
 
-        global automation_name
+        # global automation_name
         client_temp.loop_start()
         time.sleep(1)
         # print(automation_name, "automation_name")
@@ -362,7 +362,7 @@ def get_worker(client, reactor):
 
         client_temp.connect(broker, lookhere.port_pio)
 
-        global stirring_target_rpm
+        # global stirring_target_rpm
         client_temp.loop_start()
         time.sleep(1)
         # print(stirring_target_rpm, "stirring_target_rpm")
