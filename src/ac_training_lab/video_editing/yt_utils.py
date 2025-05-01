@@ -56,6 +56,9 @@ def get_latest_video_id(device_name=None, playlist_id=None):
 
 
 def download_youtube_live(video_id):
+    """
+    Relies on ytdlp https://github.com/yt-dlp/yt-dlp
+    """
     url = f"https://www.youtube.com/live/{video_id}"
     try:
         result = subprocess.run(
@@ -67,9 +70,6 @@ def download_youtube_live(video_id):
         print("An error occurred while downloading:")
         print(e.stderr)
 
-
-# Example usage
-download_youtube_live("ktj2CUfRv0w")
 
 if __name__ == "__main__":
     video_id = get_latest_video_id(device_name="Opentrons OT-2")
