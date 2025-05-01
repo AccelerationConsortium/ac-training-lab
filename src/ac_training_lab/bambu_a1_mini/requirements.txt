@@ -1,0 +1,2 @@
+bambulabs_api
+paho-mqtt
