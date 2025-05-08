@@ -1,6 +1,7 @@
 import subprocess
 
-from my_secrets import STREAM_KEY, STREAM_URL
+import requests
+from my_secrets import DEVICE_NAME, LAMBDA_FUNCTION_URL, STREAM_KEY, STREAM_URL
 
 
 def start_stream():
@@ -28,6 +29,9 @@ def start_stream():
         "h264",  # H.264 encoding
         "--bitrate",
         "1000000",  # ~1 Mbps video
+        # vertical/horizontal flips depend on the cam mount
+        "--vflip",
+        "--hflip",
         "-o",
         "-",  # Output to stdout (pipe)
     ]
@@ -80,7 +84,39 @@ def start_stream():
     return p1, p2
 
 
+def call_lambda(action, device_name):
+    payload = {"action": action, "device_name": device_name}
+    print(f"Sending to Lambda: {payload}")
+    try:
+
+        response = requests.post(LAMBDA_FUNCTION_URL, json=payload)
+        print(f"Status code: {response.status_code}")
+        print(f"Response text: {response.text}")
+        response.raise_for_status()
+        # Try to decode JSON, otherwise fall back to raw text
+        try:
+            result = response.json()
+            if isinstance(result, dict) and "statusCode" in result and "body" in result:
+                body = result["body"]
+            else:
+                body = result
+        except ValueError:
+            body = response.text
+
+        print(f"Lambda '{action}' succeeded: {body}")
+        return body
+    except requests.exceptions.HTTPError as e:
+        raise RuntimeError(f"HTTP error occurred: {e} - Response: {response.text}")
+    except requests.exceptions.RequestException as e:
+        raise RuntimeError(f"Request failed: {e}")
+    except Exception as e:
+        raise RuntimeError(f"Failed to decode Lambda response: {e}")
+
+
 if __name__ == "__main__":
+    # End previous broadcast and start a new one via Lambda
+    call_lambda("end", DEVICE_NAME)
+    call_lambda("create", DEVICE_NAME)
     while True:
         print("Starting stream..")
         p1, p2 = start_stream()
@@ -88,6 +124,8 @@ if __name__ == "__main__":
         try:
             # This will block until ffmpeg stops or the script is interrupted
             p2.wait()
+        except KeyboardInterrupt:
+            pass
         except Exception as e:
             print(e)
         finally:
