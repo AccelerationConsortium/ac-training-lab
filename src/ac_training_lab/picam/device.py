@@ -1,7 +1,13 @@
 import subprocess
 
 import requests
-from my_secrets import DEVICE_NAME, LAMBDA_FUNCTION_URL, STREAM_KEY, STREAM_URL
+from my_secrets import (
+    DEVICE_NAME,
+    LAMBDA_FUNCTION_URL,
+    PRIVACY_STATUS,
+    STREAM_KEY,
+    STREAM_URL,
+)
 
 
 def start_stream():
@@ -84,8 +90,12 @@ def start_stream():
     return p1, p2
 
 
-def call_lambda(action, device_name):
-    payload = {"action": action, "device_name": device_name}
+def call_lambda(action, device_name, privacy_status="private"):
+    payload = {
+        "action": action,
+        "device_name": device_name,
+        "privacy_status": privacy_status,
+    }
     print(f"Sending to Lambda: {payload}")
     try:
 
@@ -116,7 +126,7 @@ def call_lambda(action, device_name):
 if __name__ == "__main__":
     # End previous broadcast and start a new one via Lambda
     call_lambda("end", DEVICE_NAME)
-    call_lambda("create", DEVICE_NAME)
+    call_lambda("create", DEVICE_NAME, privacy_status=PRIVACY_STATUS)
     while True:
         print("Starting stream..")
         p1, p2 = start_stream()
