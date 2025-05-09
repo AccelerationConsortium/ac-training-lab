@@ -2,6 +2,7 @@ import subprocess
 
 import requests
 from my_secrets import (
+    CAMERA_FLIP,
     DEVICE_NAME,
     LAMBDA_FUNCTION_URL,
     PRIVACY_STATUS,
@@ -16,7 +17,7 @@ def start_stream():
       p1: libcamera-vid process
       p2: ffmpeg process
     """
-    # First: libcamera-vid command
+    # First: libcamera-vid command with core parameters
     libcamera_cmd = [
         "libcamera-vid",
         "--inline",
@@ -35,12 +36,14 @@ def start_stream():
         "h264",  # H.264 encoding
         "--bitrate",
         "1000000",  # ~1 Mbps video
-        # vertical/horizontal flips depend on the cam mount
-        "--vflip",
-        "--hflip",
-        "-o",
-        "-",  # Output to stdout (pipe)
     ]
+
+    # Add flip parameters if needed
+    if CAMERA_FLIP:
+        libcamera_cmd.extend(["--vflip", "--hflip"])
+
+    # Add output parameters last
+    libcamera_cmd.extend(["-o", "-"])  # Output to stdout (pipe)
 
     # Second: ffmpeg command
     ffmpeg_cmd = [
