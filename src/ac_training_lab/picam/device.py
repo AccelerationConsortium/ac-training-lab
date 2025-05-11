@@ -151,7 +151,7 @@ if __name__ == "__main__":
         try:
             p2.wait()
         except KeyboardInterrupt:
-            break
+            pass
         except Exception as e:
             print(e)
         finally:
