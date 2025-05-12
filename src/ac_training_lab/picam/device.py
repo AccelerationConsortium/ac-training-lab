@@ -1,17 +1,17 @@
+import json
 import subprocess
 
 import requests
 from my_secrets import (
+    CAM_NAME,
     CAMERA_FLIP,
-    DEVICE_NAME,
     LAMBDA_FUNCTION_URL,
     PRIVACY_STATUS,
-    STREAM_KEY,
-    STREAM_URL,
+    WORKFLOW_NAME,
 )
 
 
-def start_stream():
+def start_stream(ffmpeg_url):
     """
     Starts the libcamera -> ffmpeg pipeline and returns two Popen objects:
       p1: libcamera-vid process
@@ -76,7 +76,7 @@ def start_stream():
         # Output format is FLV, then final RTMP URL
         "-f",
         "flv",
-        f"{STREAM_URL}/{STREAM_KEY}",
+        ffmpeg_url,
     ]
 
     # Start libcamera-vid, capturing its output in a pipe
@@ -93,10 +93,11 @@ def start_stream():
     return p1, p2
 
 
-def call_lambda(action, device_name, privacy_status="private"):
+def call_lambda(action, CAM_NAME, WORKFLOW_NAME, privacy_status="private"):
     payload = {
         "action": action,
-        "device_name": device_name,
+        "cam_name": CAM_NAME,
+        "workflow_name": WORKFLOW_NAME,
         "privacy_status": privacy_status,
     }
     print(f"Sending to Lambda: {payload}")
@@ -118,6 +119,7 @@ def call_lambda(action, device_name, privacy_status="private"):
 
         print(f"Lambda '{action}' succeeded: {body}")
         return body
+
     except requests.exceptions.HTTPError as e:
         raise RuntimeError(f"HTTP error occurred: {e} - Response: {response.text}")
     except requests.exceptions.RequestException as e:
@@ -128,14 +130,25 @@ def call_lambda(action, device_name, privacy_status="private"):
 
 if __name__ == "__main__":
     # End previous broadcast and start a new one via Lambda
-    call_lambda("end", DEVICE_NAME)
-    call_lambda("create", DEVICE_NAME, privacy_status=PRIVACY_STATUS)
+    call_lambda("end", CAM_NAME, WORKFLOW_NAME)
+    raw_body = call_lambda(
+        "create", CAM_NAME, WORKFLOW_NAME, privacy_status=PRIVACY_STATUS
+    )
+    try:
+        result = json.loads(raw_body) if isinstance(raw_body, str) else raw_body
+        ffmpeg_url = result["ffmpeg_url"]
+    except (json.JSONDecodeError, KeyError, TypeError) as e:
+        raise RuntimeError(
+            f"Cannot proceed: ffmpeg_url not found or response invalid → {e}"
+        )
+
+    print(f"Streaming to: {ffmpeg_url}")
+
     while True:
         print("Starting stream..")
-        p1, p2 = start_stream()
+        p1, p2 = start_stream(ffmpeg_url)
         print("Stream started")
         try:
-            # This will block until ffmpeg stops or the script is interrupted
             p2.wait()
         except KeyboardInterrupt:
             pass
@@ -143,7 +156,6 @@ if __name__ == "__main__":
             print(e)
         finally:
             print("Terminating processes..")
-            # Cleanup: terminate both processes if still running
             p1.terminate()
             p2.terminate()
             print("Processes terminated. Retrying..")
