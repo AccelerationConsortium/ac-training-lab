@@ -88,15 +88,27 @@ def get_latest_video_id(channel_id, device_name=None, playlist_id=None):
     ]  # Note the different path to videoId for search results
 
 
-def download_youtube_live(video_id):
+def download_youtube_video(video_id=None, url=None, format=None, output_file=None):
     """
-    Relies on ytdlp https://github.com/yt-dlp/yt-dlp
+    Downloads a YouTube video using yt-dlp.
+    If `format` is specified, it will be passed to yt-dlp via --format.
     """
-    url = f"https://www.youtube.com/live/{video_id}"
+
+    if (video_id is None and url is None) or (video_id is not None and url is not None):
+        raise ValueError("Must specify either video_id or url (but not both)")
+
+    if video_id is not None:
+        url = f"https://www.youtube.com/watch?v={video_id}"
+
+    # Construct yt-dlp command
+    command = ["yt-dlp", url]
+    if format:
+        command.extend(["--format", format])
+    if output_file:
+        command.extend(["--output", output_file])
+
     try:
-        result = subprocess.run(
-            ["yt-dlp", url], check=True, capture_output=True, text=True
-        )
+        result = subprocess.run(command, check=True, capture_output=True, text=True)
         print("Download successful!")
         print(result.stdout)
     except subprocess.CalledProcessError as e:
@@ -109,4 +121,4 @@ if __name__ == "__main__":
     video_id = get_latest_video_id(
         channel_id="UCHBzCfYpGwoqygH9YNh9A6g", device_name="Opentrons OT-2"
     )
-    download_youtube_live(video_id)
+    download_youtube_video(video_id=video_id)
