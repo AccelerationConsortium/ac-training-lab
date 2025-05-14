@@ -85,7 +85,7 @@ python3 device.py
 To create the file, run nano (or other editor of choice):
 
 ```bash
-sudo nano /etc/systemd/system/picam.service
+sudo nano /etc/systemd/system/device.service
 ```
 
 Copy the following code into the file (right click to paste), save it via `Ctrl+O` and `Enter` and exit via `Ctrl+X`:
@@ -119,7 +119,7 @@ WantedBy=multi-user.target
 Run:
 ```
 sudo systemctl daemon-reload
-sudo systemctl enable picam.service
+sudo systemctl enable device.service
 ```
 
 Run:
@@ -139,19 +139,19 @@ Add the following at the end of the crontab file:
 Manually start the service by running:
 
 ```bash
-sudo systemctl start picam.service
+sudo systemctl start device.service
 ```
 
 This command tells systemd to run your service immediately (as if it had been triggered at boot). To check its status, use:
 
 ```bash
-sudo systemctl status picam.service
+sudo systemctl status device.service
 ```
 
 To view any logs:
 
 ```bash
-sudo journalctl -u picam.service -f
+sudo journalctl -u device.service -f
 ```
 
 Starting the service with `systemd` is recommended since it applies all the configured options (dependencies, restart behavior, etc.).
@@ -162,13 +162,13 @@ For more details, see the [systemctl(1)](https://www.freedesktop.org/software/sy
 To stop the service (for example, while you work on fixing it / pulling new changes), run:
 
 ```bash
-sudo systemctl stop picam.service
+sudo systemctl stop device.service
 ```
 
 This command stops the running instance of the service immediately. If you also want to prevent it from starting at boot until you've fixed it, you can disable it with:
 
 ```bash
-sudo systemctl disable picam.service
+sudo systemctl disable device.service
 ```
 
 To get it to reflect the new changes, run:
