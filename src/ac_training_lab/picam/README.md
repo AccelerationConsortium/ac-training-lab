@@ -88,7 +88,7 @@ To create the file, run nano (or other editor of choice):
 sudo nano /etc/systemd/system/device.service
 ```
 
-Copy the following code into the file (right click to paste), save it via `Ctrl+O` and `Enter` and exit via `Ctrl+X`:
+Copy the following code into the file (right click to paste), save it via `Ctrl+O` and `Enter` and exit via `Ctrl+X`. NOTE: This assumes that your username is `ac` rather than the default username for raspberry pi.
 
 ```yaml
 [Unit]
