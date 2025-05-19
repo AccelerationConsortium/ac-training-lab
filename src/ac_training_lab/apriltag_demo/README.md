@@ -2,13 +2,6 @@
 
 A minimal notebook demonstrating camera calibration and AprilTag pose estimation using `OpenCV` and `pupil-apriltags`.
 
-**Features:**
-
-- Requirements setup 
-- Checkerboard-based camera calibration
-- AprilTag detection with pose estimation
-- Visual overlays for tag center and orientation
-
 
 ## How to Run
 
