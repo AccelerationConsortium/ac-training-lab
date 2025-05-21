@@ -1,4 +1,5 @@
 # Self-contained Demos of AprilTag Usage
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/AccelerationConsortium/ac-training-lab/blob/apriltag_demo/src/ac_training_lab/apriltag_demo/apriltag_demo.ipynb)
 
 A minimal notebook demonstrating camera calibration and AprilTag pose estimation using `OpenCV` and `pupil-apriltags`.
 
