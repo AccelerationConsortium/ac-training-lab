@@ -73,11 +73,12 @@ def main():
         retval, corners = cv2.findChessboardCorners(gray, patternsize)
 
         if options.show_detections:
+            from google.colab.patches import cv2_imshow  
+
             display = cv2.cvtColor(gray, cv2.COLOR_GRAY2RGB)
             cv2.drawChessboardCorners(display, patternsize, corners, retval)
-            cv2.imshow(win, display)
-            cv2.waitKey(500) 
-            cv2.destroyWindow(win)
+            cv2_imshow(display)
+           
 
 
         if not retval:
@@ -108,8 +109,9 @@ def main():
     cy = K[1,2]
 
     params = (fx, fy, cx, cy)
-    
-    np.save("/content/ac-training-lab/apriltag_demo/calibrate_camera.py", np.array([fx, fy, cx, cy]))
+
+    output_path = "/content/ac-training-lab/src/ac_training_lab/apriltag_demo/camera_params.npy"
+    np.save(output_path, np.array([fx, fy, cx, cy]))
 
     print()
     print('all units below measured in pixels:')
