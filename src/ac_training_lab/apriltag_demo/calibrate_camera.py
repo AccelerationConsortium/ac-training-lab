@@ -43,8 +43,8 @@ def main():
 
     imagesize = None
 
-    win = 'Calibrate'
-    cv2.namedWindow(win)
+    # win = 'Calibrate'
+    # cv2.namedWindow(win)
 
     ipoints = []
 
@@ -124,8 +124,8 @@ def main():
     print('  fx, fy, cx, cy = {}'.format(repr(params)))
     print()
 
-    if options.show_detections:
-        cv2.destroyAllWindows()
+    # if options.show_detections:
+    #     cv2.destroyAllWindows()
     
 
 
