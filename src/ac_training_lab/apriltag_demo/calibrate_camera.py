@@ -109,7 +109,7 @@ def main():
 
     params = (fx, fy, cx, cy)
     
-    np.save("/content/ac-training-lab/src/ac_training_lab/apriltag_demo/camera_params.npy", np.array([fx, fy, cx, cy]))
+    np.save("/content/ac-training-lab/apriltag_demo/calibrate_camera.py", np.array([fx, fy, cx, cy]))
 
     print()
     print('all units below measured in pixels:')
