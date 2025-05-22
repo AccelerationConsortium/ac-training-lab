@@ -3,7 +3,6 @@
 
 A minimal notebook demonstrating camera calibration and AprilTag pose estimation using `OpenCV` and `pupil-apriltags`.
 
-
 ## How to Run
 
 You can open the notebook in **Google Colab** and run it directly.
