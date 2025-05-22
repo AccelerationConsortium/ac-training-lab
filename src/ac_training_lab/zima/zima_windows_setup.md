@@ -53,6 +53,10 @@ Follow the instructions to create a bootable USB drive:
 
 10 **Wait for Installation**: The installation process will take some time. Your ZIMA device may restart several times during the installation. Follow the on-screen instructions to complete the installation.
 
+> **Note:** After the installation is complete if you are again prompted to install Windows, remove the usb and power cycle the ZIMA device.
+
+
+## Windows 11
 
 > **Note:** After the installation is complete, you may need to install drivers for your ZIMA device. 
 
