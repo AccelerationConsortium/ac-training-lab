@@ -4,7 +4,8 @@ import subprocess
 import requests
 from my_secrets import (
     CAM_NAME,
-    CAMERA_FLIP,
+    CAMERA_VFLIP,
+    CAMERA_HFLIP,
     LAMBDA_FUNCTION_URL,
     PRIVACY_STATUS,
     WORKFLOW_NAME,
@@ -39,8 +40,10 @@ def start_stream(ffmpeg_url):
     ]
 
     # Add flip parameters if needed
-    if CAMERA_FLIP:
-        libcamera_cmd.extend(["--vflip", "--hflip"])
+    if CAMERA_VFLIP:
+        libcamera_cmd.extend(["--vflip"])
+    if CAMERA_HFLIP:
+        libcamera_cmd.extend(["--hflip"])
 
     # Add output parameters last
     libcamera_cmd.extend(["-o", "-"])  # Output to stdout (pipe)
