@@ -1,131 +1,21 @@
-name: "Copilot Setup Steps (Conda Version)"
+name: "Copilot Setup Steps"
 on: workflow_dispatch
 
 jobs:
   copilot-setup-steps:
     runs-on: ubuntu-latest
-    
     permissions:
       contents: read
-    
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      
-      - name: Set up Miniconda
-        uses: conda-incubator/setup-miniconda@v3
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
-          auto-update-conda: true
           python-version: "3.12"
-          miniforge-version: latest
-          use-mamba: true
-      
-      - name: Cache conda environment
-        uses: actions/cache@v4
-        with:
-          path: ~/conda_pkgs_dir
-          key: ${{ runner.os }}-conda-${{ hashFiles('environment.yml') }}
-          restore-keys: |
-            ${{ runner.os }}-conda-
-      
-      - name: Create conda environment from environment.yml
-        shell: bash -l {0}
+          cache: "pip"
+      - name: Install package and dev dependencies
         run: |
-          if [ -f environment.yml ]; then
-            echo "Creating conda environment from environment.yml"
-            mamba env create -f environment.yml
-            conda activate ac-training-lab
-          else
-            echo "No environment.yml found, creating basic environment"
-            mamba create -n ac-training-lab python=3.12 -y
-            conda activate ac-training-lab
-          fi
-      
-      - name: Install system dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y \
-            build-essential \
-            git \
-            curl \
-            wget \
-            libffi-dev \
-            libssl-dev
-      
-      - name: Install package and dependencies
-        shell: bash -l {0}
-        run: |
-          conda activate ac-training-lab
-          
-          pip install --upgrade pip setuptools wheel
-          
           pip install -e .
-          
           pip install tox pre-commit
-      
-      - name: Install pre-commit hooks
-        shell: bash -l {0}
-        run: |
-          conda activate ac-training-lab
           pre-commit install
-      
-      - name: Cache tox environments
-        uses: actions/cache@v4
-        with:
-          path: .tox
-          key: ${{ runner.os }}-tox-${{ hashFiles('tox.ini', 'pyproject.toml', 'setup.cfg') }}
-          restore-keys: |
-            ${{ runner.os }}-tox-
-      
-      - name: Warm up pre-commit cache
-        shell: bash -l {0}
-        run: |
-          conda activate ac-training-lab
-          pre-commit run --all-files || true
-      
-      - name: Install additional development tools
-        shell: bash -l {0}
-        run: |
-          conda activate ac-training-lab
-          pip install \
-            pytest \
-            pytest-cov \
-            black \
-            isort \
-            flake8 \
-            mypy \
-            sphinx \
-            sphinx-rtd-theme
-      
-      - name: Create project directory structure
-        run: |
-          mkdir -p data/raw data/interim data/processed data/external
-          mkdir -p models
-          mkdir -p reports/figures
-          mkdir -p notebooks
-          mkdir -p configs
-      
-      - name: Verify installation and display environment info
-        shell: bash -l {0}
-        run: |
-          conda activate ac-training-lab
-          echo "=== Environment Information ==="
-          echo "Python version: $(python --version)"
-          echo "Conda environment: $CONDA_DEFAULT_ENV"
-          echo "Pip version: $(pip --version)"
-          
-          echo "=== Package Verification ==="
-          python -c "import ac_training_lab; print('✓ AC Training Lab package imported successfully')" || echo "✗ AC Training Lab package import failed"
-          
-          echo "=== Tool Versions ==="
-          tox --version
-          pre-commit --version
-          black --version
-          isort --version
-          flake8 --version
-          
-          echo "=== Installed Packages ==="
-          pip list
-          
-          echo "=== Setup Complete! ==="
-          echo "Environment 'ac-training-lab' is ready for development"
