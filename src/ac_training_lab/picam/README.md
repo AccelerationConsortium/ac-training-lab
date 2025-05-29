@@ -10,10 +10,7 @@ Refresh the system's package list via:
 sudo apt update
 ```
 
-Optionally, upgrade the system packages to the latest versions (`-y` flag is used to automatically answer "yes" to any installation prompts):
-```bash
-sudo apt upgrade -y
-```
+Optionally, upgrade the system packages to the latest versions via `sudo apt upgrade -y` (`-y` flag is used to automatically answer "yes" to any installation prompts)
 
 Ensure that `git` is installed:
 ```bash
