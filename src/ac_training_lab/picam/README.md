@@ -5,9 +5,13 @@ Module 3 running [RPi OS Lite (bookworm, 64-bit)](https://www.raspberrypi.com/so
 
 ## Codebase
 
-Optionally, update the system packages to the latest versions (`-y` flag is used to automatically answer "yes" to any installation prompts):
-```bash
+Refresh the system's package list via:
+```
 sudo apt update
+```
+
+Optionally, upgrade the system packages to the latest versions (`-y` flag is used to automatically answer "yes" to any installation prompts):
+```bash
 sudo apt upgrade -y
 ```
 
