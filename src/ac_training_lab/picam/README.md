@@ -35,7 +35,7 @@ Make a copy of `my_secrets_example.py` called `my_secrets.py`:
 cp my_secrets_example.py my_secrets.py
 ```
 
-Fill in the necessary information. Keep in mind this will store the credentials in plain-text format, so try to keep your Pi login secure and restrict the access scope for the credentials as much as possible.
+Fill in the necessary information (e.g., via `nano my_secrets.py`). Keep in mind this will store the credentials in plain-text format, so try to keep your Pi login secure and restrict the access scope for the credentials as much as possible.
 
 ## Dependencies
 
