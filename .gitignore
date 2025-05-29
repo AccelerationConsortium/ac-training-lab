@@ -51,6 +51,7 @@ MANIFEST
 docs/devices/*.md
 !docs/devices/setup_iolt_devices.md
 !docs/devices/cudy.md
+!docs/devices/raspberry-pi-wpa2-enterprise.md
 
 # Per-project virtualenvs
 .venv*/
