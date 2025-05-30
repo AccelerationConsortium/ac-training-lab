@@ -87,7 +87,7 @@ edit_page: {github_edit_path}
 ```{{admonition}} Source Code
 :class: note
 
-<a href="{github_path}" target="_blank">View source code for this device on GitHub</a>
+<a href="{github_path}" target="_blank">View source code for this device on GitHub</a> | <a href="{github_edit_path}" target="_blank">Suggest edit</a>
 ```
 
 ```{{include}} {rel_readme_path}
