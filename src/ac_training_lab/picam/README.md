@@ -23,7 +23,7 @@ Clone the repository to your Raspberry Pi Zero 2W device via HTTPS (allows for `
 git clone https://github.com/AccelerationConsortium/ac-training-lab.git
 ```
 
-Navigate to the same directory as this README file:
+Navigate to the same directory as this README file. This assumes that your username is `ac`.
 
 ```bash
 cd /home/ac/ac-training-lab/src/ac_training_lab/picam/
@@ -89,7 +89,7 @@ To create the file, run nano (or other editor of choice):
 sudo nano /etc/systemd/system/device.service
 ```
 
-Copy the following code into the file (right click to paste), save it via `Ctrl+O` and `Enter` and exit via `Ctrl+X`:
+Copy the following code into the file (right click to paste), save it via `Ctrl+O` and `Enter` and exit via `Ctrl+X`. This assumes that your username is `ac`.
 
 ```yaml
 [Unit]
