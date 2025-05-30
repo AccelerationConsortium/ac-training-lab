@@ -8,12 +8,12 @@ Module 3 running RPi OS Lite (bookworm).
 The following components are required for the equipment monitoring setup:
 
 ### Core Hardware
-- Raspberry Pi Zero 2W - ~$24 CAD (available from electronics retailers)
+- [Raspberry Pi Zero 2W](https://www.pishop.ca/product/raspberry-pi-zero-2-w/) - ~$24 CAD
 - MicroSD Card 32GB Class 10 - ~$15 CAD (available from electronics retailers)
 - Heat Sink Kit for RPi Zero - ~$6 CAD (available from electronics retailers)
 
 ### Camera Components  
-- Raspberry Pi Camera Module 3 - ~$35 CAD (available from electronics retailers)
+- [Raspberry Pi Camera Module 3](https://www.pishop.ca/product/raspberry-pi-camera-module-3/) - ~$35 CAD
 - Raspberry Pi Zero Camera Cable - ~$8 CAD (available from electronics retailers)
 
 ### Power
