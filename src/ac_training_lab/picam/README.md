@@ -9,16 +9,16 @@ The following components are required for the equipment monitoring setup:
 
 ### Core Hardware
 - [Raspberry Pi Zero 2W](https://www.pishop.ca/product/raspberry-pi-zero-2-w/) - ~$24 CAD
-- MicroSD Card 32GB Class 10 - ~$15 CAD (available from electronics retailers)
-- Heat Sink Kit for RPi Zero - ~$6 CAD (available from electronics retailers)
+- MicroSD Card 32GB Class 10 - ~$15 CAD (available from PiShop.ca, electronics retailers)
+- Heat Sink Kit for RPi Zero - ~$6 CAD (available from PiShop.ca, electronics retailers)
 
 ### Camera Components  
 - [Raspberry Pi Camera Module 3](https://www.pishop.ca/product/raspberry-pi-camera-module-3/) - ~$35 CAD
-- Raspberry Pi Zero Camera Cable - ~$8 CAD (available from electronics retailers)
+- Raspberry Pi Zero Camera Cable - ~$8 CAD (available from PiShop.ca, electronics retailers)
   - *Note: The RPi Camera Module 3 comes with a long cable, but a shorter one might be desired for cleaner mounting*
 
 ### Power
-- USB-C Power Supply 5V 3A Official - ~$15 CAD (available from electronics retailers)
+- USB-C Power Supply 5V 3A Official - ~$15 CAD (available from PiShop.ca, electronics retailers)
 - Alternative: USB-C cable for power from computer/hub
 
 ### Mounting Hardware
