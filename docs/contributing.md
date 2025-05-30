@@ -1,3 +1,7 @@
+---
+edit_page: https://github.com/AccelerationConsortium/ac-training-lab/edit/main/CONTRIBUTING.md
+---
+
 ```{include} ../CONTRIBUTING.md
 :relative-docs: docs/
 :relative-images:
