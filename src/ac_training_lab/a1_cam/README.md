@@ -7,15 +7,38 @@ Module 3 running RPi OS Lite (bookworm).
 
 The following components are required for the equipment monitoring setup:
 
-- Raspberry Pi Zero 2W, SD card, and heat sink for better performance
-- Pi Camera Module 3
-- Pi Camera cable
-- Power adaptor or USB cable 
-- Pi and PiCam mount (with all screws and nuts needed) or:
-  - 3D printed Picam mount
-  - 4 x M2 screws and nuts
-  - 4 x M2.5 screws, hex standoffs and nuts
-- Rod assembly mount and hex nut
+### Core Hardware
+- [Raspberry Pi Zero 2W](https://pishop.ca/collections/raspberry-pi-zero/products/raspberry-pi-zero-2-w) - ~$24 CAD
+- [MicroSD Card 32GB Class 10](https://pishop.ca/collections/micro-sd-cards/products/sandisk-ultra-microsdhc-card-32gb-class-10) - ~$15 CAD  
+- [Heat Sink Kit for RPi Zero](https://pishop.ca/collections/cooling/products/heat-sink-kit-raspberry-pi-zero) - ~$6 CAD
+
+### Camera Components  
+- [Raspberry Pi Camera Module 3](https://pishop.ca/collections/camera/products/raspberry-pi-camera-module-3) - ~$35 CAD
+- [Raspberry Pi Zero Camera Cable](https://pishop.ca/collections/camera/products/raspberry-pi-zero-camera-cable) - ~$8 CAD
+
+### Power
+- [USB-C Power Supply 5V 3A Official](https://pishop.ca/collections/power/products/raspberry-pi-15w-usb-c-power-supply) - ~$15 CAD
+- Alternative: USB-C cable for power from computer/hub
+
+### Mounting Hardware
+**Option A:** Complete mount kit with all hardware included
+
+**Option B:** DIY mounting solution (recommended):
+- 3D Printable PiCam Mount (STL files - contact repository maintainer)
+- [M2 x 8mm Screws (4x) + M2 Nuts (4x)](https://pishop.ca/collections/hardware/products/m2-screws-nuts-assortment) - ~$5 CAD
+- [M2.5 x 12mm Screws (4x) + M2.5 Hex Standoffs (4x) + M2.5 Nuts (4x)](https://pishop.ca/collections/hardware/products/m2-5-screws-standoffs-nuts-kit) - ~$8 CAD
+
+### Rod Clamp Assembly & Mounting
+- Rod clamp assembly (for 8mm rod system) - contact supplier for compatibility
+- 5/16" Hex Nut for secure rod mounting - available at hardware stores
+
+### Tools Required
+- Phillips head screwdriver
+- 2.5mm hex key/Allen wrench
+
+**Total estimated cost: ~$120-140 CAD** (excluding 3D printing and rod clamp assembly)
+
+> **Note:** Links point to approximate product categories on PiShop.ca. Please verify exact part numbers and availability when ordering. The 5/16" hex nut specification is based on standard rod clamp requirements.
 
 ## Codebase
 
