@@ -3,6 +3,20 @@
 This is intended to be run on a Raspberry Pi Zero 2W Raspberry Pi Camera
 Module 3 running RPi OS Lite (bookworm).
 
+## Bill of Materials
+
+The following components are required for the equipment monitoring setup:
+
+- Raspberry Pi Zero 2W, SD card, and heat sink for better performance
+- Pi Camera Module 3
+- Pi Camera cable
+- Power adaptor or USB cable 
+- Pi and PiCam mount (with all screws and nuts needed) or:
+  - 3D printed Picam mount
+  - 4 x M2 screws and nuts
+  - 4 x M2.5 screws, hex standoffs and nuts
+- Rod assembly mount and hex nut
+
 ## Codebase
 
 Optionally, update the system packages to the latest versions (`-y` flag is used to automatically answer "yes" to any installation prompts):
