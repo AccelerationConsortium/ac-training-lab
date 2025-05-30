@@ -21,7 +21,8 @@ The following components are required for the equipment monitoring setup:
 - Alternative: USB-C cable for power from computer/hub
 
 ### Mounting Hardware
-**Option A:** Complete mount kit with all hardware included
+**Option A:** Off-the-shelf mount kit
+- [Pro Mini Camera Mount for Raspberry Pi Zero](https://www.pishop.ca/product/pro-mini-camera-mount-for-raspberry-pi-zero/) - ~$25 CAD
 
 **Option B:** DIY mounting solution (recommended):
 - 3D Printable PiCam Mount (STL files - contact repository maintainer)
