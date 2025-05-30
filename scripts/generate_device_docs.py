@@ -73,8 +73,18 @@ for root, dirs, files in os.walk(SRC_DIR):
         if str(rel_path) == ".":
             github_path = f"{GITHUB_REPO}/tree/{GITHUB_BRANCH}/src/ac_training_lab"
 
-        # Create stub content with source code link before including README
-        stub_content = f"""```{{admonition}} Source Code
+        # Create GitHub edit link to the source README
+        github_edit_path = f"{GITHUB_REPO}/edit/{GITHUB_BRANCH}/src/ac_training_lab"
+        if str(rel_path) != ".":
+            github_edit_path += f"/{rel_path}"
+        github_edit_path += "/README.md"
+
+        # Create stub content with source code link and edit page metadata
+        stub_content = f"""---
+edit_page: {github_edit_path}
+---
+
+```{{admonition}} Source Code
 :class: note
 
 <a href="{github_path}" target="_blank">View source code for this device on GitHub</a>
