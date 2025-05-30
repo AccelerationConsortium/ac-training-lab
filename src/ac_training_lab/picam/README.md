@@ -3,6 +3,46 @@
 This is intended to be run on a Raspberry Pi Zero 2W Raspberry Pi Camera
 Module 3 running [RPi OS Lite (bookworm, 64-bit)](https://www.raspberrypi.com/software/operating-systems/).
 
+## Bill of Materials
+
+The following components are required for the equipment monitoring setup:
+
+### Core Hardware
+- [Raspberry Pi Zero 2W](https://www.pishop.ca/product/raspberry-pi-zero-2-w/) - ~$24 CAD
+- MicroSD Card 32GB Class 10 - ~$15 CAD (available from electronics retailers)
+- Heat Sink Kit for RPi Zero - ~$6 CAD (available from electronics retailers)
+
+### Camera Components  
+- [Raspberry Pi Camera Module 3](https://www.pishop.ca/product/raspberry-pi-camera-module-3/) - ~$35 CAD
+- Raspberry Pi Zero Camera Cable - ~$8 CAD (available from electronics retailers)
+  - *Note: The RPi Camera Module 3 comes with a long cable, but a shorter one might be desired for cleaner mounting*
+
+### Power
+- USB-C Power Supply 5V 3A Official - ~$15 CAD (available from electronics retailers)
+- Alternative: USB-C cable for power from computer/hub
+
+### Mounting Hardware
+**Option A:** Off-the-shelf mount kit
+- [Pro Mini Camera Mount for Raspberry Pi Zero](https://www.pishop.ca/product/pro-mini-camera-mount-for-raspberry-pi-zero/) - ~$25 CAD
+
+**Option B:** DIY mounting solution (recommended):
+- 3D Printable PiCam Mount (STL files - contact repository maintainer)
+- M2 x 8mm Screws (4x) + M2 Nuts (4x) - ~$5 CAD (available from hardware stores)
+- M2.5 x 12mm Screws (4x) + M2.5 Hex Standoffs (4x) + M2.5 Nuts (4x) - ~$8 CAD (available from hardware stores)
+
+### Rod Clamp Assembly & Mounting
+- [Camera Desk Mount Table Stand](https://www.primecables.ca/p-407778-cab-lsd01-1s-camera-desk-mount-table-stand) - Prime Cables
+- [5/16" Hex Nut](https://www.mcmaster.com/91078A029/) - McMaster-Carr for secure rod mounting
+
+### Tools Required
+- [Small Precision Screwdriver](https://www.mcmaster.com/7845A36/) - McMaster-Carr
+- [2.5mm Hex Key/Allen Wrench](https://www.mcmaster.com/7648A72/) - McMaster-Carr
+- Hex nut tool with handle for tightening (recommended)
+
+**Total estimated cost: ~$120-140 CAD** (excluding 3D printing and camera desk mount)
+
+> **Note:** Electronic components are available from various retailers including PiShop.ca, electronics distributors, and online retailers. Specific product links are provided where verified to work. Hardware components like screws and nuts are available at local hardware stores.
+
 ## Codebase
 
 Refresh the system's package list via:
