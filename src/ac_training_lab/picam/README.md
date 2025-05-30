@@ -8,22 +8,22 @@ Module 3 running [RPi OS Lite (bookworm, 64-bit)](https://www.raspberrypi.com/so
 The following components are required for the equipment monitoring setup:
 
 ### Core Hardware
-- [Raspberry Pi Zero 2W](https://www.pishop.ca/product/raspberry-pi-zero-2-w/) - ~$24 CAD
-- MicroSD Card 32GB Class 10 - ~$15 CAD (available from electronics retailers)
-- Heat Sink Kit for RPi Zero - ~$6 CAD (available from electronics retailers)
+- [Raspberry Pi Zero 2W](https://www.pishop.ca/product/raspberry-pi-zero-2-w/) - $21.50 CAD
+- [MicroSD Card 32GB Class 10](https://www.pishop.ca/product/raspberry-pi-sd-card-32gb/) - $13.95 CAD
+- [Heat Sink Kit for RPi Zero](https://www.pishop.ca/product/dedicated-aluminum-heatsink-for-raspberry-pi-zero-series-zero-zero-2-w/) - $5.95 CAD
 
 ### Camera Components  
-- [Raspberry Pi Camera Module 3](https://www.pishop.ca/product/raspberry-pi-camera-module-3/) - ~$35 CAD
-- Raspberry Pi Zero Camera Cable - ~$8 CAD (available from electronics retailers)
+- [Raspberry Pi Camera Module 3](https://www.pishop.ca/product/raspberry-pi-camera-module-3/) - $35.00 CAD
+- [Raspberry Pi Zero Camera Cable](https://www.pishop.ca/product/raspberry-pi-zero-mini-camera-cable-38mm/) - $3.95 CAD
   - *Note: The RPi Camera Module 3 comes with a long cable, but a shorter one might be desired for cleaner mounting*
 
 ### Power
-- USB-C Power Supply 5V 3A Official - ~$15 CAD (available from electronics retailers)
+- [MicroUSB Power Supply 5V 3A](https://www.pishop.ca/product/microusb-power-adapter-international-plugs/) - $12.95 CAD
 - Alternative: USB-C cable for power from computer/hub
 
 ### Mounting Hardware
 **Option A:** Off-the-shelf mount kit
-- [Pro Mini Camera Mount for Raspberry Pi Zero](https://www.pishop.ca/product/pro-mini-camera-mount-for-raspberry-pi-zero/) - ~$25 CAD
+- [Pro Mini Camera Mount for Raspberry Pi Zero](https://www.pishop.ca/product/pro-mini-camera-mount-for-raspberry-pi-zero/) - $7.95 CAD
 
 **Option B:** DIY mounting solution (recommended):
 - [3D Printable PiCam Mount](https://github.com/AccelerationConsortium/ac-training-lab/tree/main/src/ac_training_lab/picam/_design) (STL files in repository)
@@ -39,9 +39,9 @@ The following components are required for the equipment monitoring setup:
 - [2.5mm Hex Key/Allen Wrench](https://www.mcmaster.com/7648A72/) - McMaster-Carr
 - Hex nut tool with handle for tightening (recommended)
 
-**Total estimated cost: ~$116-128 CAD** (excluding 3D printing, camera desk mount, and tools)
+**Total estimated cost: ~$101-109 CAD** (excluding 3D printing, camera desk mount, and tools)
 
-> **Note:** Electronic components are available from various retailers including PiShop.ca, electronics distributors, and online retailers. Specific product links are provided where verified to work. Hardware components like screws and nuts are available at local hardware stores.
+> **Note:** Most electronic components have verified working links to PiShop.ca. Hardware components like screws and nuts are available at local hardware stores or McMaster-Carr.
 
 ## Codebase
 
