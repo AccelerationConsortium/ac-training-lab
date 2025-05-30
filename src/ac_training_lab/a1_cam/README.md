@@ -8,16 +8,16 @@ Module 3 running RPi OS Lite (bookworm).
 The following components are required for the equipment monitoring setup:
 
 ### Core Hardware
-- [Raspberry Pi Zero 2W](https://pishop.ca/collections/raspberry-pi-zero/products/raspberry-pi-zero-2-w) - ~$24 CAD
-- [MicroSD Card 32GB Class 10](https://pishop.ca/collections/micro-sd-cards/products/sandisk-ultra-microsdhc-card-32gb-class-10) - ~$15 CAD  
-- [Heat Sink Kit for RPi Zero](https://pishop.ca/collections/cooling/products/heat-sink-kit-raspberry-pi-zero) - ~$6 CAD
+- Raspberry Pi Zero 2W - ~$24 CAD (available from electronics retailers)
+- MicroSD Card 32GB Class 10 - ~$15 CAD (available from electronics retailers)
+- Heat Sink Kit for RPi Zero - ~$6 CAD (available from electronics retailers)
 
 ### Camera Components  
-- [Raspberry Pi Camera Module 3](https://pishop.ca/collections/camera/products/raspberry-pi-camera-module-3) - ~$35 CAD
-- [Raspberry Pi Zero Camera Cable](https://pishop.ca/collections/camera/products/raspberry-pi-zero-camera-cable) - ~$8 CAD
+- Raspberry Pi Camera Module 3 - ~$35 CAD (available from electronics retailers)
+- Raspberry Pi Zero Camera Cable - ~$8 CAD (available from electronics retailers)
 
 ### Power
-- [USB-C Power Supply 5V 3A Official](https://pishop.ca/collections/power/products/raspberry-pi-15w-usb-c-power-supply) - ~$15 CAD
+- USB-C Power Supply 5V 3A Official - ~$15 CAD (available from electronics retailers)
 - Alternative: USB-C cable for power from computer/hub
 
 ### Mounting Hardware
@@ -26,20 +26,21 @@ The following components are required for the equipment monitoring setup:
 
 **Option B:** DIY mounting solution (recommended):
 - 3D Printable PiCam Mount (STL files - contact repository maintainer)
-- [M2 x 8mm Screws (4x) + M2 Nuts (4x)](https://pishop.ca/collections/hardware/products/m2-screws-nuts-assortment) - ~$5 CAD
-- [M2.5 x 12mm Screws (4x) + M2.5 Hex Standoffs (4x) + M2.5 Nuts (4x)](https://pishop.ca/collections/hardware/products/m2-5-screws-standoffs-nuts-kit) - ~$8 CAD
+- M2 x 8mm Screws (4x) + M2 Nuts (4x) - ~$5 CAD (available from hardware stores)
+- M2.5 x 12mm Screws (4x) + M2.5 Hex Standoffs (4x) + M2.5 Nuts (4x) - ~$8 CAD (available from hardware stores)
 
 ### Rod Clamp Assembly & Mounting
-- Rod clamp assembly (for 8mm rod system) - contact supplier for compatibility
-- 5/16" Hex Nut for secure rod mounting - available at hardware stores
+- [Camera Desk Mount Table Stand](https://www.primecables.ca/p-407778-cab-lsd01-1s-camera-desk-mount-table-stand) - Prime Cables
+- [5/16" Hex Nut](https://www.mcmaster.com/91078A029/) - McMaster-Carr for secure rod mounting
 
 ### Tools Required
-- Phillips head screwdriver
-- 2.5mm hex key/Allen wrench
+- [Small Precision Screwdriver](https://www.mcmaster.com/7845A36/) - McMaster-Carr
+- [2.5mm Hex Key/Allen Wrench](https://www.mcmaster.com/7648A72/) - McMaster-Carr
+- Hex nut tool with handle for tightening (recommended)
 
-**Total estimated cost: ~$120-140 CAD** (excluding 3D printing and rod clamp assembly)
+**Total estimated cost: ~$120-140 CAD** (excluding 3D printing and camera desk mount)
 
-> **Note:** Links point to approximate product categories on PiShop.ca. Please verify exact part numbers and availability when ordering. The 5/16" hex nut specification is based on standard rod clamp requirements.
+> **Note:** Electronic components are available from various retailers including PiShop.ca, electronics distributors, and online retailers. Specific product links are provided where verified to work. Hardware components like screws and nuts are available at local hardware stores.
 
 ## Codebase
 
