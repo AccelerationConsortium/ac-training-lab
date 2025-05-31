@@ -44,7 +44,7 @@ The following components are required for the equipment monitoring setup:
 - [2.5mm Hex Key/Allen Wrench](https://www.mcmaster.com/7648A72/) - McMaster-Carr (~$10-15 CAD)
 - [Hex Nut Driver Tool](https://www.mcmaster.com/hex-nut-drivers/) - McMaster-Carr (~$5-10 CAD)
 
-**Total estimated cost: ~$109-115 CAD** (as of 2025-05-30, excluding 3D printing, camera desk mount, hex nut, and tools)
+**Total estimated cost: ~$109-115 CAD** (as of 2025-01-30, excluding 3D printing, camera desk mount, hex nut, and tools)
 **Tool costs: ~$30-45 CAD** (separate from main components, not included in total)
 
 > **Note:** Most electronic components have verified working links to PiShop.ca. Hardware components like screws and nuts are available at local hardware stores or McMaster-Carr.
