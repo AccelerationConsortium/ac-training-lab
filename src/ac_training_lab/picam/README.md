@@ -10,12 +10,11 @@ The following components are required for the equipment monitoring setup:
 ### Core Hardware
 - [Raspberry Pi Zero 2W](https://www.pishop.ca/product/raspberry-pi-zero-2-w/) - $21.50 CAD
 - [MicroSD Card 32GB Class 10](https://www.pishop.ca/product/raspberry-pi-sd-card-32gb/) - $13.95 CAD
-- [Heat Sink Kit for RPi Zero](https://www.pishop.ca/product/dedicated-aluminum-heatsink-for-raspberry-pi-zero-series-zero-zero-2-w/) - $5.95 CAD **[OPTIONAL]**
-  - Alternative: [Aluminum Heatsink for Raspberry Pi B+/2/3 (2-Pack)](https://www.pishop.ca/product/aluminum-heatsink-for-raspberry-pi-b2-2-pack/) - $2.45 CAD **[OPTIONAL]**
-  - *Note: Alternative heatsink may need different nuts and bolts to attach to the heatsink and camera mount*
-- [Mini HDMI Plug to Standard HDMI Jack Adapter](https://www.pishop.ca/product/mini-hdmi-plug-to-standard-hdmi-jack-adapter/) - $3.45 CAD **[OPTIONAL]**
+- [Aluminum Heatsink for Raspberry Pi B+/2/3 (2-Pack)](https://www.pishop.ca/product/aluminum-heatsink-for-raspberry-pi-b2-2-pack/) - $2.45 CAD **[OPTIONAL]**
+  - Alternative: [Heat Sink Kit for RPi Zero](https://www.pishop.ca/product/dedicated-aluminum-heatsink-for-raspberry-pi-zero-series-zero-zero-2-w/) - $5.95 CAD **[OPTIONAL - Better Cooling]**
+  - *Note: The cheaper heat sink is the default as it doesn't require additional hardware. The more expensive one provides better cooling.*
 
-### Camera Components  
+### Camera Components
 - [Raspberry Pi Camera Module 3](https://www.pishop.ca/product/raspberry-pi-camera-module-3/) - $35.00 CAD
 - [Raspberry Pi Zero Camera Cable](https://www.pishop.ca/product/raspberry-pi-zero-mini-camera-cable-38mm/) - $3.95 CAD **[OPTIONAL]**
   - *Note: The RPi Camera Module 3 comes with a long cable you can use, but you can replace it with this shorter cable for cleaner mounting*
@@ -25,6 +24,15 @@ The following components are required for the equipment monitoring setup:
 - [MicroUSB Power Adapter (International Plugs)](https://www.pishop.ca/product/microusb-power-adapter-international-plugs/) - $12.95 CAD **[INTERNATIONAL OPTION]**
 - *Note: Pi Zero 2W uses micro USB for power, not USB-C*
 
+### Optional Troubleshooting Items
+These items are optional and don't factor into the final price shown. They're useful if you're unable to SSH into the machine:
+- [Mini HDMI Plug to Standard HDMI Jack Adapter](https://www.pishop.ca/product/mini-hdmi-plug-to-standard-hdmi-jack-adapter/) - $3.45 CAD **[OPTIONAL]**
+- [6FT High Speed HDMI Cable With Ethernet](https://www.pishop.ca/product/6ft-high-speed-hdmi-cable-with-ethernet-18gbps-28awg-gold-plated/) - $2.95 CAD **[OPTIONAL]**
+- [USB OTG Host Cable - MicroB OTG male to A female](https://www.pishop.ca/product/usb-otg-host-cable-microb-otg-male-to-a-female/) - $3.45 CAD **[OPTIONAL]**
+- [Wireless Keyboard and Mouse Combo with USB Dongle](https://a.co/d/dxV6WWj) - Amazon **[OPTIONAL]**
+- External Monitor **[OPTIONAL]**
+- *Note: These items provide a simple fix for situations where SSH access is unavailable*
+
 ### Mounting Hardware
 **Option A:** Off-the-shelf mount kit
 - [Pro Mini Camera Mount for Raspberry Pi Zero](https://www.pishop.ca/product/pro-mini-camera-mount-for-raspberry-pi-zero/) - $7.95 CAD
@@ -32,19 +40,24 @@ The following components are required for the equipment monitoring setup:
 
 **Option B:** DIY mounting solution (recommended):
 - [3D Printable PiCam Mount](https://github.com/AccelerationConsortium/ac-training-lab/tree/main/src/ac_training_lab/picam/_design) (STL files in repository)
-- [M2 Nylon Hex Standoff Spacer Screw Nut Assortment Kit (150 Pieces)](https://www.pishop.ca/product/m2-nylon-hex-standoff-spacer-screw-nut-assortment-kit-160-pieces/) - $7.95 CAD
-  - Alternative: M2 and M2.5 hardware from [McMaster-Carr](https://www.mcmaster.com/) as backup
+- **M2 Hardware (4 pieces needed):**
+  - [M2 Nylon Hex Standoff Spacer Screw Nut Assortment Kit (150 Pieces)](https://www.pishop.ca/product/m2-nylon-hex-standoff-spacer-screw-nut-assortment-kit-160-pieces/) - $7.95 CAD - PiShop.ca
+  - *Note: This kit contains 150+ pieces including screws, nuts, and standoffs. You only need 4 M2×12mm screws and 4 M2 nuts from this kit.*
+- **M2.5 Hardware (4 pieces needed):**
+  - [White Nylon Screw and Stand-off Set - M2.5 - 420 pieces](https://www.pishop.ca/product/white-nylon-screw-and-stand-off-set-m2-5-420-pieces/) - $18.95 CAD - PiShop.ca
+  - *Note: This kit contains 420+ pieces including screws, nuts, and standoffs. You only need 4 M2.5×8mm screws, 4 M2.5 nuts, and 4 M2.5×8mm standoffs from this kit.*
+- *Note: Assembly instructions available at [ThePiHut](https://thepihut.com/blogs/raspberry-pi-tutorials/pro-mini-camera-mount-assembly-guide)*
 
 ### Rod Clamp Assembly & Mounting
 - [Camera Desk Mount Table Stand](https://www.primecables.ca/p-407778-cab-lsd01-1s-camera-desk-mount-table-stand) - Prime Cables (~$20-30 CAD)
-- [5/16" Hex Nut](https://www.mcmaster.com/7648A72/) - McMaster-Carr for secure rod mounting (~$5-10 CAD)
+- [5/16" Hex Nut](https://www.mcmaster.com/product/91078A029) - McMaster-Carr for secure rod mounting (~$5-10 CAD)
 
 ### Tools Required (separate from total cost)
-- [Small Precision Screwdriver](https://www.mcmaster.com/7845A36/) - McMaster-Carr (~$15-20 CAD)
-- [2.5mm Hex Key/Allen Wrench](https://www.mcmaster.com/7648A72/) - McMaster-Carr (~$10-15 CAD)
-- [Hex Nut Driver Tool](https://www.mcmaster.com/hex-nut-drivers/) - McMaster-Carr (~$5-10 CAD)
+- [Small Precision Screwdriver Set](https://www.mcmaster.com/product/52985A22) - McMaster-Carr (~$15-20 CAD)
+- [2.5mm Hex Key/Allen Wrench](https://www.mcmaster.com/product/5984A23) - McMaster-Carr (~$10-15 CAD)
+- [5/16" Hex Nut Driver Tool](https://www.mcmaster.com/7142A36/) - McMaster-Carr (~$5-10 CAD)
 
-**Total estimated cost: ~$109-115 CAD** (as of 2025-01-30, excluding 3D printing, camera desk mount, hex nut, and tools)
+**Total estimated cost: ~$109-115 CAD** (as of 2025-05-31, excluding 3D printing, camera desk mount, hex nut, and tools)
 **Tool costs: ~$30-45 CAD** (separate from main components, not included in total)
 
 > **Note:** Most electronic components have verified working links to PiShop.ca. Hardware components like screws and nuts are available at local hardware stores or McMaster-Carr.
