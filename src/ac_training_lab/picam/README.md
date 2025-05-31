@@ -27,8 +27,8 @@ The following components are required for the equipment monitoring setup:
 
 ### Optional Troubleshooting Items
 These items are optional and don't factor into the final price shown. They're useful if you're unable to SSH into the machine:
-- [HDMI to HDMI Cable](https://www.pishop.ca/) - PiShop **[OPTIONAL]**
-- [Micro USB to Female USB-A Cable](https://www.pishop.ca/) - PiShop **[OPTIONAL]**
+- [6FT High Speed HDMI Cable With Ethernet](https://www.pishop.ca/product/6ft-high-speed-hdmi-cable-with-ethernet-18gbps-28awg-gold-plated/) - $2.95 CAD **[OPTIONAL]**
+- [USB OTG Host Cable - MicroB OTG male to A female](https://www.pishop.ca/product/usb-otg-host-cable-microb-otg-male-to-a-female/) - $3.45 CAD **[OPTIONAL]**
 - [Wireless Keyboard and Mouse Combo with USB Dongle](https://a.co/d/dxV6WWj) - Amazon **[OPTIONAL]**
 - External Monitor **[OPTIONAL]**
 - *Note: These items provide a simple fix for situations where SSH access is unavailable*
@@ -40,8 +40,13 @@ These items are optional and don't factor into the final price shown. They're us
 
 **Option B:** DIY mounting solution (recommended):
 - [3D Printable PiCam Mount](https://github.com/AccelerationConsortium/ac-training-lab/tree/main/src/ac_training_lab/picam/_design) (STL files in repository)
-- 4 x M2 screws and nuts (M2x12 was used) - preferably from [PiShop](https://www.pishop.ca/) or [McMaster-Carr](https://www.mcmaster.com/)
-- 4 x M2.5 screws, hex standoffs and nuts - from [McMaster-Carr](https://www.mcmaster.com/)
+- **M2 Hardware (4 sets needed):**
+  - [M2 x 12mm Socket Head Cap Screws](https://www.mcmaster.com/91292A831/) - McMaster-Carr
+  - [M2 x 0.4mm Hex Nuts](https://www.mcmaster.com/90591A111/) - McMaster-Carr
+- **M2.5 Hardware (4 sets needed):**
+  - [M2.5 x 8mm Socket Head Cap Screws](https://www.mcmaster.com/91292A014/) - McMaster-Carr
+  - [M2.5 x 0.45mm Hex Nuts](https://www.mcmaster.com/90591A113/) - McMaster-Carr
+  - [M2.5 x 8mm Hex Standoffs](https://www.mcmaster.com/94669A120/) - McMaster-Carr
 - *Note: Assembly instructions available at [ThePiHut](https://thepihut.com/blogs/raspberry-pi-tutorials/pro-mini-camera-mount-assembly-guide)*
 
 ### Rod Clamp Assembly & Mounting
@@ -50,8 +55,8 @@ These items are optional and don't factor into the final price shown. They're us
 
 ### Tools Required (separate from total cost)
 - [Small Precision Screwdriver](https://www.mcmaster.com/7845A36/) - McMaster-Carr (~$15-20 CAD)
-- [2.5mm Hex Key/Allen Wrench](https://www.mcmaster.com/7142A36/) - McMaster-Carr (~$10-15 CAD)
-- [Hex Nut Driver Tool](https://www.mcmaster.com/product/7142A36) - McMaster-Carr (~$5-10 CAD)
+- [2.5mm Hex Key/Allen Wrench](https://www.mcmaster.com/7648A72/) - McMaster-Carr (~$10-15 CAD)
+- [5/16" Hex Nut Driver Tool](https://www.mcmaster.com/7142A36/) - McMaster-Carr (~$5-10 CAD)
 
 **Total estimated cost: ~$109-115 CAD** (as of 2025-05-31, excluding 3D printing, camera desk mount, hex nut, and tools)
 **Tool costs: ~$30-45 CAD** (separate from main components, not included in total)
