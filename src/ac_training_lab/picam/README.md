@@ -40,13 +40,12 @@ These items are optional and don't factor into the final price shown. They're us
 
 **Option B:** DIY mounting solution (recommended):
 - [3D Printable PiCam Mount](https://github.com/AccelerationConsortium/ac-training-lab/tree/main/src/ac_training_lab/picam/_design) (STL files in repository)
-- **M2 Hardware (4 sets needed):**
-  - [M2 x 12mm Socket Head Cap Screws](https://www.mcmaster.com/91292A831/) - McMaster-Carr
-  - [M2 x 0.4mm Hex Nuts](https://www.mcmaster.com/90591A111/) - McMaster-Carr
-- **M2.5 Hardware (4 sets needed):**
-  - [M2.5 x 8mm Socket Head Cap Screws](https://www.mcmaster.com/91292A014/) - McMaster-Carr
-  - [M2.5 x 0.45mm Hex Nuts](https://www.mcmaster.com/90591A113/) - McMaster-Carr
-  - [M2.5 x 8mm Hex Standoffs](https://www.mcmaster.com/94669A120/) - McMaster-Carr
+- **M2 Hardware (4 pieces needed):**
+  - [M2 Nylon Hex Standoff Spacer Screw Nut Assortment Kit (150 Pieces)](https://www.pishop.ca/product/m2-nylon-hex-standoff-spacer-screw-nut-assortment-kit-160-pieces/) - $7.95 CAD - PiShop.ca
+  - *Note: This kit contains 150+ pieces including screws, nuts, and standoffs. You only need 4 M2×12mm screws and 4 M2 nuts from this kit.*
+- **M2.5 Hardware (4 pieces needed):**
+  - [White Nylon Screw and Stand-off Set - M2.5 - 420 pieces](https://www.pishop.ca/product/white-nylon-screw-and-stand-off-set-m2-5-420-pieces/) - $18.95 CAD - PiShop.ca
+  - *Note: This kit contains 420+ pieces including screws, nuts, and standoffs. You only need 4 M2.5×8mm screws, 4 M2.5 nuts, and 4 M2.5×8mm standoffs from this kit.*
 - *Note: Assembly instructions available at [ThePiHut](https://thepihut.com/blogs/raspberry-pi-tutorials/pro-mini-camera-mount-assembly-guide)*
 
 ### Rod Clamp Assembly & Mounting
@@ -54,8 +53,8 @@ These items are optional and don't factor into the final price shown. They're us
 - [5/16" Hex Nut](https://www.mcmaster.com/product/91078A029) - McMaster-Carr for secure rod mounting (~$5-10 CAD)
 
 ### Tools Required (separate from total cost)
-- [Small Precision Screwdriver](https://www.mcmaster.com/7845A36/) - McMaster-Carr (~$15-20 CAD)
-- [2.5mm Hex Key/Allen Wrench](https://www.mcmaster.com/7648A72/) - McMaster-Carr (~$10-15 CAD)
+- [Small Precision Screwdriver Set](https://www.mcmaster.com/product/52985A22) - McMaster-Carr (~$15-20 CAD)
+- [2.5mm Hex Key/Allen Wrench](https://www.mcmaster.com/product/5984A23) - McMaster-Carr (~$10-15 CAD)
 - [5/16" Hex Nut Driver Tool](https://www.mcmaster.com/7142A36/) - McMaster-Carr (~$5-10 CAD)
 
 **Total estimated cost: ~$109-115 CAD** (as of 2025-05-31, excluding 3D printing, camera desk mount, hex nut, and tools)
