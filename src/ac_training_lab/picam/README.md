@@ -15,7 +15,7 @@ The following components are required for the equipment monitoring setup:
   - *Note: The cheaper heat sink is the default as it doesn't require additional hardware. The more expensive one provides better cooling.*
 - [Mini HDMI Plug to Standard HDMI Jack Adapter](https://www.pishop.ca/product/mini-hdmi-plug-to-standard-hdmi-jack-adapter/) - $3.45 CAD **[OPTIONAL]**
 
-### Camera Components  
+### Camera Components
 - [Raspberry Pi Camera Module 3](https://www.pishop.ca/product/raspberry-pi-camera-module-3/) - $35.00 CAD
 - [Raspberry Pi Zero Camera Cable](https://www.pishop.ca/product/raspberry-pi-zero-mini-camera-cable-38mm/) - $3.95 CAD **[OPTIONAL]**
   - *Note: The RPi Camera Module 3 comes with a long cable you can use, but you can replace it with this shorter cable for cleaner mounting*
