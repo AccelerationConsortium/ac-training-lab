@@ -10,36 +10,42 @@ The following components are required for the equipment monitoring setup:
 ### Core Hardware
 - [Raspberry Pi Zero 2W](https://www.pishop.ca/product/raspberry-pi-zero-2-w/) - $21.50 CAD
 - [MicroSD Card 32GB Class 10](https://www.pishop.ca/product/raspberry-pi-sd-card-32gb/) - $13.95 CAD
-- [Heat Sink Kit for RPi Zero](https://www.pishop.ca/product/dedicated-aluminum-heatsink-for-raspberry-pi-zero-series-zero-zero-2-w/) - $5.95 CAD
+- [Heat Sink Kit for RPi Zero](https://www.pishop.ca/product/dedicated-aluminum-heatsink-for-raspberry-pi-zero-series-zero-zero-2-w/) - $5.95 CAD **[OPTIONAL]**
+  - Alternative: [Aluminum Heatsink for Raspberry Pi B+/2/3 (2-Pack)](https://www.pishop.ca/product/aluminum-heatsink-for-raspberry-pi-b2-2-pack/) - $2.45 CAD **[OPTIONAL]**
+  - *Note: Alternative heatsink may need different nuts and bolts to attach to the heatsink and camera mount*
+- [Mini HDMI Plug to Standard HDMI Jack Adapter](https://www.pishop.ca/product/mini-hdmi-plug-to-standard-hdmi-jack-adapter/) - $3.45 CAD **[OPTIONAL]**
 
 ### Camera Components  
 - [Raspberry Pi Camera Module 3](https://www.pishop.ca/product/raspberry-pi-camera-module-3/) - $35.00 CAD
-- [Raspberry Pi Zero Camera Cable](https://www.pishop.ca/product/raspberry-pi-zero-mini-camera-cable-38mm/) - $3.95 CAD [OPTIONAL]
+- [Raspberry Pi Zero Camera Cable](https://www.pishop.ca/product/raspberry-pi-zero-mini-camera-cable-38mm/) - $3.95 CAD **[OPTIONAL]**
   - *Note: The RPi Camera Module 3 comes with a long cable you can use, but you can replace it with this shorter cable for cleaner mounting*
 
 ### Power
-- [MicroUSB Power Supply 5V 3A](https://www.pishop.ca/product/microusb-power-adapter-international-plugs/) - $12.95 CAD
-- Alternative: USB-C cable for power from computer/hub
+- [Wall Adapter Power Supply - 5.1V DC 2.5A (USB Micro-B)](https://www.pishop.ca/product/wall-adapter-power-supply-5-25v-dc-2-4a-usb-micro-b/) - $9.95 CAD **[DEFAULT]**
+- [MicroUSB Power Adapter (International Plugs)](https://www.pishop.ca/product/microusb-power-adapter-international-plugs/) - $12.95 CAD **[INTERNATIONAL OPTION]**
+- *Note: Pi Zero 2W uses micro USB for power, not USB-C*
 
 ### Mounting Hardware
 **Option A:** Off-the-shelf mount kit
 - [Pro Mini Camera Mount for Raspberry Pi Zero](https://www.pishop.ca/product/pro-mini-camera-mount-for-raspberry-pi-zero/) - $7.95 CAD
+- *Note: Off-the-shelf mount works but might need to be secured so the two laser cut pieces don't wobble relative to each other*
 
 **Option B:** DIY mounting solution (recommended):
 - [3D Printable PiCam Mount](https://github.com/AccelerationConsortium/ac-training-lab/tree/main/src/ac_training_lab/picam/_design) (STL files in repository)
-- M2 x 8mm Screws (4x) + M2 Nuts (4x) - ~$5 CAD (available from hardware stores)
-- M2.5 x 12mm Screws (4x) + M2.5 Hex Standoffs (4x) + M2.5 Nuts (4x) - ~$8 CAD (available from hardware stores)
+- [M2 Nylon Hex Standoff Spacer Screw Nut Assortment Kit (150 Pieces)](https://www.pishop.ca/product/m2-nylon-hex-standoff-spacer-screw-nut-assortment-kit-160-pieces/) - $7.95 CAD
+  - Alternative: M2 and M2.5 hardware from [McMaster-Carr](https://www.mcmaster.com/) as backup
 
 ### Rod Clamp Assembly & Mounting
-- [Camera Desk Mount Table Stand](https://www.primecables.ca/p-407778-cab-lsd01-1s-camera-desk-mount-table-stand) - Prime Cables
-- [5/16" Hex Nut](https://www.mcmaster.com/91078A029/) - McMaster-Carr for secure rod mounting
+- [Camera Desk Mount Table Stand](https://www.primecables.ca/p-407778-cab-lsd01-1s-camera-desk-mount-table-stand) - Prime Cables (~$20-30 CAD)
+- [5/16" Hex Nut](https://www.mcmaster.com/7648A72/) - McMaster-Carr for secure rod mounting (~$5-10 CAD)
 
-### Tools Required
-- [Small Precision Screwdriver](https://www.mcmaster.com/7845A36/) - McMaster-Carr
-- [2.5mm Hex Key/Allen Wrench](https://www.mcmaster.com/7648A72/) - McMaster-Carr
-- Hex nut tool with handle for tightening (recommended)
+### Tools Required (separate from total cost)
+- [Small Precision Screwdriver](https://www.mcmaster.com/7845A36/) - McMaster-Carr (~$15-20 CAD)
+- [2.5mm Hex Key/Allen Wrench](https://www.mcmaster.com/7648A72/) - McMaster-Carr (~$10-15 CAD)
+- [Hex Nut Driver Tool](https://www.mcmaster.com/hex-nut-drivers/) - McMaster-Carr (~$5-10 CAD)
 
-**Total estimated cost: ~$101-109 CAD** (excluding 3D printing, camera desk mount, and tools)
+**Total estimated cost: ~$109-115 CAD** (as of 2025-05-30, excluding 3D printing, camera desk mount, hex nut, and tools)
+**Tool costs: ~$30-45 CAD** (separate from main components, not included in total)
 
 > **Note:** Most electronic components have verified working links to PiShop.ca. Hardware components like screws and nuts are available at local hardware stores or McMaster-Carr.
 
