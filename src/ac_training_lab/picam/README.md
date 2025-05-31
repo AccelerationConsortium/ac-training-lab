@@ -13,7 +13,6 @@ The following components are required for the equipment monitoring setup:
 - [Aluminum Heatsink for Raspberry Pi B+/2/3 (2-Pack)](https://www.pishop.ca/product/aluminum-heatsink-for-raspberry-pi-b2-2-pack/) - $2.45 CAD **[OPTIONAL]**
   - Alternative: [Heat Sink Kit for RPi Zero](https://www.pishop.ca/product/dedicated-aluminum-heatsink-for-raspberry-pi-zero-series-zero-zero-2-w/) - $5.95 CAD **[OPTIONAL - Better Cooling]**
   - *Note: The cheaper heat sink is the default as it doesn't require additional hardware. The more expensive one provides better cooling.*
-- [Mini HDMI Plug to Standard HDMI Jack Adapter](https://www.pishop.ca/product/mini-hdmi-plug-to-standard-hdmi-jack-adapter/) - $3.45 CAD **[OPTIONAL]**
 
 ### Camera Components
 - [Raspberry Pi Camera Module 3](https://www.pishop.ca/product/raspberry-pi-camera-module-3/) - $35.00 CAD
@@ -27,6 +26,7 @@ The following components are required for the equipment monitoring setup:
 
 ### Optional Troubleshooting Items
 These items are optional and don't factor into the final price shown. They're useful if you're unable to SSH into the machine:
+- [Mini HDMI Plug to Standard HDMI Jack Adapter](https://www.pishop.ca/product/mini-hdmi-plug-to-standard-hdmi-jack-adapter/) - $3.45 CAD **[OPTIONAL]**
 - [6FT High Speed HDMI Cable With Ethernet](https://www.pishop.ca/product/6ft-high-speed-hdmi-cable-with-ethernet-18gbps-28awg-gold-plated/) - $2.95 CAD **[OPTIONAL]**
 - [USB OTG Host Cable - MicroB OTG male to A female](https://www.pishop.ca/product/usb-otg-host-cable-microb-otg-male-to-a-female/) - $3.45 CAD **[OPTIONAL]**
 - [Wireless Keyboard and Mouse Combo with USB Dongle](https://a.co/d/dxV6WWj) - Amazon **[OPTIONAL]**
