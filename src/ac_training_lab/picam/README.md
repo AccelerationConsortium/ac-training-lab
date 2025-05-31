@@ -14,8 +14,8 @@ The following components are required for the equipment monitoring setup:
 
 ### Camera Components  
 - [Raspberry Pi Camera Module 3](https://www.pishop.ca/product/raspberry-pi-camera-module-3/) - $35.00 CAD
-- [Raspberry Pi Zero Camera Cable](https://www.pishop.ca/product/raspberry-pi-zero-mini-camera-cable-38mm/) - $3.95 CAD
-  - *Note: The RPi Camera Module 3 comes with a long cable, but a shorter one might be desired for cleaner mounting*
+- [Raspberry Pi Zero Camera Cable](https://www.pishop.ca/product/raspberry-pi-zero-mini-camera-cable-38mm/) - $3.95 CAD [OPTIONAL]
+  - *Note: The RPi Camera Module 3 comes with a long cable you can use, but you can replace it with this shorter cable for cleaner mounting*
 
 ### Power
 - [MicroUSB Power Supply 5V 3A](https://www.pishop.ca/product/microusb-power-adapter-international-plugs/) - $12.95 CAD
