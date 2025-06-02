@@ -1,4 +1,4 @@
-# RPi Zero 2W Streaming Cameras
+# RPi Streaming Cameras for Equipment Monitoring
 
 This is intended to be run on a Raspberry Pi Zero 2W Raspberry Pi Camera
 Module 3 running [RPi OS Lite (bookworm, 64-bit)](https://www.raspberrypi.com/software/operating-systems/).
