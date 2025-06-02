@@ -50,12 +50,12 @@ These items are optional and don't factor into the final price shown. They're us
 
 ### Rod Clamp Assembly & Mounting
 - [Camera Desk Mount Table Stand](https://www.primecables.ca/p-407778-cab-lsd01-1s-camera-desk-mount-table-stand) - Prime Cables (~$20-30 CAD)
-- [5/16" Hex Nut](https://www.mcmaster.com/product/91078A029) - McMaster-Carr for secure rod mounting (~$5-10 CAD)
+- [1/4"-20 Hex Nut (7/16" hex driver required, or finger-tighten)](https://www.mcmaster.com/product/91078A029) - McMaster-Carr for secure rod mounting (~$5-10 CAD)
 
 ### Tools Required (separate from total cost)
 - [Small Precision Screwdriver Set](https://www.mcmaster.com/product/52985A22) - McMaster-Carr (~$15-20 CAD)
 - [2.5mm Hex Key/Allen Wrench](https://www.mcmaster.com/product/5984A23) - McMaster-Carr (~$10-15 CAD)
-- [5/16" Hex Nut Driver Tool](https://www.mcmaster.com/7142A36/) - McMaster-Carr (~$5-10 CAD)
+- [7/16" Hex Nut Driver Tool](https://www.mcmaster.com/7142A36/) - McMaster-Carr (~$5-10 CAD)
 
 **Total estimated cost: ~$109-115 CAD** (as of 2025-05-31, excluding 3D printing, camera desk mount, hex nut, and tools)
 **Tool costs: ~$30-45 CAD** (separate from main components, not included in total)
