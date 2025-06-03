@@ -29,7 +29,9 @@ cliargs = parser.parse_args()
 def handle_control_gripper(args, cobot):
     logger.info(f"running command control/gripper with {args}")
     try:
-        cobot.set_gripper_value(**args)
+        gripper_value = args["gripper_value"]
+        speed = args["speed"]
+        cobot.set_gripper_value(gripper_value, speed)
         return {"success": True}
     except Exception as e:
         logger.critical(f"control gripper error: {str(e)}")
@@ -39,7 +41,9 @@ def handle_control_gripper(args, cobot):
 def handle_control_angles(args, cobot):
     logger.info(f"running command control/angle with {args}")
     try:
-        cobot.send_angles(**args)
+        angles = args["angles"]
+        speed = args["speed"]
+        cobot.send_angles(angles, speed)
         return {"success": True}
     except Exception as e:
         logger.critical(f"control angle error: {str(e)}")
@@ -49,7 +53,9 @@ def handle_control_angles(args, cobot):
 def handle_control_coords(args, cobot):
     logger.info(f"running command control/coord with {args}")
     try:
-        cobot.send_coords(**args)
+        coords = args["coords"]
+        speed = args["speed"]
+        cobot.send_coords(coords, speed)
         return {"success": True}
     except Exception as e:
         logger.critical(f"control coords error: {str(e)}")
