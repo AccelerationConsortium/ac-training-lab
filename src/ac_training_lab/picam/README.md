@@ -59,8 +59,8 @@ These items are optional and don't factor into the final price shown. They're us
 - [2.5mm Hex Key/Allen Wrench](https://www.mcmaster.com/product/5984A23) - McMaster-Carr (~$10-15 CAD)
 - [7/16" Hex Nut Driver Tool](https://www.mcmaster.com/7142A36/) - McMaster-Carr (~$5-10 CAD)
 
-**Total estimated cost: ~$109-115 CAD** (as of 2025-05-31, excluding 3D printing, camera desk mount, hex nut, and tools)
-**Tool costs: ~$30-45 CAD** (separate from main components, not included in total)
+**Total estimated cost: 109-115 CAD** (as of 2025-05-31, excluding 3D printing, camera desk mount, hex nut, and tools)
+**Tool costs: 30-45 CAD** (separate from main components, not included in total)
 
 > **Note:** Most electronic components have verified working links to PiShop.ca. Hardware components like screws and nuts are available at local hardware stores or McMaster-Carr.
 
