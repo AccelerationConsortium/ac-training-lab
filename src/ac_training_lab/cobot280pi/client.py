@@ -8,7 +8,6 @@ from PIL import Image
 
 
 class CobotController:
-
     def __init__(
         self,
         hive_mq_username: str,
