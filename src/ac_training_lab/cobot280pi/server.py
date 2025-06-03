@@ -56,6 +56,16 @@ def handle_control_coords(args, cobot):
         return {"success": False, "error_msg": str(e)}
 
 
+def handle_control_release_servos(args, cobot):
+    logger.info(f"running command control/release_servos with {args}")
+    try:
+        cobot.release_all_servos()
+        return {"success": True}
+    except Exception as e:
+        logger.critical(f"control release servos error: {str(e)}")
+        return {"success": False, "error_msg": str(e)}
+
+
 def handle_query_angles(args, cobot):
     logger.info(f"running command query/angle with {args}")
     try:
@@ -137,6 +147,8 @@ def handle_message(msg, cobot):
         return handle_control_coords(payload_dict["args"], cobot)
     elif cmd == "control/gripper":
         return handle_control_gripper(payload_dict["args"], cobot)
+    elif cmd == "control/release_servos":
+        return handle_control_release_servos(payload_dict["args"], cobot)
     elif cmd == "query/angles":
         return handle_query_angles(payload_dict["args"], cobot)
     elif cmd == "query/coords":
