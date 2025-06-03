@@ -204,6 +204,9 @@ Manually start the service by running:
 sudo systemctl start device.service
 ```
 
+*Note: This is the end of the picam setup. On reboot, a livestream should automatically start.*
+---
+
 This command tells systemd to run your service immediately (as if it had been triggered at boot). To check its status, use:
 
 ```bash
