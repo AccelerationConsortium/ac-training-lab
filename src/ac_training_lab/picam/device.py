@@ -4,8 +4,8 @@ import subprocess
 import requests
 from my_secrets import (
     CAM_NAME,
-    CAMERA_VFLIP,
     CAMERA_HFLIP,
+    CAMERA_VFLIP,
     LAMBDA_FUNCTION_URL,
     PRIVACY_STATUS,
     WORKFLOW_NAME,
