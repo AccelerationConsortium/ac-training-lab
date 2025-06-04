@@ -18,4 +18,6 @@ jobs:
         run: |
           pip install -e .
           pip install tox pre-commit
-          pre-commit install
+          # pre-commit run --all-files
+          # npx mint-mcp add docs.prefect.io
+          # pre-commit install # don't install, since this has been a source of issues
