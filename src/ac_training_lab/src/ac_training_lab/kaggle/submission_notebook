@@ -1,0 +1,98 @@
+!pip install ax-platform==0.4.3
+# Script 2 : bayesian optimization
+
+import json
+from ax.service.ax_client import AxClient, ObjectiveProperties
+import numpy as np
+import pandas as pd
+
+class Branin :
+    def __init__(self, index:int, X1:float, X2:float, value: float) :
+        self.index = index
+        self.X1 = X1
+        self.X2 = X2
+        self.value = value
+        
+
+    def Calculate_branin(x1, x2):
+        return float(
+            (x2 - 5.1 / (4 * np.pi**2) * x1**2 + 5.0 / np.pi * x1 - 6.0)**2 +
+            10 * (1 - 1 / (8 * np.pi)) * np.cos(x1) + 10
+        )
+
+#########
+ID = 145  # Random ID
+history = []
+Branin_trials = []
+
+
+def run_bayesian_optimization(n_init=9, tolerance=1e-3, patience=5):
+    global history
+    ax_client = AxClient()
+    ax_client.create_experiment(
+        parameters=[
+            {"name": "x1", "type": "range", "bounds": [-5.0, 10.0]},
+            {"name": "x2", "type": "range", "bounds": [0.0, 10.0]},
+        ],
+        objectives={"branin": ObjectiveProperties(minimize=True)},
+    )
+
+    # Initial trials
+
+    for _ in range(n_init):
+        params, trial_index = ax_client.get_next_trial()
+        y = branin(**params)
+        
+        trial = Branin(trial_index, params['x1'], params['x2'], y)
+         
+        Branin_trials.append(trial)    # List of trials (Branin' objects)
+        history.append(y)              # List of the obtained values
+        ax_client.complete_trial(trial_index=trial_index, raw_data=y)
+       
+   
+        
+        
+        
+
+    best_so_far = float("inf")
+    no_improve_counter = 0
+    bo_iterations = n_init
+    # Stopping condition
+    while no_improve_counter < patience:
+        params, trial_index = ax_client.get_next_trial()
+        y = branin(**params)
+        ax_client.complete_trial(trial_index=trial_index, raw_data=y)
+
+        bo_iterations += 1
+        if y < best_so_far - tolerance:
+            best_so_far = y
+            no_improve_counter = 0
+        else:
+            no_improve_counter += 1
+
+    best_bo_params, best_bo_value = ax_client.get_best_parameters()
+
+    # Organize dataframe
+
+    ID_column = [ID] * len(history)
+    
+
+    solution1 = pd.DataFrame(history,columns=["values"])
+    df = pd.DataFrame(ID_column,columns=["row_id"])
+    
+    dict_list=[vars(obj) for obj in Branin_trials]
+    solution2 = pd.DataFrame({'objects': dict_list})
+
+    solution = pd.concat([df, solution1, solution2], axis=1)
+    print(solution)
+    
+    solution.to_csv("submission.csv", index=False)
+    
+
+if __name__ == "__main__":
+    run_bayesian_optimization()
+
+
+# Check the submission file
+F = open('submission.csv','r')
+print(F.read())
