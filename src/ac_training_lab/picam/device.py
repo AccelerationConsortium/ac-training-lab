@@ -139,7 +139,7 @@ if __name__ == "__main__":
     )
     try:
         result = json.loads(raw_body) if isinstance(raw_body, str) else raw_body
-        ffmpeg_url = result["ffmpeg_url"]
+        ffmpeg_url = result["result"]["ffmpeg_url"]
     except (json.JSONDecodeError, KeyError, TypeError) as e:
         raise RuntimeError(
             f"Cannot proceed: ffmpeg_url not found or response invalid → {e}"
