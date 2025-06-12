@@ -79,34 +79,11 @@ for root, dirs, files in os.walk(SRC_DIR):
             github_edit_path += f"/{rel_path}"
         github_edit_path += "/README.md"
 
-        # Extract the title from the README if it exists
-        readme_full_path = SRC_DIR / rel_path / "README.md"
-        title = None
-        if readme_full_path.exists():
-            with open(readme_full_path, "r", encoding="utf-8") as f:
-                for line in f:
-                    line = line.strip()
-                    if line.startswith("# "):
-                        title = line[2:].strip()
-                        break
-
-        # If no title found, generate one from the device name
-        if not title:
-            title = device_name.replace("-", " ").title()
+        # fmt: off # to allow precommit to pass (can't break the <a> across two lines)
 
         # Create the stub content with source and edit links
-        stub_content = f"""# {title}
-
-```{{admonition}} Source Code :class: note
-
-<a href="{github_path}" target="_blank">View source code for this device on
-GitHub</a> | <a href="{github_edit_path}" target="_blank">Suggest edit</a>
-
-```
-
-```{{include}} {rel_readme_path} :start-line: 1 ```
-"""
-
+        # (put on one line to avoid pre-commit issues)
+        stub_content = f"""```{{admonition}} Source Code\n:class: note\n\n<a href="{github_path}" target="_blank">View source code</a> | <a href="{github_edit_path}" target="_blank">Suggest edit</a>\n```\n```{{include}} {rel_readme_path}\n```"""  # noqa: E501
         # Write the stub file
         stub_path = DOCS_DEVICES_DIR / stub_filename
         with open(stub_path, "w", encoding="utf-8") as f:
