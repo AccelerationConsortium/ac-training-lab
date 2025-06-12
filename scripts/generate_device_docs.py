@@ -84,7 +84,7 @@ for root, dirs, files in os.walk(SRC_DIR):
 :class: note
 
 <a href="{github_path}" target="_blank">View source code for this device on GitHub</a> | <a href="{github_edit_path}" target="_blank">Suggest edit</a>
-```
+``` # noqa: E501
 
 ```{{include}} {rel_readme_path}
 ```

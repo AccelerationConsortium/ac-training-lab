@@ -3,6 +3,10 @@
 
 The button above links to [a minimal notebook](https://github.com/AccelerationConsortium/ac-training-lab/blob/main/src/ac_training_lab/apriltag_demo/apriltag_demo.ipynb) demonstrating camera calibration and AprilTag pose estimation using `OpenCV` and `pupil-apriltags`.
 
+#### Watch the video walkthrough below:
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/lPaUVxq59Yw?si=ylYqb_240J-u32lX" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
 ## How to Run
 
 You can open the notebook in **Google Colab** and run it directly.
