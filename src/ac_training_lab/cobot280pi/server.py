@@ -16,7 +16,7 @@ from my_secrets import (
     HIVEMQ_USERNAME,
 )
 from PIL import Image
-from pymycobot.mycobot import MyCobot
+from pymycobot.mycobot import MyCobot  # TODO: update to use latest cobot class
 from utils import setup_logger
 
 # cli args
