@@ -44,6 +44,6 @@ DEVICE_ENDPOINT = "cobot280pi/cobot1"
 ```
 12. Run the server with the following command.
 ```
-python server.py
+python device.py
 ```
 13. Your server is now running! You can use the `CobotController` class from the `client.py` file to control your cobot. Initialize it with the same parameters as in your `my_secrets.py` file.
