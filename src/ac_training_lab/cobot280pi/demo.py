@@ -1,6 +1,6 @@
-from pymycobot.mycobot import MyCobot
+from pymycobot import MyCobot280
 
-cobot = MyCobot("/dev/ttyAMA0", 1000000)
+cobot = MyCobot280("/dev/ttyAMA0", 1000000)
 
 
 def rise():
