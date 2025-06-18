@@ -180,6 +180,52 @@ Since exact 1M/2F 8-position splitters are confirmed unavailable off-the-shelf:
    - EBC124 (ifm)
    - 4000-88001-8131000 (Murr Elektronik)
 
+## Updated Search Results: ACC-SPLIT-M8-2:1 and M8 Power Connector Solutions
+
+### ACC-SPLIT-M8-2:1 Purchase Information
+
+**Canadian Suppliers:**
+- **Electromate**: Authorized Robotiq distributor in Canada
+  - Contact: sales@electromate.com
+  - Quote-based pricing, typically $90–$200 CAD
+- **RobotShop**: Sells Robotiq products, can special order
+- **RoboSource**: Authorized distributor with Canadian operations
+
+**International Suppliers (Ship to Canada):**
+- **Universal Robots+ Showroom**: Lists Robotiq accessories
+- **Automation24** and **RS Components**: Sometimes carry Robotiq accessories
+
+**Note**: ACC-SPLIT-M8-2:1 is a proprietary Robotiq part, only available through authorized distributors. Direct quotes required as it's not stocked at generic electronics suppliers.
+
+### M8 Male to Wire Leads for Pi Zero 2W Power Solution
+
+**Requirements**: M8 male connector with wire leads for 5V 1.5A power delivery from 24V step-down regulator
+
+**Recommended Parts (No Soldering Required):**
+
+| Part Number | Description | Supplier | Price (CAD) |
+|-------------|-------------|----------|-------------|
+| Phoenix Contact 1522796 | M8 male, 3-pin, 2m cable, pre-wired | Digi-Key, Mouser Canada | $13–$18 |
+| TE Connectivity 1-2273004-2 | M8 male, 3-pin, right-angle, 2m cable | Digi-Key, Newark, Mouser | $10–$18 |
+| Weidmüller 1789260000 | M8 male, 3-pin, 2m cable | Allied, Digi-Key, Mouser | $15–$22 |
+
+**Implementation Strategy:**
+1. **M8 Connection**: Use pre-wired M8 male connector (above) to connect to 24V supply
+2. **Voltage Regulation**: Connect wire leads to Pololu step-down regulator input (e.g., D24V22F5)
+3. **Pi Power**: Regulator 5V output connects to Pi via:
+   - Direct connection to Pi's 5V/GND pins, or
+   - USB micro-B breakout cable for power input
+
+**Terminal Block Options (Minimal Soldering):**
+- Use industrial DIN rail terminal blocks for connections
+- Some suppliers offer M8 cables with ferruled ends for direct terminal connection
+- Screw terminal breakouts available for Pololu regulators
+
+**Canadian Suppliers:**
+- **Digi-Key Canada**: Search "M8 male cable" or specific part numbers
+- **Mouser Canada**: Similar inventory with industrial cable variants
+- **Allied Electronics Canada**: Industrial automation focus
+
 ## Search Tool Comparison Summary
 
 - **Perplexity MCP Tool**: ✅ Successfully accessed current product data, pricing, and supplier information
