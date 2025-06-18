@@ -201,16 +201,16 @@ Since exact 1M/2F 8-position splitters are confirmed unavailable off-the-shelf:
 
 **Requirements**: M8 male connector with wire leads for 5V 1.5A power delivery from 24V step-down regulator
 
-**Recommended Parts (No Soldering Required):**
+**Recommended Parts (No Soldering Required - 8-Position):**
 
-| Part Number | Description | Supplier | Price (CAD) |
-|-------------|-------------|----------|-------------|
-| Phoenix Contact 1522796 | M8 male, 3-pin, 2m cable, pre-wired | Digi-Key, Mouser Canada | $13–$18 |
-| TE Connectivity 1-2273004-2 | M8 male, 3-pin, right-angle, 2m cable | Digi-Key, Newark, Mouser | $10–$18 |
-| Weidmüller 1789260000 | M8 male, 3-pin, 2m cable | Allied, Digi-Key, Mouser | $15–$22 |
+| Part Number/Series | Description | Supplier | Price (CAD) |
+|-------------------|-------------|----------|-------------|
+| Phoenix Contact SAC-8P-M8MS series | M8 male, 8-pin, 2-5m cable, pre-wired | Mouser Canada | $20–$30 |
+| Same Sky M8-M8P-8P-L series | M8 male, 8-pin, pigtail cable assembly | Digi-Key Canada | $25–$50 |
+| M8 Sensor Connector Cables | M8 male, 8-pin, cable with flying leads | Newark Canada | $20–$40 |
 
 **Implementation Strategy:**
-1. **M8 Connection**: Use pre-wired M8 male connector (above) to connect to 24V supply
+1. **M8 Connection**: Use pre-wired 8-position M8 male connector (above) to connect to 24V supply
 2. **Voltage Regulation**: Connect wire leads to Pololu step-down regulator input (e.g., D24V22F5)
 3. **Pi Power**: Regulator 5V output connects to Pi via:
    - Direct connection to Pi's 5V/GND pins, or
@@ -218,13 +218,13 @@ Since exact 1M/2F 8-position splitters are confirmed unavailable off-the-shelf:
 
 **Terminal Block Options (Minimal Soldering):**
 - Use industrial DIN rail terminal blocks for connections
-- Some suppliers offer M8 cables with ferruled ends for direct terminal connection
+- All suppliers offer M8 cables with pre-stripped ends for direct terminal connection
 - Screw terminal breakouts available for Pololu regulators
 
 **Canadian Suppliers:**
-- **Digi-Key Canada**: Search "M8 male cable" or specific part numbers
-- **Mouser Canada**: Similar inventory with industrial cable variants
-- **Allied Electronics Canada**: Industrial automation focus
+- **Mouser Canada**: Search "M8 8-position male cable" or Phoenix Contact SAC-8P-M8MS series
+- **Digi-Key Canada**: Search Same Sky M8-M8P-8P-L series for 8-pin male assemblies
+- **Newark Canada**: Search M8 sensor connector cables with 8-position male configuration
 
 ## Search Tool Comparison Summary
 
