@@ -18,6 +18,7 @@ dependencies:
      - prefect
      - pupil-apriltags
      - reportlab
+     - playwright  # For YouTube video downloading automation
   # DEVELOPMENT ONLY PACKAGES (could also be kept in a separate environment file)
   - pytest
   - pytest-cov
