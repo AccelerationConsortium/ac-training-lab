@@ -25,7 +25,6 @@ class TestPlaywrightYTConfig:
         config = PlaywrightYTConfig()
         
         # Test defaults
-        assert config.default_quality == "720p"
         assert config.page_timeout == 30000
         assert config.download_timeout == 300
         assert config.headless is True
@@ -59,8 +58,6 @@ class TestPlaywrightYTConfig:
         assert "google_password" not in config_dict
         
         # Check that other fields are included
-        assert "download_dir" in config_dict
-        assert "default_quality" in config_dict
         assert "has_credentials" in config_dict
         assert config_dict["has_credentials"] is True
 
@@ -70,33 +67,28 @@ class TestYouTubePlaywrightDownloader:
     
     def test_downloader_initialization(self):
         """Test downloader initialization."""
-        with tempfile.TemporaryDirectory() as temp_dir:
-            downloader = YouTubePlaywrightDownloader(
-                email="test@example.com",
-                password="password",
-                download_dir=temp_dir,
-                headless=True
-            )
-            
-            assert downloader.email == "test@example.com"
-            assert downloader.password == "password"
-            assert downloader.download_dir == Path(temp_dir)
-            assert downloader.headless is True
-            assert downloader.timeout == 30000
-            
+        downloader = YouTubePlaywrightDownloader(
+            email="test@example.com",
+            password="password",
+            headless=True
+        )
+        
+        assert downloader.email == "test@example.com"
+        assert downloader.password == "password"
+        assert downloader.download_dir == Path.cwd() / "downloads"
+        assert downloader.headless is True
+        assert downloader.timeout == 30000
+        
     def test_download_directory_creation(self):
-        """Test that download directory is created."""
-        with tempfile.TemporaryDirectory() as temp_dir:
-            download_dir = Path(temp_dir) / "downloads"
-            
-            downloader = YouTubePlaywrightDownloader(
-                email="test@example.com",
-                password="password",
-                download_dir=str(download_dir)
-            )
-            
-            assert download_dir.exists()
-            assert download_dir.is_dir()
+        """Test that download directory is created automatically."""
+        downloader = YouTubePlaywrightDownloader(
+            email="test@example.com",
+            password="password"
+        )
+        
+        # Default downloads directory should be created
+        assert downloader.download_dir.exists()
+        assert downloader.download_dir.is_dir()
             
     @patch('ac_training_lab.video_editing.playwright_yt_downloader.sync_playwright')
     def test_context_manager(self, mock_playwright):
@@ -112,24 +104,22 @@ class TestYouTubePlaywrightDownloader:
         mock_browser.new_context.return_value = mock_context
         mock_context.new_page.return_value = mock_page
         
-        with tempfile.TemporaryDirectory() as temp_dir:
-            downloader = YouTubePlaywrightDownloader(
-                email="test@example.com",
-                password="password",
-                download_dir=temp_dir
-            )
+        downloader = YouTubePlaywrightDownloader(
+            email="test@example.com",
+            password="password"
+        )
+        
+        # Test context manager
+        with downloader:
+            # Should have started browser
+            assert mock_playwright_instance.chromium.launch.called
+            assert mock_browser.new_context.called
+            assert mock_context.new_page.called
             
-            # Test context manager
-            with downloader:
-                # Should have started browser
-                assert mock_playwright_instance.chromium.launch.called
-                assert mock_browser.new_context.called
-                assert mock_context.new_page.called
-                
-            # Should have cleaned up
-            assert mock_page.close.called
-            assert mock_browser.close.called
-            assert mock_playwright_instance.stop.called
+        # Should have cleaned up
+        assert mock_page.close.called
+        assert mock_browser.close.called
+        assert mock_playwright_instance.stop.called
 
 
 class TestYouTubeDownloadManager:
@@ -219,47 +209,6 @@ class TestIntegrationScenarios:
                 
             assert len(video_id) == 11  # YouTube video IDs are 11 characters
             assert video_id.isalnum() or any(c in video_id for c in ['-', '_'])
-            
-    def test_download_directory_handling(self):
-        """Test download directory handling."""
-        with tempfile.TemporaryDirectory() as temp_dir:
-            # Test absolute path
-            abs_path = Path(temp_dir) / "absolute_downloads"
-            
-            downloader = YouTubePlaywrightDownloader(
-                email="test@example.com",
-                password="password",
-                download_dir=str(abs_path)
-            )
-            
-            assert downloader.download_dir == abs_path
-            assert abs_path.exists()
-            
-            # Test relative path
-            rel_path = "relative_downloads"
-            downloader2 = YouTubePlaywrightDownloader(
-                email="test@example.com",
-                password="password",
-                download_dir=rel_path
-            )
-            
-            assert downloader2.download_dir.name == rel_path
-            
-    def test_quality_options(self):
-        """Test video quality options."""
-        valid_qualities = ["144p", "240p", "360p", "480p", "720p", "1080p", "1440p", "2160p"]
-        
-        for quality in valid_qualities:
-            # Test that quality string is properly formatted
-            assert quality.endswith("p")
-            assert quality[:-1].isdigit()
-            
-        # Test invalid quality handling
-        invalid_qualities = ["720", "1080px", "high", "low"]
-        
-        for quality in invalid_qualities:
-            # These should be handled gracefully by the downloader
-            assert not (quality.endswith("p") and quality[:-1].isdigit())
 
 
 if __name__ == "__main__":

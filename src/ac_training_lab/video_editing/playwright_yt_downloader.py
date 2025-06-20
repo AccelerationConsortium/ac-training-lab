@@ -31,7 +31,6 @@ class YouTubePlaywrightDownloader:
     def __init__(self, 
                  email: str, 
                  password: str, 
-                 download_dir: Optional[str] = None,
                  headless: bool = True,
                  timeout: int = 30000):
         """
@@ -40,13 +39,12 @@ class YouTubePlaywrightDownloader:
         Args:
             email: Google account email
             password: Google account password
-            download_dir: Directory to save downloads (defaults to current directory/downloads)
             headless: Whether to run browser in headless mode
             timeout: Default timeout for operations in milliseconds
         """
         self.email = email
         self.password = password
-        self.download_dir = Path(download_dir) if download_dir else Path.cwd() / "downloads"
+        self.download_dir = Path.cwd() / "downloads"  # Use simple default directory
         self.headless = headless
         self.timeout = timeout
         
@@ -161,173 +159,116 @@ class YouTubePlaywrightDownloader:
             logger.error(f"Error navigating to YouTube: {e}")
             return False
     
-    def navigate_to_video(self, video_id: str) -> bool:
+    def navigate_to_video(self, video_id: str, channel_id: str = None) -> bool:
         """
-        Navigate to a specific YouTube video.
+        Navigate to YouTube Studio for a specific video.
         
         Args:
             video_id: YouTube video ID
+            channel_id: Channel ID (optional, can be included in URL)
             
         Returns:
             bool: True if successfully navigated to video
         """
         try:
-            video_url = f"https://www.youtube.com/watch?v={video_id}"
-            logger.info(f"Navigating to video: {video_url}")
+            # Use YouTube Studio URL as suggested in the comment
+            if channel_id:
+                video_url = f"https://studio.youtube.com/video/{video_id}/edit?c={channel_id}"
+            else:
+                video_url = f"https://studio.youtube.com/video/{video_id}/edit"
+            
+            logger.info(f"Navigating to video in Studio: {video_url}")
             
             self.page.goto(video_url)
             
-            # Wait for video to load
-            self.page.wait_for_selector('video', timeout=15000)
+            # Wait for Studio page to load
+            self.page.wait_for_selector('[data-testid="video-editor"]', timeout=15000)
             
-            logger.info(f"Successfully navigated to video {video_id}")
+            logger.info(f"Successfully navigated to video {video_id} in Studio")
             return True
             
         except PlaywrightTimeoutError as e:
-            logger.error(f"Timeout navigating to video {video_id}: {e}")
+            logger.error(f"Timeout navigating to video {video_id} in Studio: {e}")
             return False
         except Exception as e:
-            logger.error(f"Error navigating to video {video_id}: {e}")
+            logger.error(f"Error navigating to video {video_id} in Studio: {e}")
             return False
     
     def find_download_button(self) -> bool:
         """
-        Find and click the download button on YouTube.
+        Find and click the three-dot ellipses menu with download option in YouTube Studio.
         
-        This method looks for various possible selectors for the download button
-        which may change over time as YouTube updates its interface.
+        As suggested in the comment, look for the three vertical ellipses button
+        that has a dropdown with a "download" option.
         
         Returns:
             bool: True if download button found and clicked
         """
         try:
-            logger.info("Looking for download button...")
+            logger.info("Looking for three-dot ellipses menu...")
             
-            # Common selectors for YouTube download button
-            download_selectors = [
-                'button[aria-label*="Download"]',
-                'button:has-text("Download")',
-                '[data-tooltip-text*="Download"]',
-                'yt-icon-button[aria-label*="Download"]',
-                '.download-button',
-                'button:has([d*="download"])',  # SVG path for download icon
+            # Look for three-dot ellipses menu button in YouTube Studio
+            ellipses_selectors = [
+                'button[aria-label*="More"]',
+                'button[aria-label*="More actions"]', 
+                'button:has-text("⋮")',  # Three vertical dots
+                '[data-testid="three-dot-menu"]',
+                'yt-icon-button[aria-label*="More"]',
+                'button[title*="More"]'
             ]
             
-            for selector in download_selectors:
+            for selector in ellipses_selectors:
                 try:
-                    # Look for the download button
-                    download_button = self.page.wait_for_selector(selector, timeout=5000)
-                    if download_button and download_button.is_visible():
-                        logger.info(f"Found download button with selector: {selector}")
-                        download_button.click()
+                    ellipses_button = self.page.wait_for_selector(selector, timeout=5000)
+                    if ellipses_button and ellipses_button.is_visible():
+                        logger.info(f"Found ellipses menu with selector: {selector}")
+                        ellipses_button.click()
                         
-                        # Wait a moment for the download menu to appear
+                        # Wait for dropdown menu to appear
                         time.sleep(2)
-                        return True
                         
+                        # Look for download option in the dropdown
+                        download_selectors = [
+                            'text="Download"',
+                            'button:has-text("Download")',
+                            '[aria-label*="Download"]'
+                        ]
+                        
+                        for dl_selector in download_selectors:
+                            try:
+                                download_option = self.page.wait_for_selector(dl_selector, timeout=3000)
+                                if download_option and download_option.is_visible():
+                                    logger.info("Found download option in dropdown")
+                                    download_option.click()
+                                    return True
+                            except PlaywrightTimeoutError:
+                                continue
+                                
                 except PlaywrightTimeoutError:
                     continue
             
-            # If no download button found, try the three-dot menu
-            logger.info("Download button not found, trying three-dot menu...")
-            return self._try_three_dot_menu()
+            logger.error("Could not find three-dot ellipses menu with download option")
+            return False
             
         except Exception as e:
             logger.error(f"Error finding download button: {e}")
             return False
     
-    def _try_three_dot_menu(self) -> bool:
-        """
-        Try to find download option in the three-dot menu.
-        
-        Returns:
-            bool: True if download option found in menu
-        """
-        try:
-            # Look for three-dot menu button
-            menu_selectors = [
-                'button[aria-label*="More actions"]',
-                'button[aria-label*="More"]',
-                '.ytp-more-button',
-                'yt-icon-button[aria-label*="More"]',
-            ]
-            
-            for selector in menu_selectors:
-                try:
-                    menu_button = self.page.wait_for_selector(selector, timeout=3000)
-                    if menu_button and menu_button.is_visible():
-                        logger.info(f"Found menu button with selector: {selector}")
-                        menu_button.click()
-                        
-                        # Wait for menu to open
-                        time.sleep(1)
-                        
-                        # Look for download option in menu
-                        download_option = self.page.wait_for_selector(
-                            'text="Download"', timeout=3000
-                        )
-                        if download_option:
-                            download_option.click()
-                            logger.info("Found and clicked download in menu")
-                            return True
-                            
-                except PlaywrightTimeoutError:
-                    continue
-            
-            return False
-            
-        except Exception as e:
-            logger.error(f"Error trying three-dot menu: {e}")
-            return False
     
     def select_download_quality(self, preferred_quality: str = "720p") -> bool:
         """
-        Select download quality from the quality selection menu.
+        Select download quality if available (simplified for Studio interface).
         
         Args:
-            preferred_quality: Preferred video quality (default: "720p")
+            preferred_quality: Preferred video quality (not used in Studio interface)
             
         Returns:
-            bool: True if quality selected successfully
+            bool: True (Studio interface handles quality automatically)
         """
-        try:
-            logger.info(f"Selecting download quality: {preferred_quality}")
-            
-            # Wait for quality selection menu to appear
-            time.sleep(2)
-            
-            # Look for quality options
-            quality_selectors = [
-                f'text="{preferred_quality}"',
-                f'[aria-label*="{preferred_quality}"]',
-                f'button:has-text("{preferred_quality}")',
-            ]
-            
-            for selector in quality_selectors:
-                try:
-                    quality_option = self.page.wait_for_selector(selector, timeout=5000)
-                    if quality_option and quality_option.is_visible():
-                        quality_option.click()
-                        logger.info(f"Selected quality: {preferred_quality}")
-                        return True
-                except PlaywrightTimeoutError:
-                    continue
-            
-            # If preferred quality not found, try to select any available quality
-            logger.warning(f"Preferred quality {preferred_quality} not found, selecting first available")
-            
-            # Look for any quality button and click the first one
-            quality_buttons = self.page.query_selector_all('button[role="menuitem"]')
-            if quality_buttons:
-                quality_buttons[0].click()
-                logger.info("Selected first available quality")
-                return True
-            
-            return False
-            
-        except Exception as e:
-            logger.error(f"Error selecting download quality: {e}")
-            return False
+        # In YouTube Studio, the download typically starts automatically
+        # after clicking the download option, so we don't need quality selection
+        logger.info("Using automatic quality selection in Studio interface")
+        return True
     
     def wait_for_download_complete(self, timeout: int = 300) -> Optional[str]:
         """
@@ -372,14 +313,16 @@ class YouTubePlaywrightDownloader:
     
     def download_video(self, 
                       video_id: str, 
+                      channel_id: Optional[str] = None,
                       quality: str = "720p",
                       max_wait_time: int = 300) -> Optional[str]:
         """
-        Download a YouTube video by ID.
+        Download a YouTube video by ID using YouTube Studio.
         
         Args:
             video_id: YouTube video ID
-            quality: Preferred video quality
+            channel_id: YouTube channel ID (optional, helps with navigation)
+            quality: Preferred video quality (not used in Studio interface)
             max_wait_time: Maximum time to wait for download completion
             
         Returns:
@@ -387,16 +330,16 @@ class YouTubePlaywrightDownloader:
         """
         logger.info(f"Starting download of video {video_id}")
         
-        # Navigate to video
-        if not self.navigate_to_video(video_id):
+        # Navigate to video in Studio
+        if not self.navigate_to_video(video_id, channel_id):
             return None
         
-        # Find and click download button
+        # Find and click download button (three-dot menu)
         if not self.find_download_button():
             logger.error("Could not find download button")
             return None
         
-        # Select quality
+        # Quality selection is automatic in Studio interface
         if not self.select_download_quality(quality):
             logger.warning("Could not select quality, proceeding with default")
         
@@ -443,18 +386,16 @@ class YouTubePlaywrightDownloader:
 def download_youtube_video_with_playwright(video_id: str, 
                                          email: str, 
                                          password: str,
-                                         download_dir: Optional[str] = None,
-                                         quality: str = "720p",
+                                         channel_id: Optional[str] = None,
                                          headless: bool = True) -> Optional[str]:
     """
-    Convenience function to download a single YouTube video.
+    Convenience function to download a single YouTube video using Studio interface.
     
     Args:
         video_id: YouTube video ID
         email: Google account email
         password: Google account password
-        download_dir: Directory to save download
-        quality: Video quality preference
+        channel_id: YouTube channel ID (optional, helps with navigation)
         headless: Whether to run browser in headless mode
         
     Returns:
@@ -463,7 +404,6 @@ def download_youtube_video_with_playwright(video_id: str,
     with YouTubePlaywrightDownloader(
         email=email, 
         password=password, 
-        download_dir=download_dir,
         headless=headless
     ) as downloader:
         
@@ -478,7 +418,7 @@ def download_youtube_video_with_playwright(video_id: str,
             return None
         
         # Download the video
-        return downloader.download_video(video_id, quality)
+        return downloader.download_video(video_id, channel_id)
 
 
 if __name__ == "__main__":
@@ -493,15 +433,15 @@ if __name__ == "__main__":
         print("Please set GOOGLE_EMAIL and GOOGLE_PASSWORD environment variables")
         exit(1)
     
-    # Example video ID (replace with actual video)
-    video_id = "dQw4w9WgXcQ"  # Never Gonna Give You Up
+    # Example: Download from ac-hardware-streams channel
+    video_id = "cIQkfIUeuSM"  # Example video ID from the comment
+    channel_id = "UCHBzCfYpGwoqygH9YNh9A6g"  # ac-hardware-streams channel
     
     downloaded_file = download_youtube_video_with_playwright(
         video_id=video_id,
         email=email,
         password=password,
-        download_dir="./downloads",
-        quality="720p",
+        channel_id=channel_id,
         headless=False  # Set to True for production
     )
     

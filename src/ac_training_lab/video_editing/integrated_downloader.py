@@ -88,26 +88,23 @@ class YouTubeDownloadManager:
     
     def download_video_playwright(self, 
                                 video_id: str,
-                                quality: Optional[str] = None) -> Optional[str]:
+                                channel_id: Optional[str] = None) -> Optional[str]:
         """
-        Download video using Playwright method.
+        Download video using Playwright method with YouTube Studio.
         
         Args:
             video_id: YouTube video ID
-            quality: Video quality preference
+            channel_id: YouTube channel ID (optional, helps with navigation)
             
         Returns:
             Optional[str]: Path to downloaded file or None if failed
         """
-        try:
-            quality = quality or self.config.default_quality
-            
+        try:            
             return download_youtube_video_with_playwright(
                 video_id=video_id,
                 email=self.config.google_email,
                 password=self.config.google_password,
-                download_dir=self.config.download_dir,
-                quality=quality,
+                channel_id=channel_id,
                 headless=self.config.headless
             )
         except Exception as e:
@@ -117,14 +114,14 @@ class YouTubeDownloadManager:
     def download_video(self, 
                       video_id: str,
                       method: Optional[str] = None,
-                      quality: Optional[str] = None) -> Dict[str, Any]:
+                      channel_id: Optional[str] = None) -> Dict[str, Any]:
         """
         Download video using specified or default method.
         
         Args:
             video_id: YouTube video ID
             method: Download method ('ytdlp' or 'playwright'), uses default if None
-            quality: Video quality preference (only for Playwright)
+            channel_id: YouTube channel ID (only for Playwright method)
             
         Returns:
             Dict[str, Any]: Download result with status and file path
@@ -142,7 +139,7 @@ class YouTubeDownloadManager:
         
         try:
             if use_playwright:
-                file_path = self.download_video_playwright(video_id, quality)
+                file_path = self.download_video_playwright(video_id, channel_id)
                 if file_path:
                     result['success'] = True
                     result['file_path'] = file_path
@@ -164,8 +161,7 @@ class YouTubeDownloadManager:
                                    channel_id: Optional[str] = None,
                                    device_name: Optional[str] = None,
                                    playlist_id: Optional[str] = None,
-                                   method: Optional[str] = None,
-                                   quality: Optional[str] = None) -> Dict[str, Any]:
+                                   method: Optional[str] = None) -> Dict[str, Any]:
         """
         Download the latest video from a channel.
         
@@ -174,7 +170,6 @@ class YouTubeDownloadManager:
             device_name: Device name to filter playlists
             playlist_id: Specific playlist ID
             method: Download method ('ytdlp' or 'playwright')
-            quality: Video quality preference
             
         Returns:
             Dict[str, Any]: Download result
@@ -194,19 +189,19 @@ class YouTubeDownloadManager:
             }
         
         # Download the video
-        return self.download_video(video_id, method, quality)
+        return self.download_video(video_id, method, channel_id)
     
     def download_multiple_videos(self, 
                                video_ids: List[str],
                                method: Optional[str] = None,
-                               quality: Optional[str] = None) -> Dict[str, Dict[str, Any]]:
+                               channel_id: Optional[str] = None) -> Dict[str, Dict[str, Any]]:
         """
         Download multiple videos.
         
         Args:
             video_ids: List of YouTube video IDs
             method: Download method ('ytdlp' or 'playwright')
-            quality: Video quality preference
+            channel_id: YouTube channel ID (for Playwright method)
             
         Returns:
             Dict[str, Dict[str, Any]]: Results for each video
@@ -215,7 +210,7 @@ class YouTubeDownloadManager:
         
         for video_id in video_ids:
             logger.info(f"Downloading video {video_id} ({len(results)+1}/{len(video_ids)})")
-            results[video_id] = self.download_video(video_id, method, quality)
+            results[video_id] = self.download_video(video_id, method, channel_id)
         
         return results
 
@@ -231,7 +226,6 @@ def main():
     parser.add_argument('--playlist-id', help='Specific playlist ID')
     parser.add_argument('--method', choices=['ytdlp', 'playwright'], 
                        help='Download method (default: ytdlp)')
-    parser.add_argument('--quality', default='720p', help='Video quality for Playwright (default: 720p)')
     parser.add_argument('--use-playwright', action='store_true', 
                        help='Use Playwright by default')
     
@@ -251,7 +245,7 @@ def main():
         result = manager.download_video(
             video_id=args.video_id,
             method=args.method,
-            quality=args.quality
+            channel_id=args.channel_id
         )
     else:
         # Download latest from channel
@@ -259,8 +253,7 @@ def main():
             channel_id=args.channel_id,
             device_name=args.device_name,
             playlist_id=args.playlist_id,
-            method=args.method,
-            quality=args.quality
+            method=args.method
         )
     
     # Print result

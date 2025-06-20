@@ -1,7 +1,7 @@
 """
 Configuration for Playwright YouTube downloader.
 
-This file contains example configuration and credential management
+This file contains lean configuration and credential management
 for the Playwright YouTube downloader.
 """
 
@@ -10,7 +10,7 @@ from typing import Optional, Dict, Any
 
 
 class PlaywrightYTConfig:
-    """Configuration class for Playwright YouTube downloader."""
+    """Simplified configuration class for Playwright YouTube downloader."""
     
     def __init__(self):
         """Initialize configuration with environment variables and defaults."""
@@ -19,19 +19,17 @@ class PlaywrightYTConfig:
         self.google_email = os.getenv("GOOGLE_EMAIL")
         self.google_password = os.getenv("GOOGLE_PASSWORD")
         
-        # Download settings
-        self.download_dir = os.getenv("YT_DOWNLOAD_DIR", "./downloads")
-        self.default_quality = os.getenv("YT_DEFAULT_QUALITY", "720p")
+        # Browser settings
         self.headless = os.getenv("YT_HEADLESS", "true").lower() == "true"
         
         # Timeout settings (in milliseconds)
         self.page_timeout = int(os.getenv("YT_PAGE_TIMEOUT", "30000"))
         self.download_timeout = int(os.getenv("YT_DOWNLOAD_TIMEOUT", "300"))  # seconds
         
-        # Channel and playlist settings
+        # Channel settings
         self.default_channel_id = os.getenv("YT_CHANNEL_ID", "UCHBzCfYpGwoqygH9YNh9A6g")
         
-        # Browser settings
+        # Browser user agent
         self.user_agent = os.getenv("YT_USER_AGENT", 
             "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
             "(KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
@@ -62,8 +60,6 @@ class PlaywrightYTConfig:
             Dict[str, Any]: Configuration as dictionary (excluding sensitive data)
         """
         return {
-            "download_dir": self.download_dir,
-            "default_quality": self.default_quality,
             "headless": self.headless,
             "page_timeout": self.page_timeout,
             "download_timeout": self.download_timeout,
@@ -73,7 +69,7 @@ class PlaywrightYTConfig:
         }
 
 
-# Example environment variables setup
+# Example environment variables setup (simplified)
 EXAMPLE_ENV_VARS = """
 # Copy these to your .env file or set as environment variables
 
@@ -82,8 +78,6 @@ GOOGLE_EMAIL=your-email@gmail.com
 GOOGLE_PASSWORD=your-app-password
 
 # Optional settings
-YT_DOWNLOAD_DIR=./downloads
-YT_DEFAULT_QUALITY=720p
 YT_HEADLESS=true
 YT_PAGE_TIMEOUT=30000
 YT_DOWNLOAD_TIMEOUT=300

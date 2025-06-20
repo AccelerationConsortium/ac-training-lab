@@ -1,16 +1,15 @@
 # Playwright YouTube Downloader
 
-This module provides an alternative method for downloading YouTube videos using Playwright browser automation. This is particularly useful for downloading private or unlisted videos from owned channels that may not be accessible via traditional methods like yt-dlp.
+This module provides a lean method for downloading YouTube videos using Playwright browser automation and YouTube Studio interface. This is particularly useful for downloading private or unlisted videos from owned channels that may not be accessible via traditional methods like yt-dlp.
 
 ## Features
 
 - **Browser Automation**: Uses Playwright to automate a real browser session
 - **Google Account Login**: Automatically logs into a Google account to access owned videos
-- **Native YouTube Interface**: Uses YouTube's built-in download functionality
-- **Quality Selection**: Supports selecting video quality (720p, 1080p, etc.)
+- **YouTube Studio Interface**: Uses the three-dot ellipses menu in YouTube Studio for downloads
+- **Simple Configuration**: Minimal environment variables needed
 - **Multiple Videos**: Can download multiple videos in sequence
 - **Integration**: Integrates with existing yt-dlp functionality
-- **Flexible Configuration**: Environment variable based configuration
 
 ## Installation
 
@@ -23,7 +22,7 @@ playwright install chromium
 
 ## Configuration
 
-Set up your credentials and preferences using environment variables:
+Set up your credentials using environment variables:
 
 ```bash
 # Required credentials
@@ -31,8 +30,6 @@ export GOOGLE_EMAIL="your-email@gmail.com"
 export GOOGLE_PASSWORD="your-app-password"
 
 # Optional settings
-export YT_DOWNLOAD_DIR="./downloads"
-export YT_DEFAULT_QUALITY="720p"
 export YT_HEADLESS="true"
 export YT_PAGE_TIMEOUT="30000"
 export YT_DOWNLOAD_TIMEOUT="300"
@@ -52,13 +49,12 @@ export YT_CHANNEL_ID="UCHBzCfYpGwoqygH9YNh9A6g"
 ```python
 from ac_training_lab.video_editing.playwright_yt_downloader import download_youtube_video_with_playwright
 
-# Download a single video
+# Download a video from YouTube Studio
 downloaded_file = download_youtube_video_with_playwright(
-    video_id="dQw4w9WgXcQ",
+    video_id="cIQkfIUeuSM",  # Example video ID from ac-hardware-streams
     email="your-email@gmail.com",
     password="your-app-password",
-    download_dir="./downloads",
-    quality="720p",
+    channel_id="UCHBzCfYpGwoqygH9YNh9A6g",  # ac-hardware-streams channel
     headless=True
 )
 
@@ -75,7 +71,6 @@ from ac_training_lab.video_editing.playwright_yt_downloader import YouTubePlaywr
 with YouTubePlaywrightDownloader(
     email="your-email@gmail.com",
     password="your-app-password",
-    download_dir="./downloads",
     headless=False  # Show browser for debugging
 ) as downloader:
     
@@ -84,12 +79,13 @@ with YouTubePlaywrightDownloader(
         downloader.navigate_to_youtube()
         
         # Download multiple videos
-        video_ids = ["video1", "video2", "video3"]
-        results = downloader.download_videos_from_list(video_ids, quality="1080p")
+        video_ids = ["cIQkfIUeuSM", "another_video_id"]
+        channel_id = "UCHBzCfYpGwoqygH9YNh9A6g"  # ac-hardware-streams
         
-        for video_id, file_path in results.items():
-            if file_path:
-                print(f"✓ {video_id}: {file_path}")
+        for video_id in video_ids:
+            result = downloader.download_video(video_id, channel_id)
+            if result:
+                print(f"✓ {video_id}: {result}")
             else:
                 print(f"✗ {video_id}: Failed")
 ```
@@ -108,8 +104,7 @@ manager = YouTubeDownloadManager(use_playwright=True)
 result = manager.download_latest_from_channel(
     channel_id="UCHBzCfYpGwoqygH9YNh9A6g",
     device_name="Opentrons OT-2",
-    method="playwright",  # or "ytdlp"
-    quality="720p"
+    method="playwright"  # or "ytdlp"
 )
 
 if result['success']:
@@ -123,9 +118,9 @@ else:
 ```bash
 # Download specific video with Playwright
 python -m ac_training_lab.video_editing.integrated_downloader \
-    --video-id dQw4w9WgXcQ \
-    --method playwright \
-    --quality 720p
+    --video-id cIQkfIUeuSM \
+    --channel-id UCHBzCfYpGwoqygH9YNh9A6g \
+    --method playwright
 
 # Download latest from channel with yt-dlp
 python -m ac_training_lab.video_editing.integrated_downloader \
@@ -143,26 +138,25 @@ python -m ac_training_lab.video_editing.integrated_downloader \
 
 1. **Browser Launch**: Starts a Chromium browser instance with download settings
 2. **Google Login**: Navigates to Google sign-in and enters credentials
-3. **YouTube Navigation**: Goes to YouTube and verifies login status
-4. **Video Access**: Navigates to specific video pages
-5. **Download Trigger**: Finds and clicks the download button in YouTube's interface
-6. **Quality Selection**: Chooses the preferred video quality
-7. **Download Monitoring**: Waits for download completion and returns file path
+3. **YouTube Studio Navigation**: Goes to YouTube Studio for the specific video
+4. **Three-Dot Menu**: Finds and clicks the three vertical ellipses (⋮) button
+5. **Download Option**: Selects the "Download" option from the dropdown menu
+6. **Download Monitoring**: Waits for download completion and returns file path
 
 ## Browser Selectors
 
-The downloader uses multiple fallback selectors to find YouTube's download interface elements, as these can change over time:
+The downloader uses multiple fallback selectors to find YouTube Studio's interface elements, as these can change over time:
 
-- Download buttons: `button[aria-label*="Download"]`, `button:has-text("Download")`, etc.
-- Three-dot menus: `button[aria-label*="More actions"]`, `yt-icon-button[aria-label*="More"]`, etc.
-- Quality options: Text-based and aria-label selectors
+- **Three-dot ellipses menus**: `button[aria-label*="More"]`, `button:has-text("⋮")`, etc.
+- **Download options**: `text="Download"`, `button:has-text("Download")`, etc.
+- **Studio pages**: `[data-testid="video-editor"]` for page load verification
 
 ## Error Handling
 
 The system includes comprehensive error handling for:
 
 - **Authentication failures**: Invalid credentials, 2FA requirements
-- **Network timeouts**: Configurable timeout values
+- **Network timeouts**: Configurable timeout values  
 - **Element not found**: Multiple selector fallbacks
 - **Download failures**: File system and browser download issues
 
@@ -175,15 +169,15 @@ The system includes comprehensive error handling for:
    - Use App Password for 2FA accounts
    - Verify account access to target videos
 
-2. **Download Button Not Found**
+2. **Three-Dot Menu Not Found**
    - Video may not have download option
-   - Account may not have permission
-   - YouTube interface may have changed
+   - Account may not have permission to video
+   - YouTube Studio interface may have changed
 
 3. **Download Timeout**
    - Increase `YT_DOWNLOAD_TIMEOUT`
    - Check network connection
-   - Try lower quality setting
+   - Ensure sufficient disk space
 
 4. **Browser Issues**
    - Run `playwright install chromium`
