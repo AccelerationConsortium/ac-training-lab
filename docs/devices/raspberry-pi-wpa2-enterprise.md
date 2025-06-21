@@ -2,7 +2,7 @@
 
 This guide provides instructions for connecting Raspberry Pi devices to WPA2-Enterprise WiFi networks (commonly found in institutional environments). This setup is required for devices like the [picam](picam.md), [a1_cam](a1_cam.md), and other Raspberry Pi-based equipment in the AC Training Lab when operating on enterprise networks.
 
-I'm leaning towards running in headless mode (e.g., Raspberry Pi OS Lite (bookworm)) in general, especially for any Raspberry Pi Zero 2W's that we have, to reduce the resources consumed by the OS.
+Consider running your devices in headless mode (e.g., Raspberry Pi OS Lite (bookworm)) in general, especially for any Raspberry Pi Zero 2W's that we have, to reduce the resources consumed by the OS.
 
 Some considerations:
 
