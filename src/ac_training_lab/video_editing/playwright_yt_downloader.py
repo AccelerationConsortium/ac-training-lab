@@ -422,30 +422,47 @@ def download_youtube_video_with_playwright(video_id: str,
 
 
 if __name__ == "__main__":
-    # Example usage
+    # Example usage with real credentials from environment
     import os
     
-    # These should be set as environment variables for security
+    # Get credentials from environment variables
     email = os.getenv("GOOGLE_EMAIL")
     password = os.getenv("GOOGLE_PASSWORD")
     
     if not email or not password:
-        print("Please set GOOGLE_EMAIL and GOOGLE_PASSWORD environment variables")
+        print("❌ ERROR: Please set GOOGLE_EMAIL and GOOGLE_PASSWORD environment variables")
+        print("Example:")
+        print("  export GOOGLE_EMAIL='your-email@gmail.com'")
+        print("  export GOOGLE_PASSWORD='your-app-password'")
         exit(1)
+    
+    print("🚀 Starting YouTube Studio downloader...")
+    print(f"   Email: {email}")
+    print(f"   Password: {'*' * len(password)}")
+    print()
     
     # Example: Download from ac-hardware-streams channel
     video_id = "cIQkfIUeuSM"  # Example video ID from the comment
     channel_id = "UCHBzCfYpGwoqygH9YNh9A6g"  # ac-hardware-streams channel
     
-    downloaded_file = download_youtube_video_with_playwright(
-        video_id=video_id,
-        email=email,
-        password=password,
-        channel_id=channel_id,
-        headless=False  # Set to True for production
-    )
+    print(f"Target video: https://studio.youtube.com/video/{video_id}/edit?c={channel_id}")
+    print("Note: Account must have access to the channel to download videos")
+    print()
     
-    if downloaded_file:
-        print(f"Successfully downloaded: {downloaded_file}")
-    else:
-        print("Download failed")
+    try:
+        downloaded_file = download_youtube_video_with_playwright(
+            video_id=video_id,
+            email=email,
+            password=password,
+            channel_id=channel_id,
+            headless=False  # Set to True for production
+        )
+        
+        if downloaded_file:
+            print(f"✅ Successfully downloaded: {downloaded_file}")
+        else:
+            print("❌ Download failed - check logs above for details")
+            
+    except Exception as e:
+        print(f"💥 Download crashed: {e}")
+        logger.error(f"Download failed with exception: {e}")
