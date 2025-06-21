@@ -1,11 +1,12 @@
 """
-Minimal working example of Ax Bayesian optimization with Prefect and MongoDB checkpointing.
+Minimal working example of Ax Bayesian optimization with Prefect, MongoDB checkpointing, 
+and human-in-the-loop decision making.
 
 This script demonstrates:
 - Ax integration with Prefect
 - MongoDB JSON checkpoint storage
+- Human-in-the-loop decision making at key points
 - Restart capability for interrupted workflows
-- Simple optimization loop without human-in-the-loop complexity
 
 Requirements:
 - ax-platform
@@ -22,6 +23,8 @@ import numpy as np
 from ax.service.ax_client import AxClient
 from ax.utils.measurement.synthetic_functions import hartmann6
 from prefect import flow, task, get_run_logger
+from prefect.engine import pause_flow_run
+from prefect.input import RunInput
 from pymongo import MongoClient
 
 
@@ -29,6 +32,15 @@ from pymongo import MongoClient
 MONGODB_URI = os.getenv("MONGODB_CONNECTION_STRING", "mongodb://localhost:27017/")
 DATABASE_NAME = os.getenv("MONGODB_DATABASE", "ax_optimization")
 COLLECTION_NAME = "checkpoints"
+
+# Human-in-the-loop configuration
+MIN_CONFIDENCE_THRESHOLD = 0.7  # Request human input below this confidence
+
+
+class HumanInput(RunInput):
+    """Input schema for human-in-the-loop decisions."""
+    continue_optimization: bool = True
+    comments: str = ""
 
 
 def get_mongo_client():
@@ -110,6 +122,13 @@ def run_optimization_step(ax_client: AxClient, iteration: int) -> Dict:
     best_parameters, best_values = ax_client.get_best_parameters()
     best_objective = best_values[0]["hartmann6"]
     
+    # Simple confidence calculation based on trial performance
+    # Higher confidence when current trial is close to best known
+    if best_objective != 0:
+        confidence = max(0.0, min(1.0, 1.0 - abs(objective_value - best_objective) / abs(best_objective)))
+    else:
+        confidence = 0.5  # Default confidence
+    
     return {
         "iteration": iteration,
         "trial_index": trial_index,
@@ -117,12 +136,13 @@ def run_optimization_step(ax_client: AxClient, iteration: int) -> Dict:
         "objective_value": objective_value,
         "best_parameters": best_parameters,
         "best_objective": best_objective,
+        "confidence": confidence,
         "ax_client_json": ax_client.to_json_snapshot(),
     }
 
 
-@flow(name="ax-bayesian-optimization")
-def ax_optimization_flow(
+@flow(name="ax-bayesian-optimization-hitl")
+async def ax_optimization_flow(
     experiment_id: str = "hartmann6_optimization",
     max_iterations: int = 20,
     resume_from_checkpoint: bool = True,
@@ -160,6 +180,44 @@ def ax_optimization_flow(
         
         # Log progress
         logger.info(f"Current best: {step_result['best_objective']:.6f} at {step_result['best_parameters']}")
+        
+        # Human-in-the-loop decision point
+        confidence = step_result['confidence']
+        if confidence < MIN_CONFIDENCE_THRESHOLD or iteration % 5 == 0:  # Low confidence or every 5th iteration
+            logger.info(f"Requesting human input (confidence: {confidence:.3f})")
+            
+            # Create human-readable summary
+            summary = (
+                f"🧪 Optimization Update - Iteration {iteration}\n\n"
+                f"📊 Current Best:\n"
+                f"   • Objective: {step_result['best_objective']:.6f}\n"
+                f"   • Parameters: {step_result['best_parameters']}\n\n"
+                f"🎯 Latest Trial:\n"
+                f"   • Objective: {step_result['objective_value']:.6f}\n"
+                f"   • Parameters: {step_result['parameters']}\n\n"
+                f"🤖 Algorithm Confidence: {confidence:.1%}\n\n"
+                f"Should we continue optimization?"
+            )
+            
+            logger.info(summary)
+            
+            # Pause for human input
+            human_input = await pause_flow_run(
+                wait_for_input=HumanInput.with_initial_data(
+                    continue_optimization=True,
+                    comments=""
+                ),
+                timeout=300  # 5 minutes timeout
+            )
+            
+            logger.info(f"Human decision: continue={human_input.continue_optimization}")
+            if human_input.comments:
+                logger.info(f"Human comments: {human_input.comments}")
+            
+            # Stop if human requested
+            if not human_input.continue_optimization:
+                logger.info("Human requested to stop optimization")
+                break
     
     # Final results
     best_parameters, best_values = ax_client.get_best_parameters()
@@ -179,5 +237,6 @@ def ax_optimization_flow(
 
 if __name__ == "__main__":
     # Run the optimization
-    result = ax_optimization_flow()
+    import asyncio
+    result = asyncio.run(ax_optimization_flow())
     print(f"Optimization complete: {result}")
