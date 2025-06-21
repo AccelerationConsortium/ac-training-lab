@@ -1,254 +1,136 @@
 # Raspberry Pi WPA2-Enterprise WiFi Setup
 
-This guide provides step-by-step instructions for connecting Raspberry Pi devices to institutional WiFi networks that use WPA2-Enterprise security (commonly found in universities and corporate environments). This setup is required for devices like the [picam](picam.md), [a1_cam](a1_cam.md), and other Raspberry Pi-based equipment in the AC Training Lab when operating on enterprise networks.
+This guide provides instructions for connecting Raspberry Pi devices to WPA2-Enterprise WiFi networks (commonly found in institutional environments). This setup is required for devices like the [picam](picam.md), [a1_cam](a1_cam.md), and other Raspberry Pi-based equipment in the AC Training Lab when operating on enterprise networks.
 
-## Overview
+I'm leaning towards running in headless mode (e.g., Raspberry Pi OS Lite (bookworm)) in general, especially for any Raspberry Pi Zero 2W's that we have, to reduce the resources consumed by the OS.
 
-WPA2-Enterprise networks use 802.1X authentication with various EAP (Extensible Authentication Protocol) methods instead of a simple shared password. Common EAP methods include:
+Some considerations:
 
-- **PEAP-MSCHAPv2**: Most common in Windows/Active Directory environments
-- **EAP-TLS**: Certificate-based authentication
-- **EAP-TTLS**: Tunneled TLS authentication
+- Connecting to WPA2-Enterprise WiFi. After a lot of troubleshooting and debugging, I found a good way to get this working on bookworm:
 
-This guide covers the most common scenario (PEAP-MSCHAPv2) but provides guidance for other methods.
+## Connecting to WPA2-Enterprise WiFi
 
-## Prerequisites
+*following based on ChatGPT prompt, username redacted*
 
-- Raspberry Pi running Raspberry Pi OS (Lite or Desktop)
-- SSH access to the Pi or physical access with keyboard/monitor
-- Network credentials from your IT administrator:
-  - Username and password
-  - EAP method (e.g., PEAP, EAP-TLS, EAP-TTLS)
-  - Phase 2 authentication method (for PEAP/EAP-TTLS)
-  - CA certificate (if required)
+> Connect to a WPA2-Enterprise network on a headless Raspberry Pi Zero 2W running OS Lite (bookworm). I have access to the terminal already. It's on a WPA2-personal network at the moment, and I want to switch it to a WPA2-Enterprise network (specifically, University of Toronto wireless with SSID "UofT") ... How can I do this without exposing my password to the command line?
 
-## Method 1: Using wpa_supplicant Configuration File (Recommended)
+**1. Verify the Current Network Status:**
 
-### Step 1: Backup Current Configuration
+First, let's check the current status of your wireless interface (`wlan0`) to understand its state.
 
 ```bash
-sudo cp /etc/wpa_supplicant/wpa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.conf.backup
-```
-
-### Step 2: Edit wpa_supplicant Configuration
-
-```bash
-sudo nano /etc/wpa_supplicant/wpa_supplicant.conf
-```
-
-### Step 3: Add Enterprise Network Configuration
-
-Add the following configuration to the file, replacing the placeholder values with your network details:
-
-#### For PEAP-MSCHAPv2 (Most Common)
-
-```bash
-ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
-update_config=1
-country=US
-
-network={
-    ssid="YourNetworkName"
-    key_mgmt=WPA-EAP
-    eap=PEAP
-    identity="your_username"
-    password="your_password"
-    phase2="auth=MSCHAPV2"
-    # Uncomment and modify if you have a CA certificate
-    # ca_cert="/etc/ssl/certs/your_ca_cert.pem"
-    # Uncomment to disable certificate validation (less secure)
-    # phase1="peapver=0 peaplabel=0"
-}
-```
-
-#### For EAP-TLS (Certificate-based)
-
-```bash
-ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
-update_config=1
-country=US
-
-network={
-    ssid="YourNetworkName"
-    key_mgmt=WPA-EAP
-    eap=TLS
-    identity="your_username"
-    client_cert="/path/to/client_cert.pem"
-    private_key="/path/to/private_key.pem"
-    private_key_passwd="private_key_password"
-    ca_cert="/path/to/ca_cert.pem"
-}
-```
-
-#### For EAP-TTLS
-
-```bash
-ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
-update_config=1
-country=US
-
-network={
-    ssid="YourNetworkName"
-    key_mgmt=WPA-EAP
-    eap=TTLS
-    identity="your_username"
-    password="your_password"
-    phase2="auth=MSCHAPV2"
-    ca_cert="/path/to/ca_cert.pem"
-}
-```
-
-### Step 4: Set Proper Permissions
-
-```bash
-sudo chmod 600 /etc/wpa_supplicant/wpa_supplicant.conf
-```
-
-### Step 5: Restart Networking Services
-
-```bash
-sudo systemctl restart wpa_supplicant
-sudo systemctl restart dhcpcd
-```
-
-Or reboot the system:
-
-```bash
-sudo reboot
-```
-
-## Method 2: Using raspi-config (Alternative)
-
-### Step 1: Open raspi-config
-
-```bash
-sudo raspi-config
-```
-
-### Step 2: Navigate to Network Options
-
-1. Select **System Options** or **Network Options** (depending on your version)
-2. Select **Wireless LAN**
-
-### Step 3: Enter Network Details
-
-1. Enter the SSID (network name)
-2. For the passphrase, you'll need to use a specific format for enterprise networks:
-
-For PEAP-MSCHAPv2, use this format as the "passphrase":
-```
-"PEAP:your_username:your_password"
-```
-
-**Note**: This method has limitations and may not work with all enterprise configurations. The wpa_supplicant method is more reliable.
-
-## Obtaining CA Certificates
-
-If your network requires CA certificate validation:
-
-### Download from IT Department
-
-Contact your IT department for the CA certificate file (usually a .pem, .crt, or .cer file).
-
-### Extract from Browser (Alternative)
-
-1. On a computer connected to the network, open a web browser
-2. Visit any HTTPS site
-3. Click on the security icon and view certificate details
-4. Export the root/intermediate certificate
-
-### Install the Certificate
-
-```bash
-# Copy certificate to the Pi (example using scp)
-scp ca_cert.pem pi@your_pi_ip:/home/pi/
-
-# Move to system certificate directory
-sudo cp ca_cert.pem /etc/ssl/certs/
-sudo chmod 644 /etc/ssl/certs/ca_cert.pem
-```
-
-## Troubleshooting
-
-### Check Connection Status
-
-```bash
-# Check if connected
 ip addr show wlan0
-
-# Check wpa_supplicant status
-sudo wpa_cli status
-
-# View detailed logs
-sudo journalctl -u wpa_supplicant -f
 ```
 
-### Common Issues and Solutions
+This command will display the IP address and connection status of `wlan0`.
 
-#### Connection Timeout
+**2. Install Necessary Packages:**
 
-- Verify credentials with IT department
-- Check if the certificate is required
-- Try disabling certificate validation temporarily (less secure):
-  ```bash
-  phase1="peapver=0 peaplabel=0"
-  ```
-
-#### Authentication Failure
-
-- Double-check username and password
-- Verify the correct EAP method with your IT department
-- Check if domain is required (e.g., `username@domain.com` vs `domain\username`)
-
-#### Certificate Issues
-
-- Ensure CA certificate is in the correct format (PEM)
-- Verify certificate path in configuration
-- Check certificate permissions (should be readable by all users)
-
-#### MAC Address Filtering
-
-Some networks require device registration:
-```bash
-# Find your MAC address
-ip link show wlan0
-```
-Contact IT to register this MAC address.
-
-## Testing the Connection
-
-### Basic Connectivity Test
+Ensure that `network-manager` and its associated tools are installed, as they provide utilities like `nmcli` and `nmtui` for network configuration.
 
 ```bash
-# Test internet connectivity
-ping -c 4 google.com
-
-# Test DNS resolution
-nslookup google.com
-
-# Check IP assignment
-ip route show
+sudo apt update
+sudo apt install network-manager
 ```
 
-### Network Information
+Optionally, you can run `sudo apt upgrade` to upgrade all packages.
+
+**3. Disable Conflicting Network Services:** [OPTIONAL]
+
+To prevent conflicts, optionally disable other network management services such as `dhcpcd` (this may not apply to bookworm, but may help with earlier versions like buster). If you get `Failed to disable unit: Unit file dhcpcd.service does not exist.` you can ignore this.
 
 ```bash
-# View current connection details
-iwconfig wlan0
-
-# Show detailed wireless information
-sudo iw dev wlan0 info
+sudo systemctl disable dhcpcd
+sudo systemctl stop dhcpcd
 ```
 
-## Security Considerations
+**4. Enable and Start NetworkManager:**
 
-1. **Credential Storage**: The configuration file contains credentials in plain text. Ensure proper file permissions (600).
+Activate `NetworkManager` to manage network connections.
 
-2. **Certificate Validation**: Always use CA certificate validation when possible. Disabling it makes your connection vulnerable to man-in-the-middle attacks.
+```bash
+sudo systemctl enable NetworkManager
+sudo systemctl start NetworkManager
+```
 
-3. **Regular Updates**: Keep your Raspberry Pi OS updated for the latest security patches.
+**5. Configure the WPA2-Enterprise Connection Using `nmtui`:**
 
-4. **Backup Configuration**: Always backup working configurations before making changes.
+The `nmtui` (NetworkManager Text User Interface) tool provides an interactive way to set up network connections.
+
+```bash
+sudo nmtui
+```
+
+Within the `nmtui` interface:
+
+- Select **"Edit a connection"**.
+- Choose **"Add"**, then **"Wi-Fi"**.
+- Set the **SSID** to "UofT".
+- Under **"Wi-Fi Security"**, select **"WPA & WPA2 Enterprise"**.
+
+![image](https://github.com/user-attachments/assets/1913a298-fdba-4f03-98af-5f8502231c19)
+
+- For **"Authentication"**, choose **"Protected EAP (PEAP)"**.
+- Enter your UTORid ("***") in the **"Username"** field.
+- Enter the domain (in UofT's case, `radius.wireless.utoronto.ca` per their online instructions, NOTE: `.utoronto.ca` not `@utoronto.ca`)
+- Leave **"Anonymous identity"** blank unless specified otherwise by the university's IT guidelines. If the interface requires you to enter something, try entering whatever you'd like (e.g., `anonymous`). Sometimes, it just needs *a* value
+- For **"CA Certificate"**, if the university provides a specific certificate, specify its path. <!-- If not, select **"No CA certificate is required"**. -->
+- Set **"Inner authentication"** to **"MSCHAPv2"**.
+- Enter your UTORid password in the **"Password"** field.
+
+**Note that users with sudo or root access can see the password again if they go digging.** I suggest changing your university password to something unique and specific to it (e.g., memorable password [generated via 1password](https://1password.com/password-generator)). You could also do something like make sure only you have root access and create a non-admin account that others on your team can SSH into, but some consideration might be required when trying to get the device to autostart a script.
+
+![image](https://github.com/user-attachments/assets/8145bdf2-e903-4794-afbe-5a2a8020daae)
+
+After configuring these settings, save and exit `nmtui`.
+
+**6. Connect to the "UofT" Network:**
+
+Attempt to establish the connection using `nmcli`.
+
+```bash
+sudo nmcli connection up UofT
+```
+
+If you are SSH'd into the device, it may close your connection. If all goes well, you should be able to connect after waiting a minute or so. Otherwise, if something catastrophic happens (i.e., it's unable to connect at all), then you'll need access to the device to manually follow these steps.
+
+<!--- originally had `--ask` flag, but doesn't seem relevant anymore because root can still access password -->
+
+**7. Verify the Connection:**
+
+Check if `wlan0` has obtained an IP address and is connected to the "UofT" network.
+
+```bash
+ip addr show wlan0
+```
+
+You can also check (example output also shown):
+
+```bash
+sudo nmcli dev status
+```
+
+> ```shell
+> DEVICE         TYPE      STATE                   CONNECTION 
+> wlan0          wifi      connected               UofT
+> ```
+
+Alternatively, you can use `sudo nmtui` and "Activate Connection" to see which one is currently active (which will have a `*`); however, if you are SSH'd into your device over WiFi, you will need to have a keyboard and mouse directly connected to the device in order to switch it this way (since you have to manually "Deactivate" before you can activate the new one, at which point your SSH connection is already broken).
+
+**Additional Considerations:**
+
+- **CA Certificate:** While some institutions require a CA certificate for secure connections, others do not. If the University of Toronto does not mandate a specific CA certificate, you can configure the connection without it. However, using a CA certificate enhances security by validating the server's identity.
+
+- **Consult University IT Support:** For institution-specific configurations or requirements, reach out to the University of Toronto's IT services or consult their support documentation.
+
+By following these steps, you should be able to connect your Raspberry Pi Zero 2W to the "UofT" WPA2-Enterprise Wi-Fi network using your UTORid "***".
+
+Rebooting the device should still connect to the one most recently chosen.
+
+## Various resources during troubleshooting
+
+Various resources during troubleshooting (see list in comment):
+- https://www.reddit.com/r/raspberry_pi/comments/18n47zi/comment/mhq1wdq/
 
 ## Integration with AC Training Lab Devices
 
@@ -259,13 +141,3 @@ When setting up specific AC Training Lab devices that use Raspberry Pi hardware,
 - **[Pioreactor](pioreactor.md)**: Automated bioreactor system
 
 For these devices, complete the WPA2-Enterprise setup first, then proceed with the device-specific installation and configuration steps.
-
-## Additional Resources
-
-- [Raspberry Pi Official Documentation](https://www.raspberrypi.org/documentation/configuration/wireless/)
-- [wpa_supplicant Configuration Guide](https://w1.fi/cgit/hostap/plain/wpa_supplicant/wpa_supplicant.conf)
-- [AC Training Lab Device Setup Guide](setup_iolt_devices.md)
-
-## Support
-
-If you encounter issues specific to your institution's network configuration, contact your local IT support team. For issues related to AC Training Lab devices, create an issue in the [AC Training Lab GitHub repository](https://github.com/AccelerationConsortium/ac-training-lab/issues).
