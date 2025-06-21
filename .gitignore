@@ -75,3 +75,7 @@ downloads/
 *.webm
 *.avi
 *.mov
+
+# Test files for credentials and browser automation
+test_no_2fa_login.py
+test_credentials_status.py
