@@ -1,33 +1,33 @@
 """
-Deployment script for the Ax Bayesian Optimization with Human-in-the-Loop tutorial.
+Deployment script for Ax Bayesian Optimization with Prefect and MongoDB checkpointing.
 
-This script creates Prefect deployments for the optimization workflow,
-making it easy to schedule and manage optimization runs.
+This script creates a Prefect deployment for the optimization workflow,
+designed to run continuously on EC2 with automatic restart capability.
 """
 
 from prefect import flow
 
 if __name__ == "__main__":
-    # Create deployment for the Ax optimization tutorial
+    # Create deployment for the Ax optimization 
     flow.from_source(
         source="https://github.com/AccelerationConsortium/ac-training-lab.git",
-        entrypoint="scripts/prefect_scripts/ax_bayesian_optimization_hitl.py:bayesian_optimization_with_hitl",
+        entrypoint="scripts/prefect_scripts/ax_prefect_minimal.py:ax_optimization_flow",
     ).deploy(
-        name="ax-bayesian-optimization-tutorial",
-        work_pool_name="my-managed-pool",  # Use your configured work pool
-        description="Ax Bayesian Optimization with Human-in-the-Loop Tutorial",
-        tags=["ax", "bayesian-optimization", "human-in-loop", "tutorial"],
+        name="ax-bayesian-optimization",
+        work_pool_name="my-work-pool",  # Use your configured work pool
+        description="Minimal Ax Bayesian Optimization with MongoDB checkpointing",
+        tags=["ax", "bayesian-optimization", "mongodb", "checkpoint"],
         parameters={
-            "experiment_name": "ax_tutorial_hartmann6",
-            "n_iterations": 10,
+            "experiment_id": "hartmann6_optimization",
+            "max_iterations": 50,
             "resume_from_checkpoint": True
         },
-        # Optional: Schedule to run weekly for demonstration
-        # cron="0 9 * * 1",  # Every Monday at 9 AM
+        # Schedule to run continuously
+        cron="*/30 * * * *",  # Every 30 minutes
     )
     
     print("✅ Deployment created successfully!")
     print("To run the flow:")
-    print("1. Start a worker: prefect worker start --pool my-managed-pool")
-    print("2. Trigger a run from the Prefect UI or CLI")
-    print("3. Monitor the flow execution and respond to human-in-the-loop prompts")
+    print("1. Start a worker: prefect worker start --pool my-work-pool")
+    print("2. The flow will run automatically every 30 minutes")
+    print("3. EC2 restarts will resume from the last MongoDB checkpoint")
