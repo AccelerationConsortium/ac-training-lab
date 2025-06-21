@@ -100,7 +100,7 @@ class YouTubePlaywrightDownloader:
         
     def login_to_google(self) -> bool:
         """
-        Log into Google account with improved 2FA handling.
+        Log into Google account with improved device verification handling.
         
         Returns:
             bool: True if login successful, False otherwise
@@ -126,9 +126,9 @@ class YouTubePlaywrightDownloader:
             
             # Try to detect successful login first
             try:
-                # Check for immediate redirect to account page (no 2FA required)
+                # Check for immediate redirect to account page (no verification required)
                 self.page.wait_for_url("**/myaccount.google.com/**", timeout=5000)
-                logger.info("Successfully logged into Google account (direct login)")
+                logger.info("✅ Successfully logged into Google account (direct login)")
                 return True
             except PlaywrightTimeoutError:
                 # Not immediately redirected, check for other scenarios
@@ -141,41 +141,65 @@ class YouTubePlaywrightDownloader:
                 "accounts.google.com/ManageAccount",
                 "accounts.google.com/b/0/ManageAccount"
             ]):
-                logger.info("Successfully logged into Google account (authenticated page)")
+                logger.info("✅ Successfully logged into Google account (authenticated page)")
                 return True
             
-            # Check for 2FA prompts or device verification
+            # Check for device verification prompts
             try:
-                # Look for various 2FA related elements
-                two_fa_selectors = [
-                    'div:has-text("2-Step Verification")',
+                # Look for device verification elements
+                verification_selectors = [
                     'div:has-text("Verify it\'s you")',
-                    'div:has-text("device verification")',
-                    'div:has-text("verification code")',
-                    'input[type="tel"]',  # Phone number input for verification
+                    'div:has-text("device verification")', 
                     'div:has-text("Check your phone")',
-                    'div:has-text("We sent a notification")'
+                    'div:has-text("We sent a notification")',
+                    'div:has-text("Tap")',  # "Tap Yes" or "Tap [number]"
+                    'div:has-text("Google Pixel")',  # Device name
                 ]
                 
-                for selector in two_fa_selectors:
+                for selector in verification_selectors:
                     try:
                         element = self.page.wait_for_selector(selector, timeout=2000)
                         if element and element.is_visible():
-                            logger.warning(f"2FA/verification prompt detected: {selector}")
-                            # Since @sgbaird mentioned 2FA should be removed now, this might indicate
-                            # the device verification is still required or there's a different issue
-                            logger.error("2FA verification still required - account may need device verification completed")
-                            return False
+                            logger.warning(f"📱 Device verification prompt detected: {selector}")
+                            
+                            # Get more details about the verification prompt
+                            page_text = self.page.text_content('body')
+                            if page_text:
+                                if "tap" in page_text.lower() and "yes" in page_text.lower():
+                                    logger.info("🔍 Device verification details: Tap 'Yes' required on registered device")
+                                elif "tap" in page_text.lower():
+                                    # Look for number patterns
+                                    import re
+                                    numbers = re.findall(r'\b\d+\b', page_text)
+                                    if numbers:
+                                        logger.info(f"🔍 Device verification details: Tap number '{numbers[-1]}' on registered device")
+                                if "pixel" in page_text.lower():
+                                    logger.info("🔍 Device verification details: Google Pixel device required")
+                            
+                            logger.info("⏳ Waiting for device verification to be completed...")
+                            logger.info("   Please check your registered device and complete the verification.")
+                            logger.info("   This is a one-time requirement for this environment.")
+                            
+                            # Wait longer for verification to be completed
+                            try:
+                                self.page.wait_for_url("**/myaccount.google.com/**", timeout=60000)  # 60 seconds
+                                logger.info("✅ Device verification completed successfully!")
+                                return True
+                            except PlaywrightTimeoutError:
+                                logger.error("⏰ Device verification timeout - verification not completed within 60 seconds")
+                                logger.error("   Please complete the device verification manually and try again.")
+                                return False
+                            
                     except PlaywrightTimeoutError:
                         continue
                         
             except Exception as e:
-                logger.warning(f"Error checking for 2FA prompts: {e}")
+                logger.warning(f"Error checking for verification prompts: {e}")
             
             # Final attempt: wait a bit longer for any redirects
             try:
                 self.page.wait_for_url("**/myaccount.google.com/**", timeout=10000)
-                logger.info("Successfully logged into Google account (delayed redirect)")
+                logger.info("✅ Successfully logged into Google account (delayed redirect)")
                 return True
             except PlaywrightTimeoutError:
                 pass
@@ -183,17 +207,21 @@ class YouTubePlaywrightDownloader:
             # Check if we ended up anywhere that suggests successful auth
             final_url = self.page.url
             if "accounts.google.com" in final_url and "signin" not in final_url:
-                logger.info(f"Login appears successful - on authenticated Google page: {final_url}")
+                logger.info(f"✅ Login appears successful - on authenticated Google page: {final_url}")
                 return True
             
-            logger.error(f"Login did not complete successfully. Final URL: {final_url}")
+            logger.error(f"❌ Login did not complete successfully. Final URL: {final_url}")
+            logger.error("   This could be due to:")
+            logger.error("   - Device verification not completed")
+            logger.error("   - Account security settings")
+            logger.error("   - Network connectivity issues")
             return False
             
         except PlaywrightTimeoutError as e:
-            logger.error(f"Timeout during Google login: {e}")
+            logger.error(f"⏰ Timeout during Google login: {e}")
             return False
         except Exception as e:
-            logger.error(f"Error during Google login: {e}")
+            logger.error(f"💥 Error during Google login: {e}")
             return False
     
     def navigate_to_youtube(self) -> bool:
