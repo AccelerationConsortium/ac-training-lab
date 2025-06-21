@@ -100,7 +100,7 @@ class YouTubePlaywrightDownloader:
         
     def login_to_google(self) -> bool:
         """
-        Log into Google account.
+        Log into Google account with improved 2FA handling.
         
         Returns:
             bool: True if login successful, False otherwise
@@ -121,11 +121,73 @@ class YouTubePlaywrightDownloader:
             password_input.fill(self.password)
             self.page.click('button:has-text("Next")')
             
-            # Wait for successful login (redirect to account page or similar)
-            self.page.wait_for_url("**/myaccount.google.com/**", timeout=30000)
+            # Handle various post-login scenarios
+            logger.info("Checking login result...")
             
-            logger.info("Successfully logged into Google account")
-            return True
+            # Try to detect successful login first
+            try:
+                # Check for immediate redirect to account page (no 2FA required)
+                self.page.wait_for_url("**/myaccount.google.com/**", timeout=5000)
+                logger.info("Successfully logged into Google account (direct login)")
+                return True
+            except PlaywrightTimeoutError:
+                # Not immediately redirected, check for other scenarios
+                pass
+            
+            # Check if we're on any Google authenticated page
+            current_url = self.page.url
+            if any(domain in current_url for domain in [
+                "myaccount.google.com", 
+                "accounts.google.com/ManageAccount",
+                "accounts.google.com/b/0/ManageAccount"
+            ]):
+                logger.info("Successfully logged into Google account (authenticated page)")
+                return True
+            
+            # Check for 2FA prompts or device verification
+            try:
+                # Look for various 2FA related elements
+                two_fa_selectors = [
+                    'div:has-text("2-Step Verification")',
+                    'div:has-text("Verify it\'s you")',
+                    'div:has-text("device verification")',
+                    'div:has-text("verification code")',
+                    'input[type="tel"]',  # Phone number input for verification
+                    'div:has-text("Check your phone")',
+                    'div:has-text("We sent a notification")'
+                ]
+                
+                for selector in two_fa_selectors:
+                    try:
+                        element = self.page.wait_for_selector(selector, timeout=2000)
+                        if element and element.is_visible():
+                            logger.warning(f"2FA/verification prompt detected: {selector}")
+                            # Since @sgbaird mentioned 2FA should be removed now, this might indicate
+                            # the device verification is still required or there's a different issue
+                            logger.error("2FA verification still required - account may need device verification completed")
+                            return False
+                    except PlaywrightTimeoutError:
+                        continue
+                        
+            except Exception as e:
+                logger.warning(f"Error checking for 2FA prompts: {e}")
+            
+            # Final attempt: wait a bit longer for any redirects
+            try:
+                self.page.wait_for_url("**/myaccount.google.com/**", timeout=10000)
+                logger.info("Successfully logged into Google account (delayed redirect)")
+                return True
+            except PlaywrightTimeoutError:
+                pass
+            
+            # Check if we ended up anywhere that suggests successful auth
+            final_url = self.page.url
+            if "accounts.google.com" in final_url and "signin" not in final_url:
+                logger.info(f"Login appears successful - on authenticated Google page: {final_url}")
+                return True
+            
+            logger.error(f"Login did not complete successfully. Final URL: {final_url}")
+            return False
             
         except PlaywrightTimeoutError as e:
             logger.error(f"Timeout during Google login: {e}")
