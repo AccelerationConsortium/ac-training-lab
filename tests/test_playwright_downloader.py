@@ -120,6 +120,60 @@ class TestYouTubePlaywrightDownloader:
         assert mock_page.close.called
         assert mock_browser.close.called
         assert mock_playwright_instance.stop.called
+        
+    @patch('ac_training_lab.video_editing.playwright_yt_downloader.sync_playwright')
+    def test_login_attempt_with_dummy_credentials(self, mock_playwright):
+        """
+        Test that login attempt works with dummy credentials.
+        
+        This demonstrates that the authentication flow is functional,
+        even though it will fail with fake credentials as expected.
+        """
+        # Mock the playwright objects
+        mock_playwright_instance = Mock()
+        mock_browser = Mock()
+        mock_context = Mock()
+        mock_page = Mock()
+        
+        # Mock the page interactions for login flow
+        mock_email_input = Mock()
+        mock_password_input = Mock()
+        
+        mock_playwright.return_value.start.return_value = mock_playwright_instance
+        mock_playwright_instance.chromium.launch.return_value = mock_browser
+        mock_browser.new_context.return_value = mock_context
+        mock_context.new_page.return_value = mock_page
+        
+        # Mock the login flow elements
+        mock_page.wait_for_selector.side_effect = [
+            mock_email_input,  # Email input found
+            mock_password_input,  # Password input found
+            Exception("Timeout - expected with dummy credentials")  # Login fails as expected
+        ]
+        
+        # Mock the wait_for_url to simulate login failure
+        mock_page.wait_for_url.side_effect = Exception("Login failed with dummy credentials")
+        
+        downloader = YouTubePlaywrightDownloader(
+            email="dummy-test@fake-domain.com",
+            password="fake-password-123",
+            headless=True
+        )
+        
+        with downloader:
+            # Attempt login with dummy credentials
+            login_result = downloader.login_to_google()
+            
+            # Should fail with dummy credentials (this is expected)
+            assert login_result is False
+            
+            # Verify that the login flow was attempted
+            mock_page.goto.assert_called_with("https://accounts.google.com/signin")
+            mock_email_input.fill.assert_called_with("dummy-test@fake-domain.com")
+            mock_password_input.fill.assert_called_with("fake-password-123")
+            
+            # Should have clicked Next buttons
+            assert mock_page.click.call_count >= 2
 
 
 class TestYouTubeDownloadManager:
