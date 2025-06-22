@@ -3,6 +3,8 @@ import subprocess
 
 import requests
 
+from .totp_utils import get_totp_code_from_env
+
 YT_API_KEY = os.getenv("YT_API_KEY")
 
 
@@ -102,6 +104,43 @@ def download_youtube_live(video_id):
     except subprocess.CalledProcessError as e:
         print("An error occurred while downloading:")
         print(e.stderr)
+
+
+def get_current_totp_for_youtube():
+    """
+    Get current TOTP code for YouTube authentication if configured.
+    
+    This function provides TOTP support for YouTube workflows that may
+    require 2FA authentication when used with playwright automation.
+    
+    Returns:
+        TOTP code as string if secret is configured, None otherwise
+    """
+    return get_totp_code_from_env("YOUTUBE_TOTP_SECRET")
+
+
+def download_youtube_with_totp(video_id, totp_code=None):
+    """
+    Enhanced YouTube download function with TOTP support.
+    
+    Args:
+        video_id: YouTube video ID to download
+        totp_code: Optional TOTP code for 2FA authentication
+        
+    Note:
+        This function demonstrates how TOTP could be integrated into
+        YouTube download workflows. The actual implementation would
+        depend on the specific playwright automation needs.
+    """
+    if totp_code is None:
+        totp_code = get_current_totp_for_youtube()
+    
+    if totp_code:
+        print(f"TOTP code available for authentication: {totp_code}")
+    
+    # For now, fall back to standard download
+    # In a real implementation, this would pass the TOTP code to playwright
+    download_youtube_live(video_id)
 
 
 if __name__ == "__main__":
