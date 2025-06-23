@@ -6,6 +6,7 @@ import sys
 import time
 from queue import Queue
 from queue import Empty
+from threading import Thread
 
 import cv2
 import paho.mqtt.client as paho
