@@ -6,7 +6,6 @@ import sys
 import time
 from queue import Queue
 from queue import Empty
-from threading import Thread
 
 import cv2
 import paho.mqtt.client as paho
@@ -198,35 +197,11 @@ if __name__ == "__main__":
     client.loop_start()
     logger.info("Ready for tasks...")
 
-    MAX_IDLE_SECONDS = 15 
-
-    def process_task():
-        global last_task_time
-        while True:
-            try:
-                msg = task_queue.get(timeout=5)
-                response_dict = handle_message(msg, cobot)
-                pub_handle = client.publish(
-                    DEVICE_ENDPOINT + "/response",
-                    qos=2,
-                    payload=json.dumps(response_dict),
-                )
-                pub_handle.wait_for_publish()
-                last_task_time = time.time()
-            except Empty:
-            
-                continue
-            except Exception as e:
-                logger.warning(f"Error in task processing: {e}")
-
-    
-    last_task_time = time.time()
-    task_thread = Thread(target=process_task, daemon=True)
-    task_thread.start()
-
-    
     while True:
-        time.sleep(5)
-        if time.time() - last_task_time > MAX_IDLE_SECONDS:
-            logger.warning("Idle timeout exceeded. Exiting...")
-            sys.exit(0)
+        msg = task_queue.get()  # blocks if queue is empty
+        response_dict = handle_message(msg, cobot)
+        pub_handle = client.publish(
+            DEVICE_ENDPOINT + "/response", qos=2, payload=json.dumps(response_dict)
+        )
+        pub_handle.wait_for_publish()
+        time.sleep(3)
