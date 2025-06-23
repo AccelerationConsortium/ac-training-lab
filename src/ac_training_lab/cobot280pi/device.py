@@ -16,7 +16,7 @@ from my_secrets import (
     HIVEMQ_USERNAME,
 )
 from PIL import Image
-from pymycobot import MyCobot280
+from pymycobot.mycobot import MyCobot280
 from utils import setup_logger
 
 # cli args
