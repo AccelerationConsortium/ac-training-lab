@@ -67,16 +67,3 @@ src/ac_training_lab/bambu_a1_mini/info.py
 
 image.jpeg
 src/ac_training_lab/squidstat/SquidstatPyLibrary-1.9.1.8-py3-none-win_amd64.whl
-
-# YouTube video downloads - don't commit downloaded files
-downloads/
-*.mp4
-*.mkv
-*.webm
-*.avi
-*.mov
-
-# Test files for credentials and browser automation
-test_no_2fa_login.py
-test_credentials_status.py
-test_device_verification_flow.py
