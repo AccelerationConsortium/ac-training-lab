@@ -124,6 +124,8 @@ def handle_query_camera(args):
 # MQTT Functions
 def on_connect(client, userdata, flags, rc, properties=None):
     logger.info("Connection received with code %s." % rc)
+    client.subscribe(DEVICE_ENDPOINT, qos=2)
+    logger.info(f"Subscribed to: {DEVICE_ENDPOINT}")
 
 
 def on_publish(client, userdata, mid, properties=None):
@@ -201,7 +203,6 @@ if __name__ == "__main__":
     client.tls_set(tls_version=paho.ssl.PROTOCOL_TLS)
     client.username_pw_set(HIVEMQ_USERNAME, HIVEMQ_PASSWORD)
     client.connect(HIVEMQ_HOST, DEVICE_PORT)
-    client.subscribe(DEVICE_ENDPOINT, qos=2)
     client.loop_start()
     logger.info("Ready for tasks...")
 
