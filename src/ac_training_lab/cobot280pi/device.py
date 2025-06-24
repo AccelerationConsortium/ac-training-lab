@@ -178,12 +178,20 @@ if __name__ == "__main__":
 
         cobot = DummyCobot()
 
-    def on_message(client, userdata, msg):
+def on_message(client, userdata, msg):
+    try:
         logger.info(
-            f"Recieved message with: \n\ttopic: {msg.topic}\
-            \n\tqos: {msg.qos}\n\tpayload: {msg.payload}"
+            f"Received message:\n"
+            f"\ttopic: {msg.topic}\n"
+            f"\tqos: {msg.qos}\n"
+            f"\tpayload: {msg.payload.decode(errors='ignore')}"
         )
+        print(f"[DEBUG] Received message on topic '{msg.topic}': {msg.payload.decode(errors='ignore')}")
+        
         task_queue.put(msg)
+    except Exception as e:
+        logger.error(f"[ERROR] Failed to handle message: {e}")
+        print(f"[ERROR] in on_message: {e}")
 
     client = paho.Client(client_id="", userdata=None, protocol=paho.MQTTv5)
     client.on_connect = on_connect
