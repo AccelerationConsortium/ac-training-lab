@@ -16,7 +16,7 @@ from my_secrets import (
     HIVEMQ_USERNAME,
 )
 from PIL import Image
-from pymycobot import MyCobot280
+from pymycobot.mycobot280 import MyCobot280
 from utils import setup_logger
 
 # cli args
@@ -123,6 +123,8 @@ def handle_query_camera(args):
 # MQTT Functions
 def on_connect(client, userdata, flags, rc, properties=None):
     logger.info("Connection received with code %s." % rc)
+    client.subscribe(DEVICE_ENDPOINT, qos=2)
+    logger.info(f"Subscribed to: {DEVICE_ENDPOINT}")
 
 
 def on_publish(client, userdata, mid, properties=None):
@@ -178,11 +180,23 @@ if __name__ == "__main__":
         cobot = DummyCobot()
 
     def on_message(client, userdata, msg):
-        logger.info(
-            f"Recieved message with: \n\ttopic: {msg.topic}\
-            \n\tqos: {msg.qos}\n\tpayload: {msg.payload}"
-        )
-        task_queue.put(msg)
+        try:
+            logger.info(
+                f"Received message:\n"
+                f"\ttopic: {msg.topic}\n"
+                f"\tqos: {msg.qos}\n"
+                f"\tpayload: {msg.payload.decode(errors='ignore')}"
+            )
+            print(
+                f"""[DEBUG] Received message:
+                Topic: {msg.topic}
+                Payload: {msg.payload.decode(errors='ignore')}"""
+            )
+
+            task_queue.put(msg)
+        except Exception as e:
+            logger.error(f"[ERROR] Failed to handle message: {e}")
+            print(f"[ERROR] in on_message: {e}")
 
     client = paho.Client(client_id="", userdata=None, protocol=paho.MQTTv5)
     client.on_connect = on_connect
@@ -192,7 +206,6 @@ if __name__ == "__main__":
     client.tls_set(tls_version=paho.ssl.PROTOCOL_TLS)
     client.username_pw_set(HIVEMQ_USERNAME, HIVEMQ_PASSWORD)
     client.connect(HIVEMQ_HOST, DEVICE_PORT)
-    client.subscribe(DEVICE_ENDPOINT, qos=2)
     client.loop_start()
     logger.info("Ready for tasks...")
 
