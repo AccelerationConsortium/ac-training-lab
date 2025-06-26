@@ -4,7 +4,7 @@ import io
 import json
 import sys
 import time
-from queue import Empty, Queue
+from queue import Queue
 
 import cv2
 import paho.mqtt.client as paho
@@ -188,7 +188,9 @@ if __name__ == "__main__":
                 f"\tpayload: {msg.payload.decode(errors='ignore')}"
             )
             print(
-                f"[DEBUG] Received message on topic '{msg.topic}': {msg.payload.decode(errors='ignore')}"
+                f"""[DEBUG] Received message:
+                Topic: {msg.topic}
+                Payload: {msg.payload.decode(errors='ignore')}"""
             )
 
             task_queue.put(msg)
