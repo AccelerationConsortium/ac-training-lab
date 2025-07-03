@@ -16,7 +16,7 @@ from my_secrets import (
     HIVEMQ_USERNAME,
 )
 from PIL import Image
-from pymycobot.mycobot import MyCobot # TODO: Update to use the latest MyCobot class
+from pymycobot import MyCobot280
 from utils import setup_logger
 
 # cli args
@@ -167,7 +167,7 @@ if __name__ == "__main__":
 
     if not cliargs.debug:
         try:
-            cobot = MyCobot("/dev/ttyAMA0", 1000000)
+            cobot = MyCobot280("/dev/ttyAMA0", 1000000)
             logger.info("Cobot object initialized...")
         except Exception as e:
             logger.critical(f"could not initialize cobot with error {str(e)}")
