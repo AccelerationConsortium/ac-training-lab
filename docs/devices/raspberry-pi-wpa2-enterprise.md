@@ -111,7 +111,7 @@ sudo nmcli dev status
 ```
 
 > ```shell
-> DEVICE         TYPE      STATE                   CONNECTION 
+> DEVICE         TYPE      STATE                   CONNECTION
 > wlan0          wifi      connected               UofT
 > ```
 
