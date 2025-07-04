@@ -1,6 +1,6 @@
 # Tailscale Setup
 
-Tailscale is a "mesh VPN" that allows secure access to devices across different networks. It simplifies remote access and management of devices.
+[Tailscale](https://tailscale.com/) is a "mesh VPN" that allows secure access to devices across different networks. It simplifies remote access and management of devices.
 
 The following covers [tailscale setup](#general-setup-instructions) for general-purpose machines (Linux, macOS, Windows, RPi OS) and SSH access, [setup for an OT-2 environment](#installing-and-auto-starting-tailscale-on-ot-2-opentrons) which requires special installation steps, and [instructions for remote desktop](#remote-desktop-on-windows) on Windows.
 
