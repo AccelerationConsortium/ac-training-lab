@@ -5,7 +5,7 @@ An example of equipment monitoring happening at the Acceleration Consortium is a
 This is intended to be run on a Raspberry Pi Zero 2W Raspberry Pi Camera
 Module 3 running [RPi OS Lite (bookworm, 64-bit)](https://www.raspberrypi.com/software/operating-systems/).
 
-```{include} ../../docs/_snippets/wpa2-enterprise-note.md
+```{include} ../../docs/_snippets/network-setup-note.md
 ```
 
 ## Bill of Materials

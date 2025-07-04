@@ -2,6 +2,9 @@
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/AccelerationConsortium/ac-training-lab/blob/cobot-usage-docs/src/ac_training_lab/cobot280pi/gradio-client-demo.ipynb)
 
+```{include} ../../docs/_snippets/network-setup-note.md
+```
+
 The general structure of the program is as follows;
 - The cobot runs a python server which listens for commands from HiveMQ, and runs the appropriate Python API functions from [pymycobot](https://github.com/elephantrobotics/pymycobot/blob/main/docs/MyCobot_280_en.md).
 - HuggingFace Spaces and the HuggingFace Python API (used in the Colab demo above) connect to HiveMQ and send commands to the appropriate topics, which the server is listening on.

@@ -3,7 +3,7 @@
 This is intended to be run on a Raspberry Pi Zero 2W Raspberry Pi Camera
 Module 3 running RPi OS Lite (bookworm).
 
-```{include} ../../docs/_snippets/wpa2-enterprise-note.md
+```{include} ../../docs/_snippets/network-setup-note.md
 ```
 
 ## Codebase
