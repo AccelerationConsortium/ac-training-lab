@@ -137,6 +137,7 @@ We would love to get suggestions on the [types of workflows and functions](https
 :maxdepth: 2
 :includehidden:
 
+Setting Up IoLT Devices <devices/setup_iolt_devices>
 Raspberry Pi WiFi Setup <raspberry-pi-wpa2-enterprise>
 Devices <devices/index>
 Developer Resources <dev-resources>
