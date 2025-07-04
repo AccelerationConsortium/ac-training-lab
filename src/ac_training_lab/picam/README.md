@@ -68,6 +68,8 @@ These items are optional and don't factor into the final price shown. They're us
 
 > **Note:** Most electronic components have verified working links to PiShop.ca. Hardware components like screws and nuts are available at local hardware stores or McMaster-Carr.
 
+The following is a standalone DigiKey cart covering many (not all) of the items above: https://www.digikey.ca/short/8w3bdb8n
+
 ## Codebase
 
 Refresh the system's package list via:
