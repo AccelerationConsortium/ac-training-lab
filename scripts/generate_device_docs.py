@@ -29,14 +29,12 @@ This section contains documentation for all devices in the AC Training Lab.
 Each page is generated from the README.md file in the corresponding device's
 source directory.
 
-## Setup Guides
+## General Setup Guides
 
-```{toctree}
-:maxdepth: 1
+For general setup procedures that apply to multiple devices, see the main documentation:
 
-setup_iolt_devices
-raspberry-pi-wpa2-enterprise
-```
+- [Raspberry Pi WPA2-Enterprise WiFi Setup](../raspberry-pi-wpa2-enterprise.md) - Required for RPi-based devices in enterprise networks
+- [Setting Up IoLT Devices](setup_iolt_devices.md) - Comprehensive guide for Internet of Laboratory Things device setup
 
 ## Device Documentation
 

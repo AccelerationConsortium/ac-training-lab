@@ -1,6 +1,6 @@
 # Raspberry Pi WPA2-Enterprise WiFi Setup
 
-This guide provides instructions for connecting Raspberry Pi devices to WPA2-Enterprise WiFi networks (commonly found in institutional environments). This setup is required for devices like the [picam](picam.md), [a1_cam](a1_cam.md), and other Raspberry Pi-based equipment in the AC Training Lab when operating on enterprise networks.
+This guide provides instructions for connecting Raspberry Pi devices to WPA2-Enterprise WiFi networks (commonly found in institutional environments). This setup is required for devices like the [picam](devices/picam.md), [a1_cam](devices/a1_cam.md), and other Raspberry Pi-based equipment in the AC Training Lab when operating on enterprise networks.
 
 Consider running your devices in headless mode (e.g., Raspberry Pi OS Lite (bookworm)) in general, especially for any Raspberry Pi Zero 2W's that we have, to reduce the resources consumed by the OS.
 
@@ -136,8 +136,8 @@ Various resources during troubleshooting (see list in comment):
 
 When setting up specific AC Training Lab devices that use Raspberry Pi hardware, refer to this documentation for the WiFi setup portion, then continue with the device-specific setup instructions:
 
-- **[Picam](picam.md)**: Overhead camera system
-- **[A1 Mini Camera](a1_cam.md)**: Toolhead camera for 3D printer monitoring
-- **[Pioreactor](pioreactor.md)**: Automated bioreactor system
+- **[Picam](devices/picam.md)**: Overhead camera system
+- **[A1 Mini Camera](devices/a1_cam.md)**: Toolhead camera for 3D printer monitoring
+- **[Pioreactor](devices/pioreactor.md)**: Automated bioreactor system
 
 For these devices, complete the WPA2-Enterprise setup first, then proceed with the device-specific installation and configuration steps.
