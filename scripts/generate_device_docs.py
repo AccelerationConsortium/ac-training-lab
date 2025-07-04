@@ -29,15 +29,6 @@ This section contains documentation for all devices in the AC Training Lab.
 Each page is generated from the README.md file in the corresponding device's
 source directory.
 
-## Setup Guides
-
-```{toctree}
-:maxdepth: 1
-
-setup_iolt_devices
-raspberry-pi-wpa2-enterprise
-```
-
 ## Device Documentation
 
 ```{toctree}
