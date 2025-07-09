@@ -42,6 +42,18 @@ def handle_control_gripper(args, cobot):
     logger.info(f"running command control/gripper with {args}")
     try:
         cobot.set_gripper_value(**args)
+
+        # Wait for gripper movement to complete using is_gripper_moving
+        max_wait_time = 10  # seconds
+        wait_interval = 0.1  # seconds
+        total_wait = 0
+
+        while total_wait < max_wait_time:
+            if not cobot.is_gripper_moving():
+                break
+            time.sleep(wait_interval)
+            total_wait += wait_interval
+
         # Add delay after gripper operation to allow device to stabilize
         time.sleep(0.5)
         # Reset connection to clear any potential buffer issues
@@ -55,7 +67,10 @@ def handle_control_gripper(args, cobot):
 def handle_control_angles(args, cobot):
     logger.info(f"running command control/angle with {args}")
     try:
-        cobot.send_angles(**args)
+        # Use sync version to wait for completion
+        if "timeout" not in args:
+            args["timeout"] = 15  # default timeout
+        cobot.sync_send_angles(**args)
         return {"success": True}
     except Exception as e:
         logger.critical(f"control angle error: {str(e)}")
@@ -65,7 +80,10 @@ def handle_control_angles(args, cobot):
 def handle_control_coords(args, cobot):
     logger.info(f"running command control/coord with {args}")
     try:
-        cobot.send_coords(**args)
+        # Use sync version to wait for completion
+        if "timeout" not in args:
+            args["timeout"] = 15  # default timeout
+        cobot.sync_send_coords(**args)
         return {"success": True}
     except Exception as e:
         logger.critical(f"control coords error: {str(e)}")
