@@ -26,10 +26,26 @@ cliargs = parser.parse_args()
 
 
 # Cobot action functions
+def reset_cobot_connection(cobot):
+    """Attempt to reset the cobot connection when communication issues occur."""
+    try:
+        # Try a simple command to flush any stuck communication
+        cobot.get_angles()
+        time.sleep(0.1)
+        return True
+    except Exception as e:
+        logger.error(f"Failed to reset cobot connection: {str(e)}")
+        return False
+
+
 def handle_control_gripper(args, cobot):
     logger.info(f"running command control/gripper with {args}")
     try:
         cobot.set_gripper_value(**args)
+        # Add delay after gripper operation to allow device to stabilize
+        time.sleep(0.5)
+        # Reset connection to clear any potential buffer issues
+        reset_cobot_connection(cobot)
         return {"success": True}
     except Exception as e:
         logger.critical(f"control gripper error: {str(e)}")
@@ -69,10 +85,33 @@ def handle_control_release_servos(args, cobot):
 def handle_query_angles(args, cobot):
     logger.info(f"running command query/angle with {args}")
     try:
-        angles = cobot.get_angles()
-        if angles is None or len(angles) < 6:
-            raise Exception("could not read angle")
-        return {"success": True, "angles": angles}
+        # Retry logic for angle queries
+        max_retries = 3
+        for attempt in range(max_retries):
+            try:
+                angles = cobot.get_angles()
+                if angles is not None and len(angles) >= 6:
+                    return {"success": True, "angles": angles}
+                else:
+                    if attempt < max_retries - 1:
+                        logger.warning(
+                            f"Angle query attempt {attempt + 1} failed, retrying..."
+                        )
+                        time.sleep(0.2)
+                        continue
+                    else:
+                        raise Exception("could not read angle after retries")
+            except Exception as retry_e:
+                if attempt < max_retries - 1:
+                    logger.warning(
+                        f"Angle query attempt {attempt + 1} failed with error: {str(retry_e)}, retrying..."  # noqa: E501
+                    )
+                    time.sleep(0.2)
+                    continue
+                else:
+                    raise retry_e
+
+        raise Exception("could not read angle")
     except Exception as e:
         logger.critical(f"query angle error: {str(e)}")
         return {"success": False, "error_msg": str(e)}
@@ -81,10 +120,33 @@ def handle_query_angles(args, cobot):
 def handle_query_coords(args, cobot):
     logger.info(f"running command query/coord with {args}")
     try:
-        coords = cobot.get_coords()
-        if coords is None or len(coords) < 6:
-            raise Exception("could not read coord")
-        return {"success": True, "coords": coords}
+        # Retry logic for coordinate queries
+        max_retries = 3
+        for attempt in range(max_retries):
+            try:
+                coords = cobot.get_coords()
+                if coords is not None and len(coords) >= 6:
+                    return {"success": True, "coords": coords}
+                else:
+                    if attempt < max_retries - 1:
+                        logger.warning(
+                            f"Coordinate query attempt {attempt + 1} failed, retrying..."  # noqa: E501
+                        )
+                        time.sleep(0.2)
+                        continue
+                    else:
+                        raise Exception("could not read coord after retries")
+            except Exception as retry_e:
+                if attempt < max_retries - 1:
+                    logger.warning(
+                        f"Coordinate query attempt {attempt + 1} failed with error: {str(retry_e)}, retrying..."  # noqa: E501
+                    )
+                    time.sleep(0.2)
+                    continue
+                else:
+                    raise retry_e
+
+        raise Exception("could not read coord")
     except Exception as e:
         logger.critical(f"query coord error: {str(e)}")
         return {"success": False, "error_msg": str(e)}
