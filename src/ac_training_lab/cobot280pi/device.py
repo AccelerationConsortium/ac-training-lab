@@ -41,7 +41,10 @@ def reset_cobot_connection(cobot):
 def handle_control_gripper(args, cobot):
     logger.info(f"running command control/gripper with {args}")
     try:
-        cobot.set_gripper_value(**args)
+        # Handle both 'value' and 'gripper_value' keys for backward compatibility
+        value = args.get("value", args.get("gripper_value", 50))
+        speed = args.get("speed", 50)
+        cobot.set_gripper_value(value, speed)
 
         # Wait for gripper movement to complete using is_gripper_moving
         max_wait_time = 10  # seconds
@@ -68,9 +71,10 @@ def handle_control_angles(args, cobot):
     logger.info(f"running command control/angle with {args}")
     try:
         # Use sync version to wait for completion
-        if "timeout" not in args:
-            args["timeout"] = 15  # default timeout
-        cobot.sync_send_angles(**args)
+        angles = args.get("angles", [])
+        speed = args.get("speed", 50)
+        timeout = args.get("timeout", 15)
+        cobot.sync_send_angles(angles, speed, timeout=timeout)
         return {"success": True}
     except Exception as e:
         logger.critical(f"control angle error: {str(e)}")
@@ -81,9 +85,11 @@ def handle_control_coords(args, cobot):
     logger.info(f"running command control/coord with {args}")
     try:
         # Use sync version to wait for completion
-        if "timeout" not in args:
-            args["timeout"] = 15  # default timeout
-        cobot.sync_send_coords(**args)
+        coords = args.get("coords", [])
+        speed = args.get("speed", 50)
+        mode = args.get("mode", 0)  # 0 - angular (default), 1 - linear
+        timeout = args.get("timeout", 15)
+        cobot.sync_send_coords(coords, speed, mode, timeout=timeout)
         return {"success": True}
     except Exception as e:
         logger.critical(f"control coords error: {str(e)}")
