@@ -2,10 +2,13 @@
 # pip install ax-platform==0.4.3 numpy pymongo
 import numpy as np
 from ax.service.ax_client import AxClient, ObjectiveProperties
+from ax.modelbridge.generation_strategy import GenerationStrategy
+from ax.modelbridge.registry import Models
 from pymongo import MongoClient  # Added import for MongoDB
 
 
 obj1_name = "branin"
+MAX_TRIALS = 19  # Configuration constant
 
 
 def branin(x1, x2):
@@ -30,23 +33,51 @@ parameters = [
 ]
 objectives = {obj1_name: ObjectiveProperties(minimize=True)}
 
+# Use Ax's default Sobol trials for 2D problems (aligns with GitHub comment)
+SOBOL_TRIALS = 5
+
 # Load existing experiment state or initialize new
 record = experiments_col.find_one({"experiment_name": obj1_name})
 if record:
-    ax_client = AxClient()
-    ax_client.create_experiment(name=obj1_name, parameters=parameters, objectives=objectives)
     saved_trials = record.get("trials", [])
+    n_existing = len(saved_trials)
+    
+    # Calculate remaining Sobol trials: max(target_sobol - existing, 0)
+    remaining_sobol = max(SOBOL_TRIALS - n_existing, 0)
+    
+    if remaining_sobol > 0:
+        generation_strategy = GenerationStrategy([
+            {"model": Models.SOBOL, "num_trials": remaining_sobol},
+            {"model": Models.GPEI, "num_trials": -1}
+        ])
+        print(f"Will run {remaining_sobol} more Sobol trials (have {n_existing} existing)")
+    else:
+        # Remove Sobol step entirely when remaining_sobol = 0
+        generation_strategy = GenerationStrategy([
+            {"model": Models.GPEI, "num_trials": -1}
+        ])
+        print(f"Skipping Sobol (have {n_existing} trials), going to GP")
+    
+    ax_client = AxClient(generation_strategy=generation_strategy)
+    ax_client.create_experiment(name=obj1_name, parameters=parameters, objectives=objectives)
+    
     # Replay saved trials
     for t in saved_trials:
         ax_client.complete_trial(trial_index=t["trial_index"], raw_data=t["raw_data"])
     start_i = len(saved_trials)
 else:
-    ax_client = AxClient()
+    # Use the SAME custom generation strategy for new experiments
+    generation_strategy = GenerationStrategy([
+        {"model": Models.SOBOL, "num_trials": SOBOL_TRIALS},
+        {"model": Models.GPEI, "num_trials": -1}
+    ])
+    ax_client = AxClient(generation_strategy=generation_strategy)
     ax_client.create_experiment(name=obj1_name, parameters=parameters, objectives=objectives)
     start_i = 0
     experiments_col.insert_one({"experiment_name": obj1_name, "trials": []})
+    print(f"Starting new experiment with {SOBOL_TRIALS} Sobol trials")
 
-for i in range(start_i, 19):
+for i in range(start_i, MAX_TRIALS):
 
     parameterization, trial_index = ax_client.get_next_trial()
 
@@ -55,11 +86,23 @@ for i in range(start_i, 19):
     x2 = parameterization["x2"]
 
     results = branin(x1, x2)
-    ax_client.complete_trial(trial_index=trial_index, raw_data=results)
-    # Save trial results to MongoDB
+    # Format raw_data as expected by AxClient (dict mapping objective name to value)
+    raw_data = {obj1_name: results}
+    
+    ax_client.complete_trial(trial_index=trial_index, raw_data=raw_data)
+    
+    # Save trial results to MongoDB with parameters for debugging
     experiments_col.update_one(
         {"experiment_name": obj1_name},
-        {"$push": {"trials": {"trial_index": trial_index, "raw_data": results}}},
+        {"$push": {"trials": {
+            "trial_index": trial_index, 
+            "raw_data": raw_data,
+            "parameters": parameterization
+        }}},
     )
+    
+    print(f"Trial {trial_index}: x1={x1:.3f}, x2={x2:.3f}, result={results:.3f}")
 
 best_parameters, metrics = ax_client.get_best_parameters()
+print(f"Best parameters: {best_parameters}")
+print(f"Best metrics: {metrics}")
