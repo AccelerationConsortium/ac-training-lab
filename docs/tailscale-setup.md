@@ -54,8 +54,8 @@ Additional resources:
 
 ## Installing and Auto-starting Tailscale on OT-2 (Opentrons)
 
-**Note:** OT-2 runs a minimal [Buildroot-based system](https://github.com/Opentrons/buildroot) with a read-only root filesystem and limited network utilities. This guide works within those constraints.  
-  
+**Note:** OT-2 runs a minimal [Buildroot-based system](https://github.com/Opentrons/buildroot) with a read-only root filesystem and limited network utilities. This guide works within those constraints.
+
  You'll use `vi` as the default editor because simpler editors like `nano` are typically not available on Buildroot systems.
 
 ### Download Static Tailscale Binary
@@ -91,7 +91,7 @@ Then
 ```
 /data/tailscale_1.82.0_arm/tailscale up --ssh
 ```
-  
+
 Since OT-2 does not have the required network driver for Tailsclae, you need to use [userspace-networking mode.
 ](https://tailscale.com/kb/1112/userspace-networking)
 
@@ -147,8 +147,8 @@ mount -o remount,rw /
 ```
 > ⚠️ **Note on remounting `/` as writable:**
 >
-> Temporarily remounting `/` with `mount -o remount,rw /` is necessary to create the systemd service.  
-> However, keep in mind that modifying a normally read-only root filesystem may increase the risk of accidental system changes.  
+> Temporarily remounting `/` with `mount -o remount,rw /` is necessary to create the systemd service.
+> However, keep in mind that modifying a normally read-only root filesystem may increase the risk of accidental system changes.
 > Make sure to only modify what's necessary, and the system will automatically return to read-only after a reboot.
 
 Create the systemd service file:
