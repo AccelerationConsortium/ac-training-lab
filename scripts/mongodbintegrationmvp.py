@@ -24,25 +24,6 @@ def branin(x1, x2):
     return y
 
 
-def create_generation_strategy(sobol_trials=5):
-    """Create generation strategy with specified number of Sobol trials."""
-    return GenerationStrategy([
-        GenerationStep(
-            model=Models.SOBOL,
-            num_trials=sobol_trials,
-            min_trials_observed=1,
-            max_parallelism=5,
-            model_kwargs={"seed": 999},  # For reproducibility
-        ),
-        GenerationStep(
-            model=Models.GPEI,
-            num_trials=-1,
-            max_parallelism=3,
-            model_kwargs={},
-        ),
-    ])
-
-
 # Connect to MongoDB with error handling
 try:
     mongo_client = MongoClient("mongodb://localhost:27017/", serverSelectionTimeoutMS=5000)
@@ -69,6 +50,32 @@ objectives = {obj1_name: ObjectiveProperties(minimize=True)}
 SOBOL_TRIALS = 5
 
 def save_ax_snapshot_to_mongodb(ax_client, experiment_name):
+    """Save Ax client snapshot to MongoDB with timestamp (append, don't overwrite)."""
+    try:
+        temp_file = f"temp_{experiment_name}_snapshot.json"
+        ax_client.save_to_json_file(temp_file)
+
+        with open(temp_file, 'r') as f:
+            snapshot_data = json.load(f)
+
+        snapshot_doc = {
+            "experiment_name": experiment_name,
+            "snapshot_data": snapshot_data,
+            "timestamp": datetime.now().isoformat(),
+            "trial_count": len(ax_client.get_trials_data_frame()) if ax_client.get_trials_data_frame() is not None else 0
+        }
+
+        # Insert a new document for every snapshot (no overwrite)
+        snapshots_col.insert_one(snapshot_doc)
+
+        os.remove(temp_file)
+
+        print(f"Snapshot saved to MongoDB at {snapshot_doc['timestamp']}")
+        return True
+
+    except Exception as e:
+        print(f"Error saving snapshot: {e}")
+        return False
     """Save Ax client snapshot to MongoDB with timestamp."""
     try:
         # Save to temporary JSON file first
@@ -126,7 +133,10 @@ def load_ax_snapshot_from_mongodb(experiment_name):
             # Clean up temp file
             os.remove(temp_file)
             
-            print(f"Loaded snapshot from {record['timestamp']} with {record['trial_count']} trials")
+            print(
+                f"Loaded snapshot from {record['timestamp']} with "
+                f"{record['trial_count']} trials"
+            )
             return ax_client
         else:
             print("No existing snapshot found")
@@ -142,7 +152,21 @@ ax_client = load_ax_snapshot_from_mongodb(obj1_name)
 
 if ax_client is None:
     # Create new experiment
-    generation_strategy = create_generation_strategy(SOBOL_TRIALS)
+    generation_strategy = GenerationStrategy([
+        GenerationStep(
+            model=Models.SOBOL,
+            num_trials=SOBOL_TRIALS,
+            min_trials_observed=1,
+            max_parallelism=5,
+            model_kwargs={"seed": 999},  # For reproducibility
+        ),
+        GenerationStep(
+            model=Models.GPEI,
+            num_trials=-1,
+            max_parallelism=3,
+            model_kwargs={},
+        ),
+    ])
     ax_client = AxClient(generation_strategy=generation_strategy)
     ax_client.create_experiment(
         name=obj1_name,
@@ -154,7 +178,7 @@ if ax_client is None:
     # Save initial snapshot
     save_ax_snapshot_to_mongodb(ax_client, obj1_name)
 else:
-    print(f"Resuming existing experiment")
+    print("Resuming existing experiment")
 
 # Get current trial count to determine how many more trials to run
 current_trials = ax_client.get_trials_data_frame()
@@ -192,7 +216,10 @@ for i in range(start_trial, MAX_TRIALS):
         try:
             best_parameters, best_metrics = ax_client.get_best_parameters()
             best_value = best_metrics[0][obj1_name]
-            print(f"Trial {trial_index}: result={results:.3f} | Best so far: {best_value:.3f}")
+            print(
+                f"Trial {trial_index}: result={results:.3f} | "
+                f"Best so far: {best_value:.3f}"
+            )
         except Exception:
             print(f"Trial {trial_index}: result={results:.3f}")
             
