@@ -1,0 +1,270 @@
+{
+  "search_metadata": {
+    "title": "Comprehensive Search for Blockly Alternatives with Python Code Generation",
+    "description": "Visual workflow designers with one-to-one correspondence to Python representation",
+    "search_date": "2025-07-11",
+    "related_issues": ["#409", "#410"],
+    "search_methods": [
+      "Perplexity AI Research",
+      "GitHub Repository Search", 
+      "Playwright Web Research"
+    ],
+    "total_repositories_analyzed": 57,
+    "perplexity_queries": 3,
+    "websites_researched": 2
+  },
+
+  "top_recommendations": {
+    "best_blockly_alternative": {
+      "name": "BlockPy",
+      "repository": "Petlja/blockpy-petlja",
+      "description": "Round-trip editing between Python code and visual blocks built on Blockly",
+      "python_support": "Excellent",
+      "one_to_one_correspondence": true,
+      "use_case": "Educational programming with seamless block-code transitions",
+      "assessment": "Closest match to Blockly for Python code generation"
+    },
+    
+    "professional_choice": {
+      "name": "Ryven",
+      "website": "https://ryven.org",
+      "description": "Flow-based visual scripting environment for Python",
+      "python_support": "Excellent", 
+      "one_to_one_correspondence": true,
+      "use_case": "Professional development and Python workflow automation",
+      "assessment": "Most comprehensive visual programming solution for Python"
+    },
+    
+    "educational_choice": {
+      "name": "Orange Data Mining",
+      "website": "https://orangedatamining.com",
+      "repository": "biolab/orange3",
+      "description": "Visual programming platform for data analysis and machine learning",
+      "python_support": "Good",
+      "one_to_one_correspondence": false,
+      "use_case": "Data science education and machine learning workflows",
+      "assessment": "Best for teaching data science concepts visually"
+    }
+  },
+
+  "tools_from_issue_409_analysis": {
+    "node_red": {
+      "name": "Node-RED",
+      "website": "https://nodered.org",
+      "python_support": "Limited",
+      "verdict": "Not suitable for Python code generation",
+      "reason": "JavaScript-based flow programming; can call Python scripts but doesn't generate Python code",
+      "primary_use": "IoT and API workflow automation"
+    },
+    
+    "n8n": {
+      "name": "n8n", 
+      "website": "https://n8n.io",
+      "python_support": "Limited",
+      "verdict": "Not suitable for direct Python code generation", 
+      "reason": "Workflow automation platform; JavaScript-centric with ability to trigger Python scripts",
+      "primary_use": "Business process automation"
+    },
+    
+    "ivory_os": {
+      "name": "IvoryOS",
+      "python_support": "Unknown",
+      "verdict": "Insufficient information",
+      "reason": "No clear evidence found of this being a visual programming tool for Python code generation",
+      "status": "Requires further investigation"
+    }
+  },
+
+  "additional_notable_tools": [
+    {
+      "name": "pyBlocks",
+      "repository": "arshavirmirzakhani/pyBlocks", 
+      "category": "Educational Block Programming",
+      "description": "Block-based Python code generator (web-based, Blockly-inspired)",
+      "python_support": "Excellent",
+      "stars": 5
+    },
+    {
+      "name": "pysimCoder",
+      "repository": "robertobucher/pysimCoder",
+      "category": "Engineering Systems",
+      "description": "Block diagram editor and real-time code generator for Python",
+      "python_support": "Excellent",
+      "stars": 201,
+      "specialization": "Control systems and dynamical systems"
+    },
+    {
+      "name": "NodeEditor",
+      "repository": "sisoe24/NodeEditor", 
+      "category": "Visual Scripting Framework",
+      "description": "A Visual scripting framework for Python",
+      "python_support": "Native",
+      "stars": 22
+    },
+    {
+      "name": "PyWorkflow",
+      "repository": "PyWorkflowApp/visual-programming",
+      "category": "Data Science",
+      "description": "Web-based visual programming application inspired by KNIME for data science",
+      "python_support": "Excellent"
+    }
+  ],
+
+  "tool_categories": {
+    "educational_block_programming": {
+      "description": "Tools designed for learning programming concepts with block-to-code generation",
+      "tools": ["BlockPy", "pyBlocks", "MIT App Inventor", "Scratch"],
+      "python_support": "Excellent - designed specifically for code generation",
+      "best_for": "Teaching programming concepts and transitions to text-based coding"
+    },
+    
+    "professional_flow_programming": {
+      "description": "Advanced visual scripting environments for professional development",
+      "tools": ["Ryven", "PyWorkflow", "NodeGraphQt"],
+      "python_support": "Excellent - native Python integration",
+      "best_for": "Professional development, automation, and complex workflows"
+    },
+    
+    "data_science_platforms": {
+      "description": "Visual tools for data analysis and machine learning workflows",
+      "tools": ["Orange Data Mining", "KNIME", "RapidMiner"],
+      "python_support": "Good - visual analytics with Python scripting support",
+      "best_for": "Data analysis, machine learning, and research"
+    },
+    
+    "workflow_automation": {
+      "description": "Tools focused on business process and system automation",
+      "tools": ["Node-RED", "n8n", "Microsoft Power Automate"],
+      "python_support": "Limited - can call Python scripts but don't generate Python code",
+      "best_for": "API integration, IoT workflows, business process automation"
+    },
+    
+    "specialized_domains": {
+      "description": "Tools designed for specific application domains",
+      "tools": ["pysimCoder", "Orange add-ons", "UIFlow"],
+      "python_support": "Variable - domain-specific implementations",
+      "best_for": "Engineering systems, embedded programming, domain-specific applications"
+    }
+  },
+
+  "github_search_results": {
+    "search_queries": [
+      "visual programming python code generation",
+      "node editor python visual scripting", 
+      "blockly python generator"
+    ],
+    "total_repositories": 57,
+    "notable_findings": [
+      {
+        "query": "blockly python generator",
+        "results": 54,
+        "top_repos": [
+          "robertobucher/pysimCoder (201 stars)",
+          "arshavirmirzakhani/pyBlocks (5 stars)", 
+          "thealoneprogrammer/Code-Generation-Using-Blockly (7 stars)"
+        ]
+      },
+      {
+        "query": "visual programming python code generation", 
+        "results": 1,
+        "top_repos": [
+          "HYDRO2070/Code-Rush (0 stars)"
+        ]
+      },
+      {
+        "query": "node editor python visual scripting",
+        "results": 2,
+        "top_repos": [
+          "sisoe24/NodeEditor (22 stars)",
+          "Goblin-Logic/Visual-TkJson-Editor (0 stars)"
+        ]
+      }
+    ]
+  },
+
+  "perplexity_research_insights": {
+    "key_findings": [
+      "BlockPy provides the closest experience to Blockly with Python code generation",
+      "Round-trip editing (blocks ↔ code) is rare and mostly found in educational tools",
+      "Most 'visual programming' tools focus on workflow automation rather than code generation",
+      "The visual programming landscape is fragmented across different domains",
+      "Educational tools prioritize code generation while professional tools prioritize workflow design"
+    ],
+    
+    "important_distinctions": {
+      "code_generation_vs_workflow": "Many tools called 'visual programming' are actually workflow automation platforms",
+      "educational_vs_professional": "Educational tools focus on teaching programming; professional tools focus on productivity",
+      "domain_specific_vs_general": "Some tools excel in specific domains (data science, IoT) rather than general programming"
+    }
+  },
+
+  "web_research_findings": {
+    "ryven_analysis": {
+      "features": [
+        "Flow-based visual scripting for Python",
+        "Built-in REPL with live API access",
+        "Code generation from visual flows",
+        "Multiple visual themes and customization",
+        "Headless execution support (ryvencore)",
+        "Source code access and method override capabilities",
+        "Stylus support for handwritten notes"
+      ],
+      "assessment": "Most comprehensive solution for professional Python visual programming"
+    },
+    
+    "orange_analysis": {
+      "features": [
+        "Visual programming for data mining and machine learning",
+        "No-code approach with drag-and-drop widgets",
+        "Strong educational focus with extensive documentation",
+        "Large library of specialized widgets",
+        "Active community and academic backing",
+        "Multiple language support"
+      ],
+      "assessment": "Excellent for data science education but limited for general Python programming"
+    }
+  },
+
+  "recommendations_by_use_case": {
+    "direct_blockly_replacement": {
+      "primary": "BlockPy",
+      "secondary": "pyBlocks",
+      "rationale": "These tools provide the closest experience to Blockly with true block-to-Python code generation"
+    },
+    
+    "professional_development": {
+      "primary": "Ryven", 
+      "secondary": "PyWorkflow",
+      "rationale": "Most capable solutions for general-purpose visual Python programming with professional features"
+    },
+    
+    "educational_use": {
+      "primary": "Orange Data Mining",
+      "secondary": "BlockPy", 
+      "rationale": "Strong pedagogical focus with excellent documentation and learning resources"
+    },
+    
+    "specialized_domains": {
+      "control_systems": "pysimCoder",
+      "data_science": "Orange Data Mining + specialized add-ons",
+      "iot_workflows": "Node-RED (with Python script nodes)",
+      "business_automation": "n8n (with Python integrations)"
+    }
+  },
+
+  "gaps_and_limitations": {
+    "missing_features": [
+      "Few tools provide true bidirectional block ↔ code editing like Blockly",
+      "Limited options for general-purpose Python programming (most are domain-specific)",
+      "Professional tools often lack the educational clarity of Blockly"
+    ],
+    
+    "tool_limitations": {
+      "node_red_n8n": "Primarily workflow automation, not code generation platforms",
+      "orange": "Excellent for data science but limited for general programming",
+      "ryven": "Powerful but may have learning curve for Blockly users"
+    },
+    
+    "ecosystem_state": "The visual programming ecosystem is fragmented, with different tools serving different niches rather than providing comprehensive Blockly alternatives"
+  }
+}

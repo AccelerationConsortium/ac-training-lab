@@ -1,0 +1,84 @@
+{
+  "metadata": {
+    "title": "Comprehensive Search for Blockly Alternatives",
+    "description": "Visual workflow designers with one-to-one Python correspondence",
+    "search_date": "2025-07-11T01:35:28.464686",
+    "related_issues": [
+      "#409",
+      "#410"
+    ],
+    "search_methods": [
+      "Perplexity AI",
+      "Playwright Web Scraping",
+      "GitHub API"
+    ]
+  },
+  "priority_tools": {
+    "description": "Tools specifically mentioned in issue #409",
+    "tools": [
+      {
+        "name": "Node-RED",
+        "type": "Flow-based programming",
+        "python_support": "Function nodes with Python scripts",
+        "url": "https://nodered.org/"
+      },
+      {
+        "name": "n8n",
+        "type": "Workflow automation",
+        "python_support": "Code nodes and custom functions",
+        "url": "https://n8n.io/"
+      },
+      {
+        "name": "IvoryOS",
+        "type": "Visual workflow designer",
+        "python_support": "To be researched",
+        "url": "To be determined"
+      },
+      {
+        "name": "Google Blockly",
+        "type": "Visual programming library",
+        "python_support": "Native Python code generation",
+        "url": "https://developers.google.com/blockly"
+      }
+    ]
+  },
+  "additional_tools": {
+    "description": "Other visual programming tools to investigate",
+    "educational": [
+      "MIT App Inventor",
+      "Scratch for Arduino",
+      "Snap!",
+      "Alice 3D"
+    ],
+    "data_science": [
+      "Orange Data Mining",
+      "KNIME",
+      "RapidMiner",
+      "Azure ML Designer"
+    ],
+    "general_purpose": [
+      "Ryven",
+      "NodeGraphQt",
+      "PyQt Node Editor",
+      "Orange Canvas"
+    ]
+  },
+  "search_criteria": {
+    "must_have": [
+      "Visual drag-and-drop interface",
+      "Python code generation or export",
+      "One-to-one correspondence between visual and code"
+    ],
+    "nice_to_have": [
+      "Real-time code preview",
+      "Educational features",
+      "Community support",
+      "Open source"
+    ]
+  },
+  "search_preparation": {
+    "perplexity_topics": 4,
+    "playwright_sites": 5,
+    "github_queries": 7
+  }
+}
