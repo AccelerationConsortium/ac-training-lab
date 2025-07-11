@@ -213,20 +213,26 @@ Now, you can reboot OT-2 and see if the device on the admin page of Tailscale wi
 
 ## Remote Desktop on Windows
 
-Tailscale SSH isn't directly supported on Windows, and SSH on Windows machines can get a bit messy. However, you can still use Tailscale to set up remote desktop access.
+Tailscale SSH isn't directly supported on Windows, and SSH on Windows machines can get a bit messy. However, you can still use Tailscale to set up remote desktop access. Note that you can only do this on Windows 10/11 Pro or Windows 10/11 Enterprise, not on Windows 10/11 Home.
 
-Use https://tailscale.com/kb/1022/install-windows and set up as with other devices. Then on the device you're planning to physically be at (instructions for Windows), use remote desktop:
+[Install tailscale for Windows](https://tailscale.com/kb/1022/install-windows). We recommend using a private browser for the interactive login step if this is a non-personal device. You may need to copy the auto-opened URL to the private browser manually. Next, set up the "Remote Desktop Protocol" (RDP) [according to tailscale's documentation](https://tailscale.com/kb/1095/secure-rdp-windows).
 
-<img width="537" height="461" alt="Image" src="https://github.com/user-attachments/assets/d43c2633-439a-4bd1-a914-c029cdd2ab61" />
+Finally, [enable Remote Desktop on your device](https://learn.microsoft.com/en-us/windows-server/remote/remote-desktop-services/remotepc/remote-desktop-allow-access):
+
+<img src=https://github.com/user-attachments/assets/050746cd-a4ff-4bf4-ae4a-5ad1d74f05c1 width=400 alt="Screenshot of enabling Remote Desktop on Windows">
+
+Then, on the device you're planning to use to access the remote device, use Windows' built-in remote desktop:
+
+<img width=350 alt="Image" src="https://github.com/user-attachments/assets/d43c2633-439a-4bd1-a914-c029cdd2ab61" />
 
 You'll enter your full domain:
 
-<img width="538" height="303" alt="Image" src="https://github.com/user-attachments/assets/6b947cda-e357-4ca4-a776-08ee7d023cb5" />
+<img width=350 alt="Image" src="https://github.com/user-attachments/assets/6b947cda-e357-4ca4-a776-08ee7d023cb5" />
 
 Assuming you have access to the admin console, you can find full domain by clicking on the hostname of the corresponding machine within https://login.tailscale.com/admin/machines
 
 This is of the form: `<hostname>.<tailnet-id>.ts.net`
 
-As long as you know the hostname and tailnet ID, you can manually construct that full domain and enter it in. Then, you just need to log in as normal.
+Otherwise, as long as you know the hostname and tailnet ID, you can manually construct that full domain and enter it in. Then, you just need to log in as normal with the remote device's username and password.
 
 _Based on https://github.com/AccelerationConsortium/ac-training-lab/issues/376_
