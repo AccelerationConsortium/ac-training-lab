@@ -10,7 +10,11 @@ Module 3 running [RPi OS Lite (bookworm, 64-bit)](https://www.raspberrypi.com/so
 
 ## Bill of Materials
 
-The following components are required for the equipment monitoring setup:
+The following components are required for the equipment monitoring setup.
+
+```{note}
+There is a [standalone DigiKey cart](https://www.digikey.ca/short/pwmfm83t) available containing most (not all) of the required components, including the optionals of HDMI and USB-A port adapters
+```
 
 ### Core Hardware
 - [Raspberry Pi Zero 2W](https://www.pishop.ca/product/raspberry-pi-zero-2-w/) (or [Zero 2WH](https://www.digikey.ca/en/products/detail/raspberry-pi/SC0721/24627135)) - $21.50 CAD
@@ -67,8 +71,6 @@ These items are optional and don't factor into the final price shown. They're us
 **Tool costs: 30-45 CAD** (separate from main components, not included in total)
 
 > **Note:** Most electronic components have verified working links to PiShop.ca. Hardware components like screws and nuts are available at local hardware stores or McMaster-Carr.
-
-The following is a standalone DigiKey cart covering many (not all) of the items above: https://www.digikey.ca/short/8w3bdb8n
 
 ## Codebase
 
