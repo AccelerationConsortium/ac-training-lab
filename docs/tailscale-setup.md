@@ -219,7 +219,7 @@ Tailscale SSH isn't directly supported on Windows, and SSH on Windows machines c
 
 Finally, [enable Remote Desktop on your device](https://learn.microsoft.com/en-us/windows-server/remote/remote-desktop-services/remotepc/remote-desktop-allow-access):
 
-<img src=https://github.com/user-attachments/assets/050746cd-a4ff-4bf4-ae4a-5ad1d74f05c1 width=400>
+<img src=https://github.com/user-attachments/assets/050746cd-a4ff-4bf4-ae4a-5ad1d74f05c1 width=400 alt="Screenshot of enabling Remote Desktop on Windows">
 
 Then, on the device you're planning to use to access the remote device, use Window's built-in remote desktop:
 
