@@ -2,7 +2,7 @@
 
 [Tailscale](https://tailscale.com/) is a "mesh VPN" that allows secure access to devices across different networks. It simplifies remote access and management of devices.
 
-The following covers [tailscale setup](#general-setup-instructions) for general-purpose machines (Linux, macOS, Windows, RPi OS) and SSH access, [setup for an OT-2 environment](#installing-and-auto-starting-tailscale-on-ot-2-opentrons) which requires special installation steps, and [instructions for remote desktop](#remote-desktop-on-windows) on Windows.
+The following covers [tailscale setup](#general-setup-instructions) for general-purpose machines (Linux, macOS, Windows, RPi OS) and SSH access, [setup for an OT-2 environment](#installing-and-auto-starting-tailscale-on-ot-2-opentrons) which requires special installation steps, and [instructions for remote desktop and SSH](#remote-desktop-and-ssh-on-windows) on Windows.
 
 ## General Setup Instructions
 
@@ -204,16 +204,20 @@ Now, you can reboot OT-2 and see if the device on the admin page of Tailscale wi
 
 ### Summary of File Locations (OT-2)
 
-| File | Purpose |
-|------|---------|
-| `/data/tailscale_1.82.0_arm/tailscaled` | Tailscale daemon |
-| `/data/tailscale_1.82.0_arm/tailscale` | Tailscale CLI |
-| `/data/start_tailscale.sh` | Startup script |
+| File                                              | Purpose                              |
+| ------------------------------------------------- | ------------------------------------ |
+| `/data/tailscale_1.82.0_arm/tailscaled`           | Tailscale daemon                     |
+| `/data/tailscale_1.82.0_arm/tailscale`            | Tailscale CLI                        |
+| `/data/start_tailscale.sh`                        | Startup script                       |
 | `/etc/systemd/system/tailscale-autostart.service` | Systemd autostart service definition |
 
-## Remote Desktop on Windows
+## Remote Desktop and SSH on Windows
 
-Tailscale SSH isn't directly supported on Windows, and SSH on Windows machines can get a bit messy. However, you can still use Tailscale to set up remote desktop access. Note that you can only do this on Windows 10/11 Pro or Windows 10/11 Enterprise, not on Windows 10/11 Home.
+[Tailscale SSH](https://tailscale.com/kb/1193/tailscale-ssh) isn't directly supported on Windows, and SSH on Windows machines can get a bit messy. However, you can still use Tailscale to set up remote desktop access or configure OpenSSH for VS Code compatibility.
+
+### Remote Desktop Setup
+
+Note that you can only use remote desktop on Windows 10/11 Pro or Windows 10/11 Enterprise, not on Windows 10/11 Home.
 
 [Install tailscale for Windows](https://tailscale.com/kb/1022/install-windows). We recommend using a private browser for the interactive login step if this is a non-personal device. You may need to copy the auto-opened URL to the private browser manually. Next, set up the "Remote Desktop Protocol" (RDP) [according to tailscale's documentation](https://tailscale.com/kb/1095/secure-rdp-windows).
 
@@ -234,5 +238,56 @@ Assuming you have access to the admin console, you can find full domain by click
 This is of the form: `<hostname>.<tailnet-id>.ts.net`
 
 Otherwise, as long as you know the hostname and tailnet ID, you can manually construct that full domain and enter it in. Then, you just need to log in as normal with the remote device's username and password.
+
+### Windows OpenSSH Setup, Including VS Code Compatibility
+
+Since **Tailscale SSH server is not supported on Windows**, you need to set up an OpenSSH Server. Run these commands on an administrator-level PowerShell terminal:
+
+#### Install and Configure OpenSSH Server:
+
+Install OpenSSH Server:
+```powershell
+Add-WindowsCapability -Online -Name OpenSSH.Server~~~~0.0.1.0
+```
+
+Start the SSH service:
+```powershell
+Start-Service sshd
+```
+
+Set it to start automatically:
+```powershell
+Set-Service -Name sshd -StartupType 'Automatic'
+```
+
+Check if it's running:
+```powershell
+Get-Service sshd
+```
+
+Configure firewall (usually done automatically, but let's make sure):
+```powershell
+New-NetFirewallRule -Name sshd -DisplayName 'OpenSSH Server (sshd)' -Enabled True -Direction Inbound -Protocol TCP -Action Allow -LocalPort 22
+```
+
+#### Important: Configure SSH for VS Code compatibility
+
+After the service is running, you'll need to edit the SSH configuration:
+
+```powershell
+notepad C:\ProgramData\ssh\sshd_config
+```
+
+In the config file, make sure these lines are present and uncommented:
+```
+AllowTcpForwarding yes
+GatewayPorts no
+PermitTunnel no
+```
+
+Then restart the SSH service:
+```powershell
+Restart-Service sshd
+```
 
 _Based on https://github.com/AccelerationConsortium/ac-training-lab/issues/376_
