@@ -221,7 +221,7 @@ Finally, [enable Remote Desktop on your device](https://learn.microsoft.com/en-u
 
 <img src=https://github.com/user-attachments/assets/050746cd-a4ff-4bf4-ae4a-5ad1d74f05c1 width=400 alt="Screenshot of enabling Remote Desktop on Windows">
 
-Then, on the device you're planning to use to access the remote device, use Window's built-in remote desktop:
+Then, on the device you're planning to use to access the remote device, use Windows' built-in remote desktop:
 
 <img width=350 alt="Image" src="https://github.com/user-attachments/assets/d43c2633-439a-4bd1-a914-c029cdd2ab61" />
 
