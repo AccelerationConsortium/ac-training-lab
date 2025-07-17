@@ -1,5 +1,8 @@
 # Pioreactor
 
+```{include} ../../docs/_snippets/network-setup-note.md
+```
+
 Pioreactor is an open-source bioreactor platform that can be used for a variety of applications, including fermentation, cell culture, and more.
 
 Related issue(s):

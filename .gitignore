@@ -51,6 +51,7 @@ MANIFEST
 docs/devices/*.md
 !docs/devices/setup_iolt_devices.md
 !docs/devices/cudy.md
+!docs/devices/raspberry-pi-wpa2-enterprise.md
 
 # Per-project virtualenvs
 .venv*/
@@ -67,3 +68,6 @@ src/ac_training_lab/bambu_a1_mini/info.py
 
 image.jpeg
 src/ac_training_lab/squidstat/SquidstatPyLibrary-1.9.1.8-py3-none-win_amd64.whl
+src/ac_training_lab/apriltag_demo/tag25_09_00000.png
+src/ac_training_lab/apriltag_demo/tag36_11_00000.png
+src/ac_training_lab/apriltag_demo/tag49_12_00000.png

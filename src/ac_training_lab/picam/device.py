@@ -1,15 +1,24 @@
+import json
 import subprocess
 
-from my_secrets import STREAM_KEY, STREAM_URL
+import requests
+from my_secrets import (
+    CAM_NAME,
+    CAMERA_HFLIP,
+    CAMERA_VFLIP,
+    LAMBDA_FUNCTION_URL,
+    PRIVACY_STATUS,
+    WORKFLOW_NAME,
+)
 
 
-def start_stream():
+def start_stream(ffmpeg_url):
     """
     Starts the libcamera -> ffmpeg pipeline and returns two Popen objects:
       p1: libcamera-vid process
       p2: ffmpeg process
     """
-    # First: libcamera-vid command
+    # First: libcamera-vid command with core parameters
     libcamera_cmd = [
         "libcamera-vid",
         "--inline",
@@ -28,9 +37,16 @@ def start_stream():
         "h264",  # H.264 encoding
         "--bitrate",
         "1000000",  # ~1 Mbps video
-        "-o",
-        "-",  # Output to stdout (pipe)
     ]
+
+    # Add flip parameters if needed
+    if CAMERA_VFLIP:
+        libcamera_cmd.extend(["--vflip"])
+    if CAMERA_HFLIP:
+        libcamera_cmd.extend(["--hflip"])
+
+    # Add output parameters last
+    libcamera_cmd.extend(["-o", "-"])  # Output to stdout (pipe)
 
     # Second: ffmpeg command
     ffmpeg_cmd = [
@@ -63,7 +79,7 @@ def start_stream():
         # Output format is FLV, then final RTMP URL
         "-f",
         "flv",
-        f"{STREAM_URL}/{STREAM_KEY}",
+        ffmpeg_url,
     ]
 
     # Start libcamera-vid, capturing its output in a pipe
@@ -80,19 +96,69 @@ def start_stream():
     return p1, p2
 
 
+def call_lambda(action, CAM_NAME, WORKFLOW_NAME, privacy_status="private"):
+    payload = {
+        "action": action,
+        "cam_name": CAM_NAME,
+        "workflow_name": WORKFLOW_NAME,
+        "privacy_status": privacy_status,
+    }
+    print(f"Sending to Lambda: {payload}")
+    try:
+
+        response = requests.post(LAMBDA_FUNCTION_URL, json=payload)
+        print(f"Status code: {response.status_code}")
+        print(f"Response text: {response.text}")
+        response.raise_for_status()
+        # Try to decode JSON, otherwise fall back to raw text
+        try:
+            result = response.json()
+            if isinstance(result, dict) and "statusCode" in result and "body" in result:
+                body = result["body"]
+            else:
+                body = result
+        except ValueError:
+            body = response.text
+
+        print(f"Lambda '{action}' succeeded: {body}")
+        return body
+
+    except requests.exceptions.HTTPError as e:
+        raise RuntimeError(f"HTTP error occurred: {e} - Response: {response.text}")
+    except requests.exceptions.RequestException as e:
+        raise RuntimeError(f"Request failed: {e}")
+    except Exception as e:
+        raise RuntimeError(f"Failed to decode Lambda response: {e}")
+
+
 if __name__ == "__main__":
+    # End previous broadcast and start a new one via Lambda
+    call_lambda("end", CAM_NAME, WORKFLOW_NAME)
+    raw_body = call_lambda(
+        "create", CAM_NAME, WORKFLOW_NAME, privacy_status=PRIVACY_STATUS
+    )
+    try:
+        result = json.loads(raw_body) if isinstance(raw_body, str) else raw_body
+        ffmpeg_url = result["result"]["ffmpeg_url"]
+    except (json.JSONDecodeError, KeyError, TypeError) as e:
+        raise RuntimeError(
+            f"Cannot proceed: ffmpeg_url not found or response invalid → {e}"
+        )
+
+    print(f"Streaming to: {ffmpeg_url}")
+
     while True:
         print("Starting stream..")
-        p1, p2 = start_stream()
+        p1, p2 = start_stream(ffmpeg_url)
         print("Stream started")
         try:
-            # This will block until ffmpeg stops or the script is interrupted
             p2.wait()
+        except KeyboardInterrupt:
+            pass
         except Exception as e:
             print(e)
         finally:
             print("Terminating processes..")
-            # Cleanup: terminate both processes if still running
             p1.terminate()
             p2.terminate()
             print("Processes terminated. Retrying..")

@@ -17,6 +17,19 @@ class DummyCobot:
     def send_coords(self, **kwargs):
         self.logger.info(f"tried to send coords with args {kwargs}")
 
+    def sync_send_angles(self, **kwargs):
+        self.logger.info(f"tried to sync send angles with args {kwargs}")
+
+    def sync_send_coords(self, **kwargs):
+        self.logger.info(f"tried to sync send coords with args {kwargs}")
+
+    def is_gripper_moving(self, **kwargs):
+        self.logger.info(f"tried to check if gripper is moving with args {kwargs}")
+        return False  # Always return False for dummy (not moving)
+
+    def release_all_servos(self, **kwargs):
+        self.logger.info(f"tried to release all servos with args {kwargs}")
+
     def get_angles(self, **kwargs):
         self.logger.info(f"tried to get angles with args {kwargs}")
         return [0, 0, 0, 0, 0, 0]
