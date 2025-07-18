@@ -203,7 +203,7 @@ Add the following at the end of the crontab file:
 ```bash
 #
 # Restart at 2 am, local time (set up during flashing, or specified manually via e.g., `sudo timedatectl set-timezone America/New_York`)
-0 2 * * * /sbin/shutdown -r now
+0 5,13,21 * * * /sbin/shutdown -r now
 ```
 
 Manually start the service by running:
