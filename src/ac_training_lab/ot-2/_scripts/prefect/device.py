@@ -1,18 +1,18 @@
 import json
 
 import opentrons.simulate
-from prefect import flow, task
+from prefect import flow, serve
 
 # ------------------- OT-2 Setup -------------------
 protocol = opentrons.simulate.get_protocol_api("2.12")
 protocol.home()
 
 # Load Labware
-with open("ac_color_sensor_charging_port.json", encoding="utf-8") as f1:
+with open("../ac_color_sensor_charging_port.json", encoding="utf-8") as f1:
     labware_def1 = json.load(f1)
     tiprack_2 = protocol.load_labware_from_definition(labware_def1, 10)
 
-with open("ac_6_tuberack_15000ul.json", encoding="utf-8") as f2:
+with open("../ac_6_tuberack_15000ul.json", encoding="utf-8") as f2:
     labware_def2 = json.load(f2)
     reservoir = protocol.load_labware_from_definition(labware_def2, 3)
 
@@ -28,7 +28,7 @@ print("Labwares loaded")
 
 
 # ------------------- Prefect Tasks -------------------
-@task
+@flow
 def mix_color(R, Y, B, mix_well):
     """Mix colors with specified RGB values into a well"""
     total = R + Y + B
@@ -59,7 +59,7 @@ def mix_color(R, Y, B, mix_well):
     print(f"Mixed R:{R}, Y:{Y}, B:{B} in well {mix_well}")
 
 
-@task
+@flow
 def move_sensor_to_measurement_position(mix_well):
     """Move sensor to measurement position"""
     assert p300 is not None and tiprack_2 is not None and plate is not None
@@ -68,7 +68,7 @@ def move_sensor_to_measurement_position(mix_well):
     print("Sensor is now in position for measurement")
 
 
-@task
+@flow
 def move_sensor_back():
     """Move sensor back to charging position"""
     assert p300 is not None and tiprack_2 is not None
@@ -76,22 +76,12 @@ def move_sensor_back():
     print("Sensor moved back to charging position")
 
 
-# ------------------- Prefect Flow -------------------
-@flow(name="ot2-device-flow")
-def main_flow(R: int = 100, Y: int = 100, B: int = 100, mix_well: str = "A1"):
-    """
-    Main flow for color mixing.
-    Parameters will come from Prefect Cloud when orchestrator triggers it.
-    """
-    mix_color(R, Y, B, mix_well)
-    move_sensor_to_measurement_position(mix_well)
-    move_sensor_back()
-
-
 if __name__ == "__main__":
     # Serve mode: register to Prefect Cloud & listen for tasks
-    main_flow.serve(
-        name="ot2-device-deployment",
+    serve(
+        mix_color.to_deployment("mix-color"),
+        move_sensor_to_measurement_position.to_deployment(
+            "move-sensor-to-measurement-position"
+        ),
+        move_sensor_back.to_deployment("move-sensor-back"),
     )
-
-# main_flow(120, 50, 80, "A1")
