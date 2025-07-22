@@ -104,7 +104,7 @@ The AC Training Lab has recently become virtual 😎. After running the [Bayesia
 
 You can check the space out yourself by clicking on the invite link below. If you find something not working or have a suggestion, please feel free to [open an issue](https://github.com/AccelerationConsortium/ac-training-lab/issues/new).
 
-Invite link: https://app.gather.town/invite?token=XkfecjxCSLuT5kvhtLci
+Invite link: https://app.gather.town/invite?token=Ob0RdnDDQ2u0IbA1r674
 
 Password: `japanese-envelope-spoken` (subject to change in case access needs to be refreshed for some reason)
 
