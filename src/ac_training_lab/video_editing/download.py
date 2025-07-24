@@ -1,11 +1,14 @@
-import os
 import json
+import os
 from pathlib import Path
-from playwright.sync_api import sync_playwright, TimeoutError as PlaywrightTimeoutError
+
+import pyotp
 from google.oauth2.credentials import Credentials
 from googleapiclient.discovery import build
+from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
+from playwright.sync_api import sync_playwright
+
 from src.ac_training_lab.video_editing.my_secrets import EMAIL, PASSWORD, TOTP_SECRET
-import pyotp
 
 # Set up TOTP for 2FA
 totp = pyotp.TOTP(TOTP_SECRET)
