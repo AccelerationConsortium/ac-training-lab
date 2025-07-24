@@ -10,7 +10,6 @@ from ax.modelbridge.registry import Models
 from ax.service.ax_client import AxClient, ObjectiveProperties
 from pymongo import MongoClient, errors
 
-
 obj1_name = "branin"
 MAX_TRIALS = 19  # Configuration constant
 
@@ -51,6 +50,7 @@ objectives = {obj1_name: ObjectiveProperties(minimize=True)}
 
 # Use Ax's default Sobol trials for 2D problems
 SOBOL_TRIALS = 5
+
 
 def save_ax_snapshot_to_mongodb(ax_client, experiment_name):
     """Save Ax client snapshot to MongoDB with timestamp (append, don't overwrite)."""
