@@ -29,6 +29,8 @@ This section contains documentation for all devices in the AC Training Lab.
 Each page is generated from the README.md file in the corresponding device's
 source directory.
 
+## Device Documentation
+
 ```{toctree}
 :maxdepth: 1
 
@@ -73,17 +75,17 @@ for root, dirs, files in os.walk(SRC_DIR):
         if str(rel_path) == ".":
             github_path = f"{GITHUB_REPO}/tree/{GITHUB_BRANCH}/src/ac_training_lab"
 
-        # Create stub content with source code link before including README
-        stub_content = f"""```{{admonition}} Source Code
-:class: note
+        # Create GitHub edit link to the source README
+        github_edit_path = f"{GITHUB_REPO}/edit/{GITHUB_BRANCH}/src/ac_training_lab"
+        if str(rel_path) != ".":
+            github_edit_path += f"/{rel_path}"
+        github_edit_path += "/README.md"
 
-<a href="{github_path}" target="_blank">View source code for this device on GitHub</a>
-```
+        # fmt: off # to allow precommit to pass (can't break the <a> across two lines)
 
-```{{include}} {rel_readme_path}
-```
-"""
-
+        # Create the stub content with source and edit links
+        # (put on one line to avoid pre-commit issues)
+        stub_content = f"""```{{admonition}} Source Code\n:class: note\n\n<a href="{github_path}" target="_blank">View source code</a> | <a href="{github_edit_path}" target="_blank">Suggest edit</a>\n```\n```{{include}} {rel_readme_path}\n```"""  # noqa: E501
         # Write the stub file
         stub_path = DOCS_DEVICES_DIR / stub_filename
         with open(stub_path, "w", encoding="utf-8") as f:

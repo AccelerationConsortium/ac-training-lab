@@ -1,15 +1,85 @@
-# RPi Zero 2W Streaming Cameras
+# RPi Streaming Cameras for Equipment Monitoring
+
+An example of equipment monitoring happening at the Acceleration Consortium is available at https://www.youtube.com/@ac-hardware-streams.
 
 This is intended to be run on a Raspberry Pi Zero 2W Raspberry Pi Camera
-Module 3 running RPi OS Lite (bookworm).
+Module 3 running [RPi OS Lite (bookworm, 64-bit)](https://www.raspberrypi.com/software/operating-systems/).
+
+```{include} ../../docs/_snippets/network-setup-note.md
+```
+
+## Bill of Materials
+
+The following components are required for the equipment monitoring setup.
+
+```{note}
+There is a [standalone DigiKey cart](https://www.digikey.ca/short/pwmfm83t) available containing most (not all) of the required components, including the optionals of HDMI and USB-A port adapters
+```
+
+### Core Hardware
+- [Raspberry Pi Zero 2W](https://www.pishop.ca/product/raspberry-pi-zero-2-w/) (or [Zero 2WH](https://www.digikey.ca/en/products/detail/raspberry-pi/SC0721/24627135)) - $21.50 CAD
+- [MicroSD Card 32GB Class 10](https://www.pishop.ca/product/raspberry-pi-sd-card-32gb/) - $13.95 CAD
+- [MicroSD Card Reader](https://www.pishop.ca/product/usb-2-0-keychain-micro-sd-card-reader/) - $2.95 CAD
+- [Aluminum Heatsink for Raspberry Pi B+/2/3 (2-Pack)](https://www.pishop.ca/product/aluminum-heatsink-for-raspberry-pi-b2-2-pack/) - $2.45 CAD
+  - Alternative: [Heat Sink Kit for RPi Zero](https://www.pishop.ca/product/dedicated-aluminum-heatsink-for-raspberry-pi-zero-series-zero-zero-2-w/) - $5.95 CAD **[OPTIONAL - Better Cooling]**
+  - *Note: The cheaper heat sink is the default as it doesn't require additional hardware. The more expensive one provides better cooling.*
+
+### Camera Components
+- [Raspberry Pi Camera Module 3](https://www.pishop.ca/product/raspberry-pi-camera-module-3/) - $35.00 CAD
+- [Raspberry Pi Zero Camera Cable](https://www.pishop.ca/product/raspberry-pi-zero-mini-camera-cable-38mm/) - $3.95 CAD **[OPTIONAL]**
+  - *Note: The RPi Camera Module 3 comes with a long cable you can use, but you can replace it with this shorter cable for cleaner mounting*
+
+### Power
+- [Wall Adapter Power Supply - 5.1V DC 2.5A (USB Micro-B)](https://www.pishop.ca/product/wall-adapter-power-supply-5-25v-dc-2-4a-usb-micro-b/) - $9.95 CAD **[DEFAULT]**
+- [MicroUSB Power Adapter (International Plugs)](https://www.pishop.ca/product/microusb-power-adapter-international-plugs/) - $12.95 CAD **[INTERNATIONAL OPTION]**
+- *Note: Pi Zero 2W uses micro USB for power, not USB-C*
+
+### Optional Troubleshooting Items
+These items are optional and don't factor into the final price shown. They're useful if you're unable to SSH into the machine:
+- [Mini HDMI Plug to Standard HDMI Jack Adapter](https://www.pishop.ca/product/mini-hdmi-plug-to-standard-hdmi-jack-adapter/) - $3.45 CAD **[OPTIONAL]**
+- [6FT High Speed HDMI Cable With Ethernet](https://www.pishop.ca/product/6ft-high-speed-hdmi-cable-with-ethernet-18gbps-28awg-gold-plated/) - $2.95 CAD **[OPTIONAL]**
+- [USB OTG Host Cable - MicroB OTG male to A female](https://www.pishop.ca/product/usb-otg-host-cable-microb-otg-male-to-a-female/) - $3.45 CAD **[OPTIONAL]**
+- [Wireless Keyboard and Mouse Combo with USB Dongle](https://a.co/d/dxV6WWj) - Amazon **[OPTIONAL]**
+- External Monitor **[OPTIONAL]**
+- *Note: These items provide a simple fix for situations where SSH access is unavailable*
+
+### Mounting Hardware
+**Option A:** Off-the-shelf mount kit
+- [Pro Mini Camera Mount for Raspberry Pi Zero](https://www.pishop.ca/product/pro-mini-camera-mount-for-raspberry-pi-zero/) - $7.95 CAD
+- *Note: Off-the-shelf mount works but might need to be secured so the two laser cut pieces don't wobble relative to each other*
+
+**Option B:** DIY mounting solution (recommended):
+- [3D Printable PiCam Mount](https://github.com/AccelerationConsortium/ac-training-lab/tree/main/src/ac_training_lab/picam/_design) (STL files in repository)
+- **M2 Hardware (4 pieces needed):**
+  - [M2 Nylon Hex Standoff Spacer Screw Nut Assortment Kit (150 Pieces)](https://www.pishop.ca/product/m2-nylon-hex-standoff-spacer-screw-nut-assortment-kit-160-pieces/) - $7.95 CAD - PiShop.ca
+  - *Note: This kit contains 150+ pieces including screws, nuts, and standoffs. You only need 4 M2×12mm screws and 4 M2 nuts from this kit.*
+- **M2.5 Hardware (4 pieces needed):**
+  - [White Nylon Screw and Stand-off Set - M2.5 - 420 pieces](https://www.pishop.ca/product/white-nylon-screw-and-stand-off-set-m2-5-420-pieces/) - $18.95 CAD - PiShop.ca
+  - *Note: This kit contains 420+ pieces including screws, nuts, and standoffs. You only need 4 M2.5×8mm screws, 4 M2.5 nuts, and 4 M2.5×8mm standoffs from this kit.*
+- *Note: Assembly instructions available at [ThePiHut](https://thepihut.com/blogs/raspberry-pi-tutorials/pro-mini-camera-mount-assembly-guide)*
+
+### Rod Clamp Assembly & Mounting
+- [Camera Desk Mount Table Stand](https://www.primecables.ca/p-407778-cab-lsd01-1s-camera-desk-mount-table-stand) - Prime Cables (~$20-30 CAD)
+- [1/4"-20 Hex Nut (7/16" hex driver required, or finger-tighten)](https://www.mcmaster.com/product/91078A029) - McMaster-Carr for secure rod mounting (~$5-10 CAD)
+
+### Tools Required (separate from total cost)
+- [Small Precision Screwdriver Set](https://www.mcmaster.com/product/52985A22) - McMaster-Carr (~$15-20 CAD)
+- [2.5mm Hex Key/Allen Wrench](https://www.mcmaster.com/product/5984A23) - McMaster-Carr (~$10-15 CAD)
+- [7/16" Hex Nut Driver Tool](https://www.mcmaster.com/7142A36/) - McMaster-Carr (~$5-10 CAD)
+
+**Total estimated cost: 109-115 CAD** (as of 2025-05-31, excluding 3D printing, camera desk mount, hex nut, and tools)
+**Tool costs: 30-45 CAD** (separate from main components, not included in total)
+
+> **Note:** Most electronic components have verified working links to PiShop.ca. Hardware components like screws and nuts are available at local hardware stores or McMaster-Carr.
 
 ## Codebase
 
-Optionally, update the system packages to the latest versions (`-y` flag is used to automatically answer "yes" to any installation prompts):
-```bash
-sudo apt update
-sudo apt upgrade -y
+Refresh the system's package list via:
 ```
+sudo apt update
+```
+
+Optionally, upgrade the system packages to the latest versions via `sudo apt upgrade -y` (`-y` flag is used to automatically answer "yes" to any installation prompts)
 
 Ensure that `git` is installed:
 ```bash
@@ -22,7 +92,7 @@ Clone the repository to your Raspberry Pi Zero 2W device via HTTPS (allows for `
 git clone https://github.com/AccelerationConsortium/ac-training-lab.git
 ```
 
-Navigate to the same directory as this README file:
+Navigate to the same directory as this README file. This assumes that your username is `ac`.
 
 ```bash
 cd /home/ac/ac-training-lab/src/ac_training_lab/picam/
@@ -35,7 +105,7 @@ Make a copy of `my_secrets_example.py` called `my_secrets.py`:
 cp my_secrets_example.py my_secrets.py
 ```
 
-Fill in the necessary information. Keep in mind this will store the credentials in plain-text format, so try to keep your Pi login secure and restrict the access scope for the credentials as much as possible.
+Fill in the necessary information (e.g., via `nano my_secrets.py`). Keep in mind this will store the credentials in plain-text format, so try to keep your Pi login secure and restrict the access scope for the credentials as much as possible.
 
 ## Dependencies
 
@@ -85,10 +155,10 @@ python3 device.py
 To create the file, run nano (or other editor of choice):
 
 ```bash
-sudo nano /etc/systemd/system/picam.service
+sudo nano /etc/systemd/system/device.service
 ```
 
-Copy the following code into the file (right click to paste), save it via `Ctrl+O` and `Enter` and exit via `Ctrl+X`:
+Copy the following code into the file (right click to paste), save it via `Ctrl+O` and `Enter` and exit via `Ctrl+X`. This assumes that your username is `ac`.
 
 ```yaml
 [Unit]
@@ -119,7 +189,7 @@ WantedBy=multi-user.target
 Run:
 ```
 sudo systemctl daemon-reload
-sudo systemctl enable picam.service
+sudo systemctl enable device.service
 ```
 
 Run:
@@ -139,19 +209,23 @@ Add the following at the end of the crontab file:
 Manually start the service by running:
 
 ```bash
-sudo systemctl start picam.service
+sudo systemctl start device.service
 ```
+
+*Note: This is the end of the picam setup. On reboot, a livestream should automatically start.*
+
+---
 
 This command tells systemd to run your service immediately (as if it had been triggered at boot). To check its status, use:
 
 ```bash
-sudo systemctl status picam.service
+sudo systemctl status device.service
 ```
 
 To view any logs:
 
 ```bash
-sudo journalctl -u picam.service -f
+sudo journalctl -u device.service -f
 ```
 
 Starting the service with `systemd` is recommended since it applies all the configured options (dependencies, restart behavior, etc.).
@@ -162,13 +236,13 @@ For more details, see the [systemctl(1)](https://www.freedesktop.org/software/sy
 To stop the service (for example, while you work on fixing it / pulling new changes), run:
 
 ```bash
-sudo systemctl stop picam.service
+sudo systemctl stop device.service
 ```
 
 This command stops the running instance of the service immediately. If you also want to prevent it from starting at boot until you've fixed it, you can disable it with:
 
 ```bash
-sudo systemctl disable picam.service
+sudo systemctl disable device.service
 ```
 
 To get it to reflect the new changes, run:

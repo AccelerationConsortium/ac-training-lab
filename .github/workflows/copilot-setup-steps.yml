@@ -1,0 +1,23 @@
+name: "Copilot Setup Steps"
+on: workflow_dispatch
+
+jobs:
+  copilot-setup-steps:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+      - name: Install package and dev dependencies
+        run: |
+          pip install -e .
+          pip install tox pre-commit
+          # pre-commit run --all-files
+          # npx mint-mcp add docs.prefect.io
+          # pre-commit install # don't install, since this has been a source of issues
