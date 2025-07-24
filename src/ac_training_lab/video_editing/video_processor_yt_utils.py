@@ -1,5 +1,4 @@
 import os
-import subprocess
 
 import requests
 
@@ -86,4 +85,3 @@ def get_latest_video_id(channel_id, device_name=None, playlist_id=None):
     return items[0]["id"][
         "videoId"
     ]  # Note the different path to videoId for search results
-
