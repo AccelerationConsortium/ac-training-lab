@@ -76,40 +76,6 @@ def save_ax_snapshot_to_mongodb(ax_client, experiment_name):
     except Exception as e:
         print(f"Error saving snapshot: {e}")
         return False
-    """Save Ax client snapshot to MongoDB with timestamp."""
-    try:
-        # Save to temporary JSON file first
-        temp_file = f"temp_{experiment_name}_snapshot.json"
-        ax_client.save_to_json_file(temp_file)
-        
-        # Read the JSON content
-        with open(temp_file, 'r') as f:
-            snapshot_data = json.load(f)
-        
-        # Create MongoDB document
-        snapshot_doc = {
-            "experiment_name": experiment_name,
-            "snapshot_data": snapshot_data,
-            "timestamp": datetime.now().isoformat(),
-            "trial_count": len(ax_client.get_trials_data_frame()) if ax_client.get_trials_data_frame() is not None else 0
-        }
-        
-        # Upsert the snapshot (replace if exists, insert if not)
-        snapshots_col.replace_one(
-            {"experiment_name": experiment_name},
-            snapshot_doc,
-            upsert=True
-        )
-        
-        # Clean up temp file
-        os.remove(temp_file)
-        
-        print(f"Snapshot saved to MongoDB at {snapshot_doc['timestamp']}")
-        return True
-        
-    except Exception as e:
-        print(f"Error saving snapshot: {e}")
-        return False
 
 
 def load_ax_snapshot_from_mongodb(experiment_name):
