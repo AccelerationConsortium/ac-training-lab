@@ -13,6 +13,9 @@ from pymongo import MongoClient, errors
 obj1_name = "branin"
 MAX_TRIALS = 19  # Configuration constant
 
+# Experiment identifier (separate from objective name)
+experiment_id = f"{obj1_name}_experiment_k7m9"
+
 
 def branin(x1, x2):
     """Branin function - a common benchmark for optimization."""
@@ -24,22 +27,15 @@ def branin(x1, x2):
     return y
 
 
-# Connect to MongoDB with error handling
-try:
-    mongo_client = MongoClient(
-        "mongodb://localhost:27017/", serverSelectionTimeoutMS=5000
-    )
-    # Test the connection
-    mongo_client.admin.command("ping")
-    db = mongo_client["ax_db"]
-    snapshots_col = db["ax_snapshots"]  # Collection for storing JSON snapshots
-    print("Connected to MongoDB successfully")
-except errors.ServerSelectionTimeoutError:
-    print("Failed to connect to MongoDB. Is MongoDB running?")
-    exit(1)
-except Exception as e:
-    print(f"MongoDB connection error: {e}")
-    exit(1)
+# Connect to MongoDB
+mongo_client = MongoClient(
+    "mongodb://localhost:27017/", serverSelectionTimeoutMS=5000
+)
+# Test the connection
+mongo_client.admin.command("ping")
+db = mongo_client["ax_db"]
+snapshots_col = db["ax_snapshots"]  # Collection for storing JSON snapshots
+print("Connected to MongoDB successfully")
 
 # Experiment configuration
 parameters = [
@@ -48,22 +44,14 @@ parameters = [
 ]
 objectives = {obj1_name: ObjectiveProperties(minimize=True)}
 
-# Use Ax's default Sobol trials for 2D problems
-SOBOL_TRIALS = 5
-
 
 def save_ax_snapshot_to_mongodb(ax_client, experiment_name):
     """Save Ax client snapshot to MongoDB with timestamp (append, don't overwrite)."""
     try:
-        temp_file = f"temp_{experiment_name}_snapshot.json"
-        ax_client.save_to_json_file(temp_file)
-
-        with open(temp_file, "r") as f:
-            snapshot_data = json.load(f)
-
+        # Insert document first to get unique ID
         snapshot_doc = {
             "experiment_name": experiment_name,
-            "snapshot_data": snapshot_data,
+            "snapshot_data": {},  # Placeholder, will be updated
             "timestamp": datetime.now().isoformat(),
             "trial_count": (
                 len(ax_client.get_trials_data_frame())
@@ -73,16 +61,29 @@ def save_ax_snapshot_to_mongodb(ax_client, experiment_name):
         }
 
         # Insert a new document for every snapshot (no overwrite)
-        snapshots_col.insert_one(snapshot_doc)
+        result = snapshots_col.insert_one(snapshot_doc)
+        
+        # Use database ID in temp filename to avoid conflicts
+        temp_file = f"temp_{experiment_name}_{result.inserted_id}_snapshot.json"
+        ax_client.save_to_json_file(temp_file)
+
+        with open(temp_file, "r") as f:
+            snapshot_data = json.load(f)
+
+        # Update the document with actual snapshot data
+        snapshots_col.update_one(
+            {"_id": result.inserted_id},
+            {"$set": {"snapshot_data": snapshot_data}}
+        )
 
         os.remove(temp_file)
 
-        print(f"Snapshot saved to MongoDB at {snapshot_doc['timestamp']}")
-        return True
+        print(f"Snapshot saved to MongoDB at {snapshot_doc['timestamp']} (ID: {result.inserted_id})")
+        return result.inserted_id
 
     except Exception as e:
         print(f"Error saving snapshot: {e}")
-        return False
+        return None
 
 
 def load_ax_snapshot_from_mongodb(experiment_name):
@@ -95,8 +96,8 @@ def load_ax_snapshot_from_mongodb(experiment_name):
         )
 
         if record:
-            # Save snapshot data to temporary file
-            temp_file = f"temp_{experiment_name}_snapshot.json"
+            # Use database ID in temp filename to avoid conflicts
+            temp_file = f"temp_{experiment_name}_{record['_id']}_snapshot.json"
             with open(temp_file, "w") as f:
                 json.dump(record["snapshot_data"], f)
 
@@ -121,35 +122,18 @@ def load_ax_snapshot_from_mongodb(experiment_name):
 
 
 # Load existing experiment or create new one
-ax_client = load_ax_snapshot_from_mongodb(obj1_name)
+ax_client = load_ax_snapshot_from_mongodb(experiment_id)
 
 if ax_client is None:
-    # Create new experiment
-    generation_strategy = GenerationStrategy(
-        [
-            GenerationStep(
-                model=Models.SOBOL,
-                num_trials=SOBOL_TRIALS,
-                min_trials_observed=1,
-                max_parallelism=5,
-                model_kwargs={"seed": 999},  # For reproducibility
-            ),
-            GenerationStep(
-                model=Models.GPEI,
-                num_trials=-1,
-                max_parallelism=3,
-                model_kwargs={},
-            ),
-        ]
-    )
-    ax_client = AxClient(generation_strategy=generation_strategy)
+    # Create new experiment (Ax will use default generation strategy)
+    ax_client = AxClient()
     ax_client.create_experiment(
-        name=obj1_name, parameters=parameters, objectives=objectives
+        name=experiment_id, parameters=parameters, objectives=objectives
     )
-    print(f"Created new experiment with {SOBOL_TRIALS} Sobol trials")
+    print("Created new experiment with default generation strategy")
 
     # Save initial snapshot
-    save_ax_snapshot_to_mongodb(ax_client, obj1_name)
+    save_ax_snapshot_to_mongodb(ax_client, experiment_id)
 else:
     print("Resuming existing experiment")
 
@@ -160,71 +144,56 @@ start_trial = len(current_trials) if current_trials is not None else 0
 print(f"Starting optimization: running trials {start_trial} to {MAX_TRIALS-1}")
 
 for i in range(start_trial, MAX_TRIALS):
-    try:
-        # Get next trial
-        parameterization, trial_index = ax_client.get_next_trial()
+    # Get next trial
+    parameterization, trial_index = ax_client.get_next_trial()
 
-        # Extract parameters
-        x1 = parameterization["x1"]
-        x2 = parameterization["x2"]
+    # Extract parameters
+    x1 = parameterization["x1"]
+    x2 = parameterization["x2"]
 
-        print(f"Trial {trial_index}: x1={x1:.3f}, x2={x2:.3f}")
+    print(f"Trial {trial_index}: x1={x1:.3f}, x2={x2:.3f}")
 
-        # Save snapshot before running experiment (preserves pending trial)
-        save_ax_snapshot_to_mongodb(ax_client, obj1_name)
+    # Save snapshot before running experiment (preserves pending trial)
+    save_ax_snapshot_to_mongodb(ax_client, experiment_id)
 
-        # Evaluate objective function
-        results = branin(x1, x2)
+    # Evaluate objective function
+    results = branin(x1, x2)
 
-        # Format raw_data as expected by AxClient
-        raw_data = {obj1_name: results}
+    # Format raw_data as expected by AxClient
+    raw_data = {obj1_name: results}
 
-        # Complete trial
-        ax_client.complete_trial(trial_index=trial_index, raw_data=raw_data)
+    # Complete trial
+    ax_client.complete_trial(trial_index=trial_index, raw_data=raw_data)
 
-        # Save snapshot after completing trial
-        save_ax_snapshot_to_mongodb(ax_client, obj1_name)
+    # Save snapshot after completing trial
+    save_ax_snapshot_to_mongodb(ax_client, experiment_id)
 
-        # Get current best for progress tracking
-        try:
-            best_parameters, best_metrics = ax_client.get_best_parameters()
-            best_value = best_metrics[0][obj1_name]
-            print(
-                f"Trial {trial_index}: result={results:.3f} | "
-                f"Best so far: {best_value:.3f}"
-            )
-        except Exception:
-            print(f"Trial {trial_index}: result={results:.3f}")
-
-    except Exception as e:
-        print(f"Error in trial {trial_index}: {e}")
-        continue
+    # Get current best for progress tracking
+    best_parameters, best_metrics = ax_client.get_best_parameters()
+    best_value = best_metrics[0][obj1_name]
+    print(
+        f"Trial {trial_index}: result={results:.3f} | "
+        f"Best so far: {best_value:.3f}"
+    )
 
 print("\nOptimization completed!")
-try:
-    best_parameters, best_metrics = ax_client.get_best_parameters()
-    print(f"Best parameters: {best_parameters}")
-    print(f"Best metrics: {best_metrics}")
+best_parameters, best_metrics = ax_client.get_best_parameters()
+print(f"Best parameters: {best_parameters}")
+print(f"Best metrics: {best_metrics}")
 
-    # Save final snapshot
-    save_ax_snapshot_to_mongodb(ax_client, obj1_name)
+# Save final snapshot
+save_ax_snapshot_to_mongodb(ax_client, experiment_id)
 
-    # Print experiment summary
-    trials_df = ax_client.get_trials_data_frame()
-    if trials_df is not None:
-        print(f"Total trials completed: {len(trials_df)}")
-        print(f"Best objective value: {trials_df[obj1_name].min():.6f}")
-
-except Exception as e:
-    print(f"Error getting best parameters: {e}")
+# Print experiment summary
+trials_df = ax_client.get_trials_data_frame()
+if trials_df is not None:
+    print(f"Total trials completed: {len(trials_df)}")
+    print(f"Best objective value: {trials_df[obj1_name].min():.6f}")
 
 # Clean up MongoDB connection
 mongo_client.close()
 print("MongoDB connection closed")
 
 # Optional: Display trials data frame for debugging
-try:
-    print("\nTrials Summary:")
-    print(ax_client.get_trials_data_frame())
-except Exception as e:
-    print(f"Error displaying trials: {e}")
+print("\nTrials Summary:")
+print(ax_client.get_trials_data_frame())
