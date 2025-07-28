@@ -2,8 +2,9 @@
 # pip install ax-platform==0.4.3 numpy pymongo
 import json
 import os
-import time
 from datetime import datetime
+import random
+import string
 
 import numpy as np
 from ax.modelbridge.generation_strategy import GenerationStep, GenerationStrategy
@@ -14,8 +15,9 @@ from pymongo import MongoClient, errors
 obj1_name = "branin"
 MAX_TRIALS = 19  # Configuration constant
 
-# Experiment identifier (separate from objective name)
-experiment_id = f"{obj1_name}_experiment_k7m9"
+# These will be set based on user choice
+experiment_id = None
+db_name = None
 
 
 def branin(x1, x2):
@@ -28,15 +30,67 @@ def branin(x1, x2):
     return y
 
 
+def generate_random_id(length=4):
+    """Generate a random alphanumeric ID."""
+    return ''.join(random.choices(string.ascii_lowercase + string.digits, k=length))
+
+
+def get_user_choice():
+    """Ask user whether to continue previous experiment or start new one."""
+    print("\n" + "="*50)
+    print("EXPERIMENT SETUP")
+    print("="*50)
+    print("Choose an option:")
+    print("1. Continue previous experiment (use existing database)")
+    print("2. Start new experiment (create new database)")
+    
+    while True:
+        choice = input("\nEnter your choice (1 or 2): ").strip()
+        if choice == "1":
+            return "continue"
+        elif choice == "2":
+            return "new"
+        else:
+            print("Invalid choice. Please enter 1 or 2.")
+
+
+def setup_experiment_config(choice):
+    """Set up experiment configuration based on user choice."""
+    global experiment_id, db_name
+    
+    if choice == "continue":
+        # Use default previous experiment settings
+        experiment_id = f"{obj1_name}_experiment_k7m9"
+        db_name = "ax_db"
+        print(f"\nContinuing previous experiment...")
+        print(f"Database: {db_name}")
+        print(f"Experiment ID: {experiment_id}")
+    else:
+        # Create new experiment with random ID
+        random_id = generate_random_id()
+        experiment_id = f"{obj1_name}_experiment_{random_id}"
+        db_name = f"ax_db_{random_id}"
+        print(f"\nStarting new experiment...")
+        print(f"Database: {db_name}")
+        print(f"Experiment ID: {experiment_id}")
+    
+    return experiment_id, db_name
+
+
+# Get user choice and setup configuration
+user_choice = get_user_choice()
+experiment_id, db_name = setup_experiment_config(user_choice)
+
+
 # Connect to MongoDB
 mongo_client = MongoClient(
     "mongodb://localhost:27017/", serverSelectionTimeoutMS=5000
 )
 # Test the connection
 mongo_client.admin.command("ping")
-db = mongo_client["ax_db"]
+db = mongo_client[db_name]  # Use dynamic database name
 snapshots_col = db["ax_snapshots"]  # Collection for storing JSON snapshots
-print("Connected to MongoDB successfully")
+print(f"Connected to MongoDB successfully (Database: {db_name})")
 
 # Experiment configuration
 parameters = [
@@ -131,12 +185,12 @@ if ax_client is None:
     ax_client.create_experiment(
         name=experiment_id, parameters=parameters, objectives=objectives
     )
-    print("Created new experiment with default generation strategy")
+    print(f"Created new experiment '{experiment_id}' with default generation strategy")
 
     # Save initial snapshot
     save_ax_snapshot_to_mongodb(ax_client, experiment_id)
 else:
-    print("Resuming existing experiment")
+    print(f"Resuming existing experiment '{experiment_id}'")
 
 # Get current trial count to determine how many more trials to run
 current_trials = ax_client.get_trials_data_frame()
@@ -153,10 +207,6 @@ for i in range(start_trial, MAX_TRIALS):
     x2 = parameterization["x2"]
 
     print(f"Trial {trial_index}: x1={x1:.3f}, x2={x2:.3f}")
-    
-    # Add delay for manual testing - gives time to kill the process
-    print("⏳ Starting trial evaluation in 3 seconds... (Press Ctrl+C to simulate kernel kill)")
-    time.sleep(3)
 
     # Save snapshot before running experiment (preserves pending trial)
     save_ax_snapshot_to_mongodb(ax_client, experiment_id)
@@ -180,26 +230,25 @@ for i in range(start_trial, MAX_TRIALS):
         f"Trial {trial_index}: result={results:.3f} | "
         f"Best so far: {best_value:.3f}"
     )
-    
-    # Add pause after trial completion for manual testing
-    print("✅ Trial completed! Waiting 2 seconds before next trial... (Press Ctrl+C to test recovery)")
-    time.sleep(2)
-    print("=" * 50)
 
 print("\nOptimization completed!")
 best_parameters, best_metrics = ax_client.get_best_parameters()
 print(f"Best parameters: {best_parameters}")
 print(f"Best metrics: {best_metrics}")
 
+# Save final snapshot
 save_ax_snapshot_to_mongodb(ax_client, experiment_id)
 
+# Print experiment summary
 trials_df = ax_client.get_trials_data_frame()
 if trials_df is not None:
     print(f"Total trials completed: {len(trials_df)}")
     print(f"Best objective value: {trials_df[obj1_name].min():.6f}")
 
+# Clean up MongoDB connection
 mongo_client.close()
 print("MongoDB connection closed")
 
+# Optional: Display trials data frame for debugging
 print("\nTrials Summary:")
 print(ax_client.get_trials_data_frame())
