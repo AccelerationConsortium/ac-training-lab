@@ -75,7 +75,7 @@ def load_processed():
 def get_pending_downloads(youtube, processed_videos, downloaded_ids):
     all_videos = {}
     playlist_ids = list_my_playlists(youtube)
-    for playlist_id in playlist_ids[:1]:
+    for playlist_id in playlist_ids:
         video_ids = list_videos_in_playlist(youtube, playlist_id)
         all_videos[playlist_id] = [
             vid
