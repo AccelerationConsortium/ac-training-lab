@@ -1,5 +1,4 @@
 import json
-import os
 from pathlib import Path
 
 import pyotp
@@ -8,7 +7,16 @@ from googleapiclient.discovery import build
 from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
 from playwright.sync_api import sync_playwright
 
-from src.ac_training_lab.video_editing.my_secrets import EMAIL, PASSWORD, TOTP_SECRET
+from src.ac_training_lab.video_editing.my_secrets import (
+    EMAIL,
+    PASSWORD,
+    TOTP_SECRET,
+    YOUTUBE_CLIENT_ID,
+    YOUTUBE_CLIENT_SECRET,
+    YOUTUBE_REFRESH_TOKEN,
+    YOUTUBE_TOKEN,
+    YOUTUBE_TOKEN_URI,
+)
 
 # Set up TOTP for 2FA
 totp = pyotp.TOTP(TOTP_SECRET)
@@ -55,11 +63,11 @@ def list_videos_in_playlist(youtube, playlist_id):
 
 def setup_youtube_client():
     credentials = Credentials(
-        token=os.getenv("YOUTUBE_TOKEN"),
-        refresh_token=os.getenv("YOUTUBE_REFRESH_TOKEN"),
-        token_uri=os.getenv("YOUTUBE_TOKEN_URI"),
-        client_id=os.getenv("YOUTUBE_CLIENT_ID"),
-        client_secret=os.getenv("YOUTUBE_CLIENT_SECRET"),
+        token=YOUTUBE_TOKEN,
+        refresh_token=YOUTUBE_REFRESH_TOKEN,
+        token_uri=YOUTUBE_TOKEN_URI,
+        client_id=YOUTUBE_CLIENT_ID,
+        client_secret=YOUTUBE_CLIENT_SECRET,
         scopes=["https://www.googleapis.com/auth/youtube.force-ssl"],
     )
     return build("youtube", "v3", credentials=credentials)
