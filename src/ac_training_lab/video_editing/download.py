@@ -114,13 +114,16 @@ def login_google(page):
 
 def download_video(page, video_id):
     try:
+        print(f"Navigating to video {video_id}...")
         page.goto(f"https://studio.youtube.com/video/{video_id}/edit/", timeout=15000)
         page.get_by_role("button", name="Options").wait_for(timeout=5000)
         page.get_by_role("button", name="Options").click()
+        print(f"Opened video {video_id} options.")
 
         page.get_by_role("menuitem", name="Download").wait_for(timeout=5000)
         with page.expect_download(timeout=10000) as download_info:
             page.get_by_role("menuitem", name="Download").click()
+            print(f"Began downloading video {video_id}...")
 
         download = download_info.value
         OUTPUT_DIR.mkdir(exist_ok=True)
