@@ -1,9 +1,9 @@
 LAMBDA_FUNCTION_URL = "your_Lambda_function_url"
 
-# NOTE: the combination of CAM_NAME and WORKFLOW_NAME must be fewer than 67 characters to accommodate YouTube's title limit
-# (33 characters are automatically appended due to https://github.com/AccelerationConsortium/streamingLambda/blob/32e1ce85664d5fca6f8c1bf21cd1e7e5df071040/chalicelib/ytb_api_utils.py#L100)
+# NOTE: keep the combination of CAM_NAME and WORKFLOW_NAME to 71 characters or fewer to accommodate YouTube's title limit of 100 characters
+# (29 characters are automatically appended due to https://github.com/AccelerationConsortium/streamingLambda/blob/main/chalicelib/ytb_api_utils.py)
 CAM_NAME = "your_camera_name" # e.g., "cam-a1b2"
-WORKFLOW_NAME = "your_workflow_name" # typical naming convention: [device]-[workflow]-[lab], e.g., "OT2-HM-SDL2" for an Opentrons OT2, hot melt workflow, as part of the Inorganic Chemistry Lab (SDL2) at the Acceleration Consortium
+WORKFLOW_NAME = "your_workflow_name" # typical naming convention: [device]-[workflow]-[lab] @ [organization], e.g., "OT2-HM-SDL2 @ AC" for an Opentrons OT2, hot melt workflow, as part of the Inorganic Chemistry Lab (SDL2) at the Acceleration Consortium
 
 PRIVACY_STATUS = "private"  # "private", "public", or "unlisted"
 
