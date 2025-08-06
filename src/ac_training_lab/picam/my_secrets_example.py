@@ -1,6 +1,8 @@
 LAMBDA_FUNCTION_URL = "your_Lambda_function_url"
 CAM_NAME = "your_camera_name"
-WORKFLOW_NAME = "your_workflow_name"
+
+WORKFLOW_NAME = "your_workflow_name" # must be 59 characters or fewer
+
 PRIVACY_STATUS = "private"  # "private", "public", or "unlisted"
 
 # Camera orientation settings
