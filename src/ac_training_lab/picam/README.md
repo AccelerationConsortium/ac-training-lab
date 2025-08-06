@@ -21,7 +21,7 @@ There is a [standalone DigiKey cart](https://www.digikey.ca/short/pwmfm83t) avai
 - [MicroSD Card 32GB Class 10](https://www.pishop.ca/product/raspberry-pi-sd-card-32gb/) - $13.95 CAD
 - [MicroSD Card Reader](https://www.pishop.ca/product/usb-2-0-keychain-micro-sd-card-reader/) - $2.95 CAD
 - [Aluminum Heatsink for Raspberry Pi B+/2/3 (2-Pack)](https://www.pishop.ca/product/aluminum-heatsink-for-raspberry-pi-b2-2-pack/) - $2.45 CAD
-  - Alternative: [Heat Sink Kit for RPi Zero](https://www.pishop.ca/product/dedicated-aluminum-heatsink-for-raspberry-pi-zero-series-zero-zero-2-w/) - $5.95 CAD **[OPTIONAL - Better Cooling]**
+  - Alternative: [Heat Sink Kit for RPi Zero](https://www.pishop.ca/product/dedicated-aluminum-heatsink-for-raspberry-pi-zero-series-zero-zero-2-w/) - $5.95 CAD **[OPTIONAL - better cooling]**
   - *Note: The cheaper heat sink is the default as it doesn't require additional hardware. The more expensive one provides better cooling.*
 
 ### Camera Components
@@ -30,9 +30,14 @@ There is a [standalone DigiKey cart](https://www.digikey.ca/short/pwmfm83t) avai
   - *Note: The RPi Camera Module 3 comes with a long cable you can use, but you can replace it with this shorter cable for cleaner mounting*
 
 ### Power
-- [Wall Adapter Power Supply - 5.1V DC 2.5A (USB Micro-B)](https://www.pishop.ca/product/wall-adapter-power-supply-5-25v-dc-2-4a-usb-micro-b/) - $9.95 CAD **[DEFAULT]**
-- [MicroUSB Power Adapter (International Plugs)](https://www.pishop.ca/product/microusb-power-adapter-international-plugs/) - $12.95 CAD **[INTERNATIONAL OPTION]**
-- *Note: Pi Zero 2W uses micro USB for power, not USB-C*
+
+- [Compact 2A Power Adapter with USB-A socket](https://www.digikey.ca/en/products/detail/globtek-inc/WR9HA2000USBFMR6B/8598255) - $16.65 CAD
+- [USB-A male to Micro USB male cable (2m)](https://www.digikey.ca/en/products/detail/cvilux-usa/DH-20M50056/13177301) - $3.19 CAD
+  - *Note: Pi Zero 2W uses micro USB for power, not USB-C*
+
+- [USB-A extension cable (2m)](https://www.digikey.ca/en/products/detail/assmann-wsw-components/AK669-2-18-BLACK/2391690) - $5.54 CAD **[OPTIONAL]**
+
+- [International Power Adapter](https://www.digikey.ca/en/products/detail/eaton-tripp-lite/UNIPLUGINT/4439442?gQT=1) - $33.93 CAD **[OPTIONAL, for international]**
 
 ### Optional Troubleshooting Items
 These items are optional and don't factor into the final price shown. They're useful if you're unable to SSH into the machine:
@@ -106,6 +111,8 @@ cp my_secrets_example.py my_secrets.py
 ```
 
 Fill in the necessary information (e.g., via `nano my_secrets.py`). Keep in mind this will store the credentials in plain-text format, so try to keep your Pi login secure and restrict the access scope for the credentials as much as possible.
+
+
 
 ## Dependencies
 
