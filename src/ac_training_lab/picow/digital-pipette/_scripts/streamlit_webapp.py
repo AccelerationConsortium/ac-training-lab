@@ -32,7 +32,6 @@ position = st.slider(
 # singleton: https://docs.streamlit.io/develop/api-reference/caching-and-state/st.cache_resource
 @st.cache_resource
 def get_paho_client(hostname, username, password=None, port=8883, tls=True):
-
     client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2, protocol=mqtt.MQTTv5)
 
     # The callback for when the client receives a CONNACK response from the server.
