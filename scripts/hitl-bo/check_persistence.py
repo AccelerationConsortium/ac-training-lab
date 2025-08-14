@@ -1,5 +1,5 @@
 # Manual test for MongoDB persistence
-# Run this to check the state before and after manually killing Untitled-1.py
+# Run this to check the state before and after manually killing mongodbintegrationmvp.py
 
 from pymongo import MongoClient
 from datetime import datetime
@@ -75,14 +75,14 @@ def main():
     print("=" * 60)
     print("🔍 MONGODB PERSISTENCE CHECKER")
     print("=" * 60)
-    print("This tool helps you manually test the persistence of Untitled-1.py")
+    print("This tool helps you manually test the persistence of mongodbintegrationmvp.py")
     print("")
     print("How to use:")
     print("1. Run this script to check current state")
-    print("2. Start Untitled-1.py and let it run a few trials")
-    print("3. Kill Untitled-1.py (Ctrl+C or close terminal)")
+    print("2. Start mongodbintegrationmvp.py and let it run a few trials")
+    print("3. Kill mongodbintegrationmvp.py (Ctrl+C or close terminal)")
     print("4. Run this script again to verify data was saved")
-    print("5. Start Untitled-1.py again to see it resume")
+    print("5. Start mongodbintegrationmvp.py again to see it resume")
     print("")
     
     while True:
@@ -101,10 +101,10 @@ def main():
             if trial_count is not None:
                 if trial_count == 0:
                     print("\n💡 No trials found. You can now:")
-                    print("   - Start Untitled-1.py to begin a new experiment")
+                    print("   - Start mongodbintegrationmvp.py to begin a new experiment")
                 else:
                     print(f"\n💡 Found {trial_count} trials. You can now:")
-                    print("   - Start Untitled-1.py to resume the experiment")
+                    print("   - Start mongodbintegrationmvp.py to resume the experiment")
                     print("   - Or kill it partway through to test persistence")
             
         elif choice == "2":

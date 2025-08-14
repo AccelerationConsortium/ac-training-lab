@@ -14,7 +14,7 @@ from pymongo import MongoClient, errors
 obj1_name = "branin"
 MAX_TRIALS = 19  # Configuration constant
 
-# Experiment identifier (separate from objective name)
+# Experiment identifier (separate from objective name) with hardcoded unique ID
 experiment_id = f"{obj1_name}_experiment_k7m9"
 
 

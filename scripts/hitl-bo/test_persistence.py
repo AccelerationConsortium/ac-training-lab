@@ -1,5 +1,5 @@
 # Test script to simulate kernel interruption and recovery
-# This demonstrates MongoDB persistence in Untitled-1.py
+# This demonstrates MongoDB persistence in mongodbintegrationmvp.py
 
 import subprocess
 import sys
@@ -50,7 +50,7 @@ def run_experiment_with_interruption(trials_before_kill=3):
     
     # Start the experiment as a subprocess
     process = subprocess.Popen([
-        sys.executable, "Untitled-1.py"
+        sys.executable, "mongodbintegrationmvp.py"
     ], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, bufsize=1)
     
     trial_count = 0
@@ -93,7 +93,7 @@ def run_experiment_recovery():
     try:
         # Run the experiment normally
         result = subprocess.run([
-            sys.executable, "Untitled-1.py"
+            sys.executable, "mongodbintegrationmvp.py"
         ], capture_output=True, text=True, timeout=60)
         
         print("📝 Recovery run output:")

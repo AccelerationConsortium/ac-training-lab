@@ -1,5 +1,5 @@
 # Simple test to demonstrate MongoDB persistence
-# This script will run Untitled-1.py twice to show persistence
+# This script will run mongodbintegrationmvp.py twice to show persistence
 
 import subprocess
 import sys
@@ -30,7 +30,7 @@ def run_experiment_limited(max_trials=5):
     print(f"🚀 Running experiment with MAX_TRIALS={max_trials}")
     
     # Read the original file
-    with open("Untitled-1.py", "r") as f:
+    with open("mongodbintegrationmvp.py", "r") as f:
         original_content = f.read()
     
     # Create a temporary modified version
