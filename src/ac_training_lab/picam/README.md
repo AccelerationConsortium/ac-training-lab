@@ -8,10 +8,9 @@ Module 3 running [RPi OS Lite (bookworm, 64-bit)](https://www.raspberrypi.com/so
 ```{include} ../../docs/_snippets/network-setup-note.md
 ```
 
-<img width="1659" height="874" alt="image" src="https://github.com/user-attachments/assets/244cf2dd-34bb-4a6c-b78a-52ec8d7bd6dc" />
+![image](https://github.com/user-attachments/assets/244cf2dd-34bb-4a6c-b78a-52ec8d7bd6dc)
 
-<img width="1577" height="900" alt="image" src="https://github.com/user-attachments/assets/73200d69-44a9-4e46-ad1e-44e7c9dface4" />
-
+![image](https://github.com/user-attachments/assets/73200d69-44a9-4e46-ad1e-44e7c9dface4)
 
 ## Bill of Materials
 
