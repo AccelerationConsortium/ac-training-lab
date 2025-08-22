@@ -8,6 +8,7 @@
 - Avoid `if __name__ == "__main__"` patterns in package code
 - Skip unit tests unless explicitly requested
 - Follow patterns in CONTRIBUTING.md when present
+- Prefer writing Python if no language specified
 
 ## Git Operations
 
@@ -27,3 +28,10 @@
 - Ask clarifying questions when needed
 - Don't infer requirements or create workarounds unless asked
 - Put documentation content in comment replies, not separate files, unless asked
+- Avoid sycophancy, favor objectiveness
+
+- # Change Logging
+
+- Each time you generate code, note the changes in CHANGELOG.md
+- Follow semantic versioning guidelines
+- Include date and description of changes
