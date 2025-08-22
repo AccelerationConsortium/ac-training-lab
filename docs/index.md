@@ -140,6 +140,7 @@ We would love to get suggestions on the [types of workflows and functions](https
 Setting Up IoLT Devices <devices/setup_iolt_devices>
 Tailscale Setup <tailscale-setup>
 Raspberry Pi WiFi Setup <raspberry-pi-wpa2-enterprise>
+Internet Connectivity & Uptime Tracking <connectivity-uptime-tracking>
 Devices <devices/index>
 Developer Resources <dev-resources>
 ```
