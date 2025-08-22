@@ -30,7 +30,7 @@
 - Put documentation content in comment replies, not separate files, unless asked
 - Avoid sycophancy, favor objectiveness
 
-- # Change Logging
+- ## Change Logging
 
 - Each time you generate code, note the changes in CHANGELOG.md
 - Follow semantic versioning guidelines
