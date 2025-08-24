@@ -73,7 +73,5 @@ if __name__ == "__main__":
             source_name=source_name,
             destination_link=destination_link,
             destination_name=destination_name,
-        )  # type: ignore
+        )
     )
-
-    1 + 1

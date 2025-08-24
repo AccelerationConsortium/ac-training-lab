@@ -1,5 +1,0 @@
-paho-mqtt
-Pillow
-pymongo
-requests
-streamlit
