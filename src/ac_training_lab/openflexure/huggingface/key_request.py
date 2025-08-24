@@ -35,7 +35,6 @@ def show():
 
     def check_variable(variable_name):
         try:
-
             document = collection.find_one({"variable_name": variable_name})
             if document:
                 return document.get("value", "Variable not found.")
@@ -131,7 +130,6 @@ def show():
         "Choose a microscope:", microscopes, index=microscopes.index("microscope2")
     )
     if microscope != st.session_state.get("previous_selected_value", microscope):
-
         st.session_state.button_clicked = False
 
         st.session_state["previous_selected_value"] = microscope
@@ -147,7 +145,6 @@ def show():
         ctime = get_current_time()
         var = check_variable(microscope)
         if ctime >= var + access_time:
-
             access_key = "Microscope" + str(random.randint(10000000, 99999999))
             delete_user(microscope + "clientuser")
             create_user(microscope + "clientuser", access_key)
