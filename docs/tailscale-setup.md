@@ -17,7 +17,7 @@ For running commands on your device during setup, you have two options:
    # Using mDNS/Bonjour hostname (if supported):
    ssh <username>@<hostname>.local
    # Example: ssh ac@rpi-zero2w-stream-cam-a1b2.local
-   
+
    # Or using the device's local IP address:
    ssh <username>@<ip-address>
    # Replace <username> with your Pi's username (default is `pi`) and <ip-address> (e.g., 192.168.1.100) with your device's actual IP address.
@@ -81,7 +81,7 @@ Additional resources:
 Note that you can only use remote desktop on Windows 10/11 Pro or Windows 10/11 Enterprise, not on Windows 10/11 Home.
 
 ```{warning}
-[Install Tailscale for Windows](https://tailscale.com/kb/1022/install-windows).  
+[Install Tailscale for Windows](https://tailscale.com/kb/1022/install-windows).
 We recommend using a private browser for the interactive login step if this is a non-personal device. You may need to copy the auto-opened URL to the private browser manually.
 
 Next, set up the "Remote Desktop Protocol" (RDP) [according to Tailscale's documentation](https://tailscale.com/kb/1095/secure-rdp-windows).
@@ -324,4 +324,3 @@ Now, you can reboot OT-2 and see if the device on the admin page of Tailscale wi
 | `/data/tailscale_1.82.0_arm/tailscale`            | Tailscale CLI                        |
 | `/data/start_tailscale.sh`                        | Startup script                       |
 | `/etc/systemd/system/tailscale-autostart.service` | Systemd autostart service definition |
-

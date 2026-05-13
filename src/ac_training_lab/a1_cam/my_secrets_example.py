@@ -9,4 +9,6 @@ BUCKET_NAME = "your-bucket-name"
 AWS_REGION = "your-region"
 AWS_ACCESS_KEY_ID = "your-aws-access-key-id"
 AWS_SECRET_ACCESS_KEY = "your-aws-secret-access-key"
-IMAGE_QUALITY = 85  # JPEG quality (1-100). Lower = smaller file size. 85 gives ~2-3 MB images
+IMAGE_QUALITY = (
+    85  # JPEG quality (1-100). Lower = smaller file size. 85 gives ~2-3 MB images
+)

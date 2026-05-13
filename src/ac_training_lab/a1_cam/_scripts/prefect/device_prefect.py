@@ -1,18 +1,17 @@
+import os
 from datetime import datetime, timezone
 from pathlib import Path
-import os
 
 import boto3
 from libcamera import Transform
-from picamera2 import Picamera2
-from prefect import flow
-
 from my_secrets import (
     AWS_ACCESS_KEY_ID,
     AWS_REGION,
     AWS_SECRET_ACCESS_KEY,
     BUCKET_NAME,
 )
+from picamera2 import Picamera2
+from prefect import flow
 
 
 def _configure_picam2() -> Picamera2:
@@ -66,6 +65,9 @@ if __name__ == "__main__":
         entrypoint="src/ac_training_lab/a1_cam/device_prefect.py:capture_image",
     ).deploy(
         name="capture-image",
-        description="Capture a Picamera2 image and upload it to S3 using the configured bucket.",
+        description=(
+            "Capture a Picamera2 image and upload it to S3 using the configured "
+            "bucket."
+        ),
         work_pool_name=os.environ.get("PREFECT_WORK_POOL", "a1-cam-pool"),
     )

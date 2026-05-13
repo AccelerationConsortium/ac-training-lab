@@ -7,7 +7,7 @@ Successfully validated the MQTT communication pattern using a local mosquitto br
 ### Test Environment
 - **Broker**: Mosquitto 2.0.18 (localhost:1883)
 - **Device Serial**: test-cam-01
-- **Topic Structure**: 
+- **Topic Structure**:
   - Request: `rpi-zero2w/still-camera/{DEVICE_SERIAL}/request`
   - Response: `rpi-zero2w/still-camera/{DEVICE_SERIAL}/response`
 

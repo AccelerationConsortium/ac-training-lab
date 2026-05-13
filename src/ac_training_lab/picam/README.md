@@ -176,7 +176,7 @@ Controls the visibility of your YouTube live stream:
 - `"public"` - Anyone can find and view the stream
 - `"unlisted"` - Anyone with the link can view, but it won't appear in search results
 
-**Recommendation:** 
+**Recommendation:**
 - Use `"unlisted"` for lab monitoring. This provides controlled access while keeping streams discoverable by your team.
 - If you use `"private"`, you must provide access by adding a Google account for each person.
 - Each person added to the channel will be able to see all videos in the channel.
