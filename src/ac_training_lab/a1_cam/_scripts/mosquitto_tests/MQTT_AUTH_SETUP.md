@@ -40,7 +40,7 @@ mosquitto_passwd mosquitto_passwd admin_user
 
 **Recommended Users:**
 - **device_user**: For Raspberry Pi devices (read requests, write responses)
-- **client_user**: For notebooks/orchestrators (write requests, read responses)  
+- **client_user**: For notebooks/orchestrators (write requests, read responses)
 - **admin_user**: For debugging (full access)
 
 ### 3. ACL File (`mosquitto_acl`)
@@ -151,7 +151,7 @@ Updated test scripts are provided in `_scripts/`:
 **Client:**
 ```
 ✓ Client authenticated and connected
-  Username: client_user  
+  Username: client_user
 ✓ Publish successful
 ✓ SUCCESS! Received response:
   Image URI: https://test-bucket.s3...
@@ -221,7 +221,7 @@ client = mqtt.Client(client_id="")
 3. **Minimum permissions**: Grant only necessary topic access
 4. **Audit logs**: Monitor connection attempts and publish/subscribe patterns
 5. **Separate credentials**: Different users for devices vs clients vs admins
-6. **File permissions**: 
+6. **File permissions**:
    ```bash
    chmod 600 mosquitto_passwd  # Only mosquitto user can read
    chmod 644 mosquitto_acl     # World-readable is OK (no secrets)
@@ -243,7 +243,7 @@ User: device_user
 Publish: rpi-zero2w/still-camera/${clientid}/response
 Subscribe: rpi-zero2w/still-camera/${clientid}/request
 
-User: client_user  
+User: client_user
 Publish: rpi-zero2w/still-camera/+/request
 Subscribe: rpi-zero2w/still-camera/+/response
 ```

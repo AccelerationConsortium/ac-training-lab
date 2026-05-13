@@ -1,10 +1,10 @@
 import asyncio
-from uuid import UUID
 from typing import Optional
+from uuid import UUID
 
 from prefect.client.orchestration import get_client
-from prefect.flow_runs import wait_for_flow_run
 from prefect.deployments import run_deployment
+from prefect.flow_runs import wait_for_flow_run
 
 
 async def capture_image_async(deployment_identifier: str, timeout: int = 300) -> str:

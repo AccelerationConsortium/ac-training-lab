@@ -2,23 +2,23 @@
 
 ## 1. Adjustable Tie Rod (M4, Stainless Steel)
 
-**Product:** 18-8 Stainless Steel Threaded Rod, M4 × 0.7 mm, 50 mm Length, Fully Threaded  
-**Link:** [McMaster-Carr 98863A534](https://www.mcmaster.com/98863A534/)  
-**Justification:** Provides corrosion resistance and compatibility with M4 rod ends and actuator clevis. 50 mm length is suitable for most SEM linkage applications and can be further cut to length if needed. Use with jam nuts for adjustment and secure installation.  
+**Product:** 18-8 Stainless Steel Threaded Rod, M4 × 0.7 mm, 50 mm Length, Fully Threaded
+**Link:** [McMaster-Carr 98863A534](https://www.mcmaster.com/98863A534/)
+**Justification:** Provides corrosion resistance and compatibility with M4 rod ends and actuator clevis. 50 mm length is suitable for most SEM linkage applications and can be further cut to length if needed. Use with jam nuts for adjustment and secure installation.
 
 ## 2. Ball Joint Rod End (M4, Stainless Steel)
-**Product:** Internally Threaded Corrosion-Resistant Ball Joint Rod End, M4 × 0.7 mm Thread, 303 Stainless Steel  
-**Link:** [McMaster-Carr 2988K31](https://www.mcmaster.com/2988K31)  
+**Product:** Internally Threaded Corrosion-Resistant Ball Joint Rod End, M4 × 0.7 mm Thread, 303 Stainless Steel
+**Link:** [McMaster-Carr 2988K31](https://www.mcmaster.com/2988K31)
 **Justification:** Stainless steel construction ensures corrosion resistance in laboratory environments. Ball joint allows for angular misalignment and smooth actuation. M4 thread is compatible with the tie rod and actuator clevis.
 
 ## 3. Jam Nut (M4, Stainless Steel)
-**Product:** Stainless Steel Hex Jam Nut, M4 × 0.7 mm Thread  
-**Link:** [McMaster-Carr 91828A110](https://www.mcmaster.com/91828A110)  
+**Product:** Stainless Steel Hex Jam Nut, M4 × 0.7 mm Thread
+**Link:** [McMaster-Carr 91828A110](https://www.mcmaster.com/91828A110)
 **Justification:** Secures the rod end to the tie rod, preventing loosening during repeated actuation. Stainless steel for durability and corrosion resistance.
 
 ## 4. Handle Attachment (Cable Tie or U-Bolt Clamp)
-**Product:** Select based on SEM handle geometry. Recommended: Stainless steel cable tie or U-bolt clamp sized to fit handle diameter.  
-**Link:** [Cable Ties](https://www.mcmaster.com/cable-ties/) | [U-Bolt Clamps](https://www.mcmaster.com/u-bolts/)  
+**Product:** Select based on SEM handle geometry. Recommended: Stainless steel cable tie or U-bolt clamp sized to fit handle diameter.
+**Link:** [Cable Ties](https://www.mcmaster.com/cable-ties/) | [U-Bolt Clamps](https://www.mcmaster.com/u-bolts/)
 **Justification:** Provides a secure, non-slip connection to the SEM handle. Stainless steel options preferred for longevity and chemical resistance.
 
 ### Cable Tie for SEM Handle Attachment

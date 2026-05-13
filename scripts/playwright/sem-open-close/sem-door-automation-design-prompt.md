@@ -16,7 +16,7 @@ Design a mechanical linkage system to connect an Actuonix L16 linear actuator to
 ### Handle Dimensions:
 - **Cross-sectional shape**: Ellipsoidal
 - **Diameter (left-right)**: 24mm
-- **Diameter (top-bottom)**: 20mm  
+- **Diameter (top-bottom)**: 20mm
 - **Distance from right side to first handle**: 120mm
 - **3D printed component width**: 150mm across
 - **Optimal attachment point**: Center of handle for parallel force application
@@ -40,7 +40,7 @@ Design a mechanical linkage system to connect an Actuonix L16 linear actuator to
 Implement a **tie rod linkage system** consisting of:
 
 1. **Connecting Rod ("Tie Rod")**: Adjustable-length rod with threaded ends
-2. **Jam Nut**: For locking rod at desired length  
+2. **Jam Nut**: For locking rod at desired length
 3. **Clevis Rod End**: Attaches to actuator's clevis interface
 4. **Rod End Bolt**: Connects to handle attachment mechanism
 5. **Handle Attachment**: Secures rod end bolt to ellipsoidal handle

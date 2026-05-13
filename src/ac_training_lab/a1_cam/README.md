@@ -35,7 +35,7 @@ Key considerations:
 - **Region**: Choose a region close to your devices for lower latency (e.g., `us-east-2`)
 - **Bucket name**: Must be globally unique (e.g., `rpi-zero2w-toolhead-camera`)
 - **Object Ownership**: ACLs disabled (recommended)
-- **Block Public Access settings**: 
+- **Block Public Access settings**:
   - For enhanced security, keep "Block all public access" enabled (recommended)
   - If you need to access images from external systems, use IAM-based access controls or generate signed URLs rather than making the bucket public
   - Only uncheck public access if you fully understand the security implications and need publicly accessible URLs (as shown in the screenshot)
@@ -150,7 +150,7 @@ Create AWS IAM credentials with S3 access permissions. Follow the official guide
    - Save these credentials securely in a password manager
    - Click **Done**
 
-**Security best practices**: 
+**Security best practices**:
 - Revoke credentials immediately if compromised
 - Never commit credentials to version control
 

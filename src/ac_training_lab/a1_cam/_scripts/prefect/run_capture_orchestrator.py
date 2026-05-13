@@ -12,10 +12,13 @@ Defaults to `capture-image/capture-image`.
 
 import asyncio
 import sys
-from prefect.deployments import run_deployment
-from prefect.client.orchestration import get_client
 
-# WARNING: These have not been working, just simply trying to get the returned result without making an S3 bucket just for passing a string around. See src/ac_training_lab/a1_cam/_scripts/prefect/copilot-logs.md
+from prefect.client.orchestration import get_client
+from prefect.deployments import run_deployment
+
+# WARNING: These have not been working. This is trying to get the returned
+# result without making an S3 bucket just for passing a string around. See
+# src/ac_training_lab/a1_cam/_scripts/prefect/copilot-logs.md.
 
 
 async def run_and_get(deployment_name: str = "capture-image/capture-image") -> object:

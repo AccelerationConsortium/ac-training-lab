@@ -127,13 +127,15 @@ try:
     while True:
         elapsed = round(time() - start_time)
         current_time = time()
-        
+
         # Print with exponentially increasing intervals (5s, 10s, 20s, 40s, max 300s)
         if current_time - last_print_time >= print_interval:
             print(f"Running... Elapsed: {elapsed}s")
             last_print_time = current_time
-            print_interval = min(print_interval * 2, 300)  # Double interval, cap at 5 minutes
-        
+            print_interval = min(
+                print_interval * 2, 300
+            )  # Double interval, cap at 5 minutes
+
         sleep(5)
 
 except Exception as e:
